@@ -17,7 +17,7 @@
 \begin{document}
 
 \title{Time Randomization to Thwart Concurrency Bug Exploitation}
-\author{\IEEEauthorblockN{David M. Tagatac}
+\author{\IEEEauthorblockN{David Tagatac}
 \IEEEauthorblockA{Department of Computer Science\\
 Columbia University, New York, NY 10027\\
 Email: dtagatac@cs.columbia.edu}}
@@ -30,7 +30,7 @@ Lu et al. did a survey of concurrency bugs \cite{Lu2008}, and Yang et al. has de
 
 We address the threat of concurrency attacks from yet another angle.  Much like the way that address space layout randomization thwarts attacks that depend on absolute and/or relative code and data addresses in memory, we propose to thwart concurrency attacks that depend on specific thread timing by randomizing the delays between and among threads.  Like the memoization approach described above, we also focus on the synchronization schedule (the interleaving of the various threads in a multithreaded program).  However, instead of removing nondeterminism to increase reproducibility, we attempt to randomize the synchronization schedule to remove the possibility that the relative timing of two (or more) threads can be studied and used to craft an attack.  For this subset of concurrency attacks which depend on thread timing, we hypothesize that random injection of timing delays between concurrent threads will reduce the chance of any specific attack's success.  If such an attack can address different thread timing with correspondingly different input timing, at least randomization increases the cost to the attacker to determine the appropriate input timing; moreover, that knowledge is only useful for one system until the next randomization. 
 
-\section{Preliminary Results}
+\section{Preliminary Effectiveness Results}
 \begin{figure}
 \begin{lstlisting}[firstnumber=43]
 static inline long do_mmap2(
@@ -69,20 +69,54 @@ out:
 \end{figure}
 To motivate the plausibility of our approach, we first tested the effects of targeted timing delays in buggy multithreaded code for which we have an exploit script.  The CentOS 3.9 kernel (from Linux 2.4.21) contains a critical concurrency bug that causes a system hang when exploited \cite{CVE2006-4814}.  The bug is a deadlock on the mmap semaphore `mmap\_sem' that is triggered by a specific interleaving of concurrent threads, one calling the mmap system call and the other calling the mincore system call.  The Red Hat bug report \cite{RHELbug180663} provides a script which creates two threads - one that repeatedly calls mincore in a loop, and another that repeatedly calls mmap in a loop.  By placing calls to usleep() just before the call to down\_write on mmap\_sem in the i386 architecture-specific implementation of mmap (Figure \ref{fig_mmapcode}), we were able to alter the timing of the thread interleaving.  We observed that the number of exploit script runs required for a successful exploit strictly increased with the duration of the sleep inserted (Figure \ref{fig_prelimgraph}).
 
-\section{Experiment}
-After observing that targeted timing delays reduce the success rate of at least one concurrency bug exploit, the next step is to show that randomized timing delays have a similar effect.  Our approach is to rewrite buggy multithreaded binaries, for which we have exploit scripts in hand, in the following way:
+\section{Preliminary Performance Cost Results}
+After observing that targeted timing delays reduce the success rate of at least one concurrency bug exploit, it is relevant to ask about the performance cost of these timing delays.  I chose to run three of the core SPLASH-2 benchmarks \cite{Woo1995} as they presented the least trouble compiling on an operating system as old as CentOS 3.9.  In particular, I ran the Contiguous Partitions Ocean Simulation, the Hierarchical Radiosity Application, and the Water Simulation with Spatial Data Structure.  Each application was run three times for each delay insertion length, and then averaged to obtain the results below.
+\subsection{Ocean Simulation}
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{ocean}
+\caption{The performance cost on the SPLASH-2 application OCEAN of placing targeted timing delays in the CentOS Linux kernel 2.4.21.}
+\label{fig_ocean}
+\end{figure}
+The Ocean Simulation in the SPLASH-2 benchmark suite simulates large-scale ocean movements based on eddy and boundary currents.  The Contiguous Partitions version implements the simulation grids with three-dimensional arrays.  The algorithm computes time steps of the currents in the aforementioned grids, setting up and solving spatial partial differential equations at each step \cite{Singh1992}.  I ran the simulation with the default parameters of a 258x258 grid ocean, a single processor, an error tolerance of $10^{-7}$, 20,000 meters between grid points, and 28,800 virtual seconds between timesteps.  Figure \ref{fig_ocean} shows that performance is nearly constant, increasing only slightly with the length of inserted delays, up through 100{\textmu}s.  Then with an inserted delay of 5ms, the performance takes a significant hit, running 2.36 times slower than without any inserted delay.
+\subsection{Hierarchical Radiosity}
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{ocean}
+\caption{The performance cost on the SPLASH-2 application RADIOSITY of placing targeted timing delays in the CentOS Linux kernel 2.4.21.}
+\label{fig_radiosity}
+\end{figure}
+The Hierarchical Radiosity Application \cite{Hanrahan1991} in SPLASH-2 quickly illuminates series of large polygonal patches, decomposing the scene into $O(n)$ blocks.  I ran this application with the room model (illumination as if the polygons are enclosed in a room), in batch mode, with a single process.  Figure \ref{fig_radiosity} shows that there is very little fluctuation in the performance of this application with respect to changes in targeted delay length.  Even with an inserted delay of 5ms, the application only sees a slowdown of less than one half of one percent.
+\subsection{Water Simulation}
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{water}
+\caption{The performance cost on the SPLASH-2 application WATER of placing targeted timing delays in the CentOS Linux kernel 2.4.21.}
+\label{fig_water}
+\end{figure}
+The Water Simulation in SPLASH-2 evaluates forces and potentials in a system of water molecules as an $n$-body problem \cite{Singh1992}.  The Spatial Data Structure algorithm approximates the solutions classically (not quantum mechanically), keeping track of the intermediary results in a 3-D spatial data structure in the cubical domain.  I used the default input parameters of $1.5 \times 10^{-16}$ seconds between timesteps, 512 molecules of water, 3 timesteps to simulate, and 1 processor.  Figure \ref{fig_water} shows a slight correlation between inserted delay in do\_mmap2 and the slowdown of the water simulation application.  With an inserted delay of 5ms, the Water Simulation experienced a 9.74\% slowdown.
+
+\section{Future Work}
+The next step is to show that randomized timing delays have a similar effect.  Our approach is to rewrite buggy multithreaded binaries, for which we have exploit scripts in hand, in the following way:
 \begin{enumerate}
 	\item Replace all function calls with jumps to variable-length NOP loops, different for each function.
 	\item At the end of these loops, jump to the originally intended function.
 	\item Randomize the NOP loop lengths on each rewrite.
 \end{enumerate}
-\newpage{}
-In this way, we can change the program timing by introducing randomness between experiments.  In a real-world scenario this would correspond to program rewrites at boot time, or some other periodic interval.
+In this way, we can change the program timing by introducing randomness between experiments.  In a real-world scenario this would correspond to program rewrites at boot time, or some other periodic interval.  If the reduction in exploit success justifies the overhead of the timing delays, thread timing randomization could be an important defense against concurrency attacks.
 
-If the reduction in exploit success justifies the overhead of the timing delays, thread timing randomization could be an important defense against concurrency attacks.
+\section{Fennec Bug \#777045}
+Fennec, or Firefox for Mobile, contained a concurrency bug up until revision 24ed03720db7 on August 4th 2012.  This bug, when triggered, caused a doorhanger (similar to a popup) associated with one website to be displayed when viewing another website.  The bug was originally discovered by Mozilla developers running automated test suites on the Fennec code.  Specifically, the Robocop test driver, running in the talos test suite, with the test case "testCheck" - a checkerboard performance test - was shown by several developers to reproduce the bug.  It was quickly discovered that a race condition exists between the thread called to generate the doorhanger and the main thread used to display different web pages.  If the main thread "won" the race, the doorhanger could persist after its associated webpage was closed.  This appeared to be an ideal candidate for experimenting the hypothesis outlined above; however, I will now discuss the various setbacks that prevented me from even reproducing this bug, let alone randomly injecting NOPs into it.
+\subsection{Building with Clang}
+My first attempt at reproducing the bug involved trying to run testCheck in an Android emulator on my Mac.  Two things are necessary in order to run testCheck: 1) Fennec built for Android, and 2) an executable called ``xpcshell" built for the architecture that the test will run on (Darwin in this case).  However, a compatible versions of these two things were not buildable with Clang on Mac OS 10.9 at revision 3613cbdc3481 (shortly prior to the bug fix).  At first, compilation of Fennec was failing with the error message `JS\_GetNaNValue' has C-linkage specified, but returns user-defined type `jsval'.  This turned out to be because Robocop will not work with XUL Fennec - a more cross-platform-compatible version of Firefox.  However, even after building Fennec with API 14 and NDK r7c, the xpcshell binary from the Mozilla nightly builds was not compatible, failing with ``dyld: Library not loaded: @executable\_path/XUL".
+Attempts at building the same revision using Clang 3.0, targeting Darwin 9.2, with the Mac OS X 10.5 SDK, and targeting Mac OS X 10.5 also failed with the error message ``/Users/tag/Work/firefox/memory/mozjemalloc/jemalloc.c:6351:29: error: no member named `memalign' in `struct \_malloc\_zone\_t'"  Finally, after attempts to build xpcshell targeting Mac on Ubuntu 12.04 Desktop 64-but, and with some advice from some Mozilla developers, I decided to give up trying to compile with Clang, and switched to GCC.
+\subsection{Building with GCC}
+Right away, I was able to successfully build Fennec and Firefox from revision 3613cbdc3481 in an Ubuntu 12.04 VM.  However, testCheck was failing in talos with the error message talosError: ``Unable to copy `/tmp/tmpC9SIvv/profile' to remote device `/mnt/sdcard/tests/profile'".  In fact all of the talos tests were failing.  Tests were working better in the mochitest framework, but Fennec was crashing with API 14 (without GPU hardware rendering) in the Android emulator.  In fact the hardware GPU failed with APIs 14, 15, 16, and 19.
+\subsection{Real Device}
+At this point, I decided that it would be better to try on a real device, rather than continue to beat my head against the emulator, as it clearly had software graphics rendering issues.  I ordered a Samsung Galaxy Tab 2 with Android 4.1.1, rooted it with CF-AutoRoot, and installed ClockworkMod-restore.  Still mochitest-robotium failed on the device with API 14 and 16, with error message ``/sdcard/robotium.config: cannot open for write: Permission denied".  Downgrading to Android 4.0.4 (closer to the era of the bug gave more success.  In the end, I was able to get testCheck running on the device via the mochitest framework.  However, after 2,744 run, the bug was still not observed.
 
 \bibliographystyle{IEEEtran}
-\begin{thebibliography}{10}
+\begin{thebibliography}{13}
 \bibitem{Lu2008}
 S. Lu, S. Park, E. Seo and Y. Zhou, "Learning from mistakes - A Comprehensive Study on Real World Concurrency Bug Characteristics," in \emph{Proceedings of the 13th international conference on Architectural support for programming languages and operating systems} - ASPLOS XIII, New York, NY, 2008.
 \bibitem{Yang2011}
@@ -103,6 +137,12 @@ H. Cui, J. Wu, J. Gallagher, H. Guo and J. Yang, "Efficient Deterministic Multit
 CVE-2006-4814. \url{http://www.cvedetails.com/cve/CVE-2006-4814/}
 \bibitem{RHELbug180663}
 Red Hat Bugzilla --- Bug 180663.\\\url{https://bugzilla.redhat.com/show_bug.cgi?id=180663}
+\bibitem{Woo1995}
+Woo, Steven Cameron, et al. "The SPLASH-2 programs: Characterization and methodological considerations." \emph{ACM SIGARCH Computer Architecture News}, Vol. 23. No. 2. ACM, 1995.
+\bibitem{Singh1992}
+Singh, Jaswinder Pal, Wolf-Dietrich Weber, and Anoop Gupta. "SPLASH: Stanford parallel applications for shared-memory." \emph{ACM SIGARCH Computer Architecture News} 20.1 (1992): 5-44.
+\bibitem{Hanrahan1991}
+Hanrahan, Pat, David Salzman, and Larry Aupperle. "A rapid hierarchical radiosity algorithm." \emph{ACM SIGGRAPH Computer Graphics}, Vol. 25. No. 4. ACM, 1991.
 \end{thebibliography}
 
 
