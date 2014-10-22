@@ -1,34 +1,79 @@
-\documentclass[12pt,conference]{IEEEtran}
-\hyphenation{op-tical net-works semi-conduc-tor}
-\usepackage[pdftex]{graphicx}
-\usepackage{textcomp}
-\usepackage{hyperref}
-\usepackage{cite}
-\usepackage{listings}
+% TEMPLATE for Usenix papers, specifically to meet requirements of
+%  USENIX '05
+% originally a template for producing IEEE-format articles using LaTeX.
+%   written by Matthew Ward, CS Department, Worcester Polytechnic Institute.
+% adapted by David Beazley for his excellent SWIG paper in Proceedings,
+%   Tcl 96
+% turned into a smartass generic template by De Clarke, with thanks to
+%   both the above pioneers
+% use at your own risk.  Complaints to /dev/null.
+% make it two column with no page numbering, default is 10 point
+
+% Munged by Fred Douglis <douglis@research.att.com> 10/97 to separate
+% the .sty file from the LaTeX source template, so that people can
+% more easily include the .sty file into an existing document.  Also
+% changed to more closely follow the style guidelines as represented
+% by the Word sample file. 
+
+% Note that since 2010, USENIX does not require endnotes. If you want
+% foot of page notes, don't include the endnotes package in the 
+% usepackage command, below.
+
+% This version uses the latex2e styles, not the very ancient 2.09 stuff.
+\documentclass[letterpaper,twocolumn,10pt]{article}
+\usepackage{usenix,epsfig,endnotes,hyperref,listings,textcomp}
 \lstset{
 	basicstyle=\ttfamily,
 	showstringspaces=false,
 	escapechar=\%,
 	breaklines=true,
 	numbers=left,
-	xleftmargin=2em
+	%xleftmargin=2em
 }
-
 \begin{document}
 
-\title{Time Randomization to Thwart Concurrency Bug Exploitation}
-\author{\IEEEauthorblockN{David Tagatac}
-\IEEEauthorblockA{Department of Computer Science\\
-Columbia University, New York, NY 10027\\
-Email: dtagatac@cs.columbia.edu}}
+%don't want date printed
+\date{\today}
+
+%make title bold and 14 pt font (Latex default is non-bold, 16 pt)
+\title{\Large \bf Time Randomization to Thwart Concurrency Bug Exploitation}
+
+%for single author (just remove % characters)
+\author{
+{\rm David M. Tagatac}\\
+Columbia University
+\and
+{\rm Tony Ling}\\
+Columbia University
+\and
+{\rm Michalis Polychronakis}\\
+Columbia University
+\and
+{\rm Salvatore J. Stolfo}\\
+Columbia University
+% copy the following lines to add more authors
+% \and
+% {\rm Name}\\
+%Name Institution
+} % end author
+
 \maketitle
+
+% Use the following at camera-ready time to suppress page numbers.
+% Comment it out when you first submit the paper for review.
+%\thispagestyle{empty}
+
+
+\subsection*{Abstract}
+Your Abstract Text Goes Here.  Just a few facts.
+Whet our appetites.
 
 \section{Introduction}
 With the pervasiveness of multicore architectures, multithreading is an important - and often necessary - tool when programming for performance.  However, programming with multiple threads is generally more difficult than programming for serial execution.  Each thread has the potential to contain any bug of a serial program, and on top of that, the uncertain interleaving of concurrent threads has the potential for concurrency bugs (e.g. data races).
 
 Lu et al. did a survey of concurrency bugs \cite{Lu2008}, and Yang et al. has demonstrated that attacks on buggy multithreaded programs are a real concern \cite{Yang2011}.  Much of the effort in combating this threat has gone into tools and systems which detect data races in order to aid debugging \cite{Savage1997, Flanagan2004, Laadan2011, Pratikakis2011, Kasikci2013}.  An alternative approach is to guide multithreaded programs into memoized synchronization schedules \cite{Cui2011}.  This approach does not dwell on race detection, but rather on removing the nondeterminism from the portions of multithreaded programs where races are most likely.  However, schedule memoization in its most automated form is still susceptible to attack whenever the attacker can trigger a different schedule by changing the input.
 
-We address the threat of concurrency attacks from yet another angle.  Much like the way that address space layout randomization thwarts attacks that depend on absolute and/or relative code and data addresses in memory, we propose to thwart concurrency attacks that depend on specific thread timing by randomizing the delays between and among threads.  Like the memoization approach described above, we also focus on the synchronization schedule (the interleaving of the various threads in a multithreaded program).  However, instead of removing nondeterminism to increase reproducibility, we attempt to randomize the synchronization schedule to remove the possibility that the relative timing of two (or more) threads can be studied and used to craft an attack.  For this subset of concurrency attacks which depend on thread timing, we hypothesize that random injection of timing delays between concurrent threads will reduce the chance of any specific attack's success.  If such an attack can address different thread timing with correspondingly different input timing, at least randomization increases the cost to the attacker to determine the appropriate input timing; moreover, that knowledge is only useful for one system until the next randomization. 
+We address the threat of concurrency attacks from yet another angle.  Much like the way that address space layout randomization thwarts attacks that depend on absolute and/or relative code and data addresses in memory, we propose to thwart concurrency attacks that depend on specific thread timing by randomizing the delays between and among threads.  Like the memoization approach described above, we also focus on the synchronization schedule (the interleaving of the various threads in a multithreaded program).  However, instead of removing nondeterminism to increase reproducibility, we attempt to randomize the synchronization schedule to remove the possibility that the relative timing of two (or more) threads can be studied and used to craft an attack.  For this subset of concurrency attacks which depend on thread timing, we hypothesize that random injection of timing delays between concurrent threads will reduce the chance of any specific attack's success.  If such an attack can address different thread timing with correspondingly different input timing, at least randomization increases the cost to the attacker to determine the appropriate input timing; moreover, that knowledge is only useful for one system until the next randomization.
 
 \section{Preliminary Effectiveness Results}
 \begin{figure}
@@ -115,7 +160,9 @@ Right away, I was able to successfully build Fennec and Firefox from revision 36
 \subsection{Real Device}
 At this point, I decided that it would be better to try on a real device, rather than continue to beat my head against the emulator, as it clearly had software graphics rendering issues.  I ordered a Samsung Galaxy Tab 2 with Android 4.1.1, rooted it with CF-AutoRoot, and installed ClockworkMod-restore.  Still mochitest-robotium failed on the device with API 14 and 16, with error message ``/sdcard/robotium.config: cannot open for write: Permission denied".  Downgrading to Android 4.0.4 (closer to the era of the bug gave more success.  In the end, I was able to get testCheck running on the device via the mochitest framework.  However, after 2,744 run, the bug was still not observed.
 
-\bibliographystyle{IEEEtran}
+%{\footnotesize \bibliographystyle{acm}
+%\bibliography{../common/bibliography}}
+\bibliographystyle{IEEE}
 \begin{thebibliography}{13}
 \bibitem{Lu2008}
 S. Lu, S. Park, E. Seo and Y. Zhou, "Learning from mistakes - A Comprehensive Study on Real World Concurrency Bug Characteristics," in \emph{Proceedings of the 13th international conference on Architectural support for programming languages and operating systems} - ASPLOS XIII, New York, NY, 2008.
@@ -145,7 +192,13 @@ Singh, Jaswinder Pal, Wolf-Dietrich Weber, and Anoop Gupta. "SPLASH: Stanford pa
 Hanrahan, Pat, David Salzman, and Larry Aupperle. "A rapid hierarchical radiosity algorithm." \emph{ACM SIGGRAPH Computer Graphics}, Vol. 25. No. 4. ACM, 1991.
 \end{thebibliography}
 
+%\theendnotes
 
 \end{document}
+
+
+
+
+
 
 

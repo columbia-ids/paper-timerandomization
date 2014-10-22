@@ -1,5 +1,6 @@
 *.aux
 *.log
 *.out
+*.ent
 report.pdf
 .DS_Store
