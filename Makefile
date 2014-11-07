@@ -1,4 +1,4 @@
-report.pdf : report.tex usenix.sty report.out
+report.pdf : report.tex usenix.sty report.out libsafe-PoC.c
 	pdflatex report.tex
 
 report.out :

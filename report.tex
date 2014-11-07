@@ -1,35 +1,18 @@
-% TEMPLATE for Usenix papers, specifically to meet requirements of
-%  USENIX '05
-% originally a template for producing IEEE-format articles using LaTeX.
-%   written by Matthew Ward, CS Department, Worcester Polytechnic Institute.
-% adapted by David Beazley for his excellent SWIG paper in Proceedings,
-%   Tcl 96
-% turned into a smartass generic template by De Clarke, with thanks to
-%   both the above pioneers
-% use at your own risk.  Complaints to /dev/null.
-% make it two column with no page numbering, default is 10 point
+% Based off of the TEMPLATE for Usenix papers (https://www.usenix.org/sites/default/files/template.la_.txt)
 
-% Munged by Fred Douglis <douglis@research.att.com> 10/97 to separate
-% the .sty file from the LaTeX source template, so that people can
-% more easily include the .sty file into an existing document.  Also
-% changed to more closely follow the style guidelines as represented
-% by the Word sample file. 
-
-% Note that since 2010, USENIX does not require endnotes. If you want
-% foot of page notes, don't include the endnotes package in the 
-% usepackage command, below.
-
-% This version uses the latex2e styles, not the very ancient 2.09 stuff.
 \documentclass[letterpaper,twocolumn,10pt]{article}
 \usepackage{usenix,epsfig,endnotes,hyperref,listings,textcomp}
+\usepackage[T1]{fontenc}
 \lstset{
 	basicstyle=\ttfamily,
-	showstringspaces=false,
-	escapechar=\%,
 	breaklines=true,
+	breakatwhitespace=false,
+	escapechar=\%,
 	numbers=left,
-	%xleftmargin=2em
+	tabsize=2,
+	xleftmargin=2em
 }
+
 \begin{document}
 
 %don't want date printed
@@ -43,10 +26,10 @@
 {\rm David M. Tagatac}\\
 Columbia University
 \and
-{\rm Tony Ling}\\
+{\rm Michalis Polychronakis}\\
 Columbia University
 \and
-{\rm Michalis Polychronakis}\\
+{\rm Tony Ling}\\
 Columbia University
 \and
 {\rm Salvatore J. Stolfo}\\
@@ -65,8 +48,7 @@ Columbia University
 
 
 \subsection*{Abstract}
-Your Abstract Text Goes Here.  Just a few facts.
-Whet our appetites.
+TODO
 
 \section{Introduction}
 With the pervasiveness of multicore architectures, multithreading is an important - and often necessary - tool when programming for performance.  However, programming with multiple threads is generally more difficult than programming for serial execution.  Each thread has the potential to contain any bug of a serial program, and on top of that, the uncertain interleaving of concurrent threads has the potential for concurrency bugs (e.g. data races).
@@ -78,12 +60,25 @@ We address the threat of concurrency attacks from yet another angle.  Much like 
 \section{Time Randomization}
 
 \section{Experimental Design}
+To test both the efficacy and the performance of time randomization as a mechanism to thwart concurrency bug exploitation, we applied time randomization to Libsafe 2.0-16.  This version of Libsafe contains a concurrency bug, for which there is a publicly available proof of concept exploit.
 \subsection{CVE-2005-1125}
-To test both the efficacy and the performance of time randomization as a mechanism to thwart concurrency bug exploitation, we applied time randomization to Libsafe 2.0-16.  This version of Libsafe contains a concurrency bug, for which there is publicly available proof of concept exploit.
+Libsafe is a library which protects processes against the exploitation of buffer overflow vulnerabilities in process stacks, as well as format string vulnerabilities.  It does this by intercepting all calls to C standard library functions known to be vulnerable, and then running ``safe" versions of those functions which issue warnings about exploit attempts before exiting without allowing the exploits to succeed.
 
-The bug works as follows:
-
+A static global variable `dying' is used in Libsafe to indicate when an unsafe action has already been detected, and Libsafe is issuing warnings and exiting.  In this case, Libsafe stops checking for new exploit attempts.  However, this variable is not protected by any synchronization mechanisms, so in the case of a multithreaded program, the following sequence of events is possible:
+\begin{enumerate}
+	\item Thread A attempts an exploit.
+	\item The exploit is caught by Libsafe, the `dying' flag is set, and Libsafe begins the warning and exit procedure.
+	\item Thread B is scheduled, and attempts another exploit before Libsafe has exited thread A.
+	\item Because the `dying' flag is set, thread B's exploit is not caught by Libsafe, and it succeeds.
+\end{enumerate}
+The proof-of-concept exploit (Figure \ref{fig_poc}) often realizes the above sequence of events.
+\begin{figure}
+\lstinputlisting{libsafe-PoC.c}
+\caption{The proof of concept exploit for concurrency bug CVE-2005-1125 \cite{CVE2005-1125}.}
+\label{fig_poc}
+\end{figure}
 \subsection{Instrumentation}
+
 
 \section{Analysis}
 
@@ -184,31 +179,35 @@ The bug works as follows:
 \bibliographystyle{IEEE}
 \begin{thebibliography}{13}
 \bibitem{Lu2008}
-S. Lu, S. Park, E. Seo and Y. Zhou, "Learning from mistakes - A Comprehensive Study on Real World Concurrency Bug Characteristics," in \emph{Proceedings of the 13th international conference on Architectural support for programming languages and operating systems} - ASPLOS XIII, New York, NY, 2008.
+S. Lu, S. Park, E. Seo and Y. Zhou, ``Learning from mistakes - A Comprehensive Study on Real World Concurrency Bug Characteristics," in \emph{Proceedings of the 13th international conference on Architectural support for programming languages and operating systems} - ASPLOS XIII, New York, NY, 2008.
 \bibitem{Yang2011}
-J. Yang, A. Cui, S. Stolfo and S. Sethumadhavan, "Concurrency Attacks," in HotPar'12 \emph{Proceedings of the 4th USENIX conference on Hot Topics in Parallelism}, Berkeley, CA, 2011.
+J. Yang, A. Cui, S. Stolfo and S. Sethumadhavan, ``Concurrency Attacks," in HotPar'12 \emph{Proceedings of the 4th USENIX conference on Hot Topics in Parallelism}, Berkeley, CA, 2011.
 \bibitem{Savage1997}
-S. Savage, M. Burrows, G. Nelson, P. Sobalvarro and T. Anderson, "Eraser: a dynamic data race detector for multithreaded programs," \emph{ACM Transactions on Computer Systems}, vol. 15, no. 4, pp. 391-411, 1997.
+S. Savage, M. Burrows, G. Nelson, P. Sobalvarro and T. Anderson, ``Eraser: a dynamic data race detector for multithreaded programs," \emph{ACM Transactions on Computer Systems}, vol. 15, no. 4, pp. 391-411, 1997.
 \bibitem{Flanagan2004}
-C. Flanagan and S. N. Freund, "Atomizer: a dynamic atomicity checker for multithreaded programs," in \emph{18th International Parallel and Distributed Processing Symposium}, 2004. Proceedings., 2004.
+C. Flanagan and S. N. Freund, ``Atomizer: a dynamic atomicity checker for multithreaded programs," in \emph{18th International Parallel and Distributed Processing Symposium}, 2004. Proceedings., 2004.
 \bibitem{Laadan2011}
-O. Laadan, C.-C. Tsai, N. Viennot, C. Blinn, P. S. Du, J. Yang and J. Nieh, "Finding Concurrency Errors in Sequential Code—OS-level, In-vivo Model Checking of Process Races," in \emph{Proceedings of the 13th USENIX conference on Hot topics in operating systems}, 2011.
+O. Laadan, C.-C. Tsai, N. Viennot, C. Blinn, P. S. Du, J. Yang and J. Nieh, ``Finding Concurrency Errors in Sequential Code—OS-level, In-vivo Model Checking of Process Races," in \emph{Proceedings of the 13th USENIX conference on Hot topics in operating systems}, 2011.
 \bibitem{Pratikakis2011}
-P. Pratikakis, J. S. Foster and M. Hicks, "LOCKSMITH: Practical Static Race Detection for C," \emph{ACM Transactions on Programming Languages and Systems}, vol. 33, no. 1, pp. 1-55, 2011.
+P. Pratikakis, J. S. Foster and M. Hicks, ``LOCKSMITH: Practical Static Race Detection for C," \emph{ACM Transactions on Programming Languages and Systems}, vol. 33, no. 1, pp. 1-55, 2011.
 \bibitem{Kasikci2013}
-B. Kasikci, C. Zamfir and G. Candea, "RaceMob: Crowdsourced Data Race Detection," in \emph{Proceedings of the Twenty-Fourth ACM Symposium on Operating Systems Principles} - SOSP '13, New York, NY, 2013.
+B. Kasikci, C. Zamfir and G. Candea, ``RaceMob: Crowdsourced Data Race Detection," in \emph{Proceedings of the Twenty-Fourth ACM Symposium on Operating Systems Principles} - SOSP '13, New York, NY, 2013.
 \bibitem{Cui2011}
-H. Cui, J. Wu, J. Gallagher, H. Guo and J. Yang, "Efficient Deterministic Multithreading through Schedule Relaxation," in \emph{Proceedings of the TwentyThird ACM Symposium on Operating Systems Principles} SOSP 11, 2011.
+H. Cui, J. Wu, J. Gallagher, H. Guo and J. Yang, ``Efficient Deterministic Multithreading through Schedule Relaxation," in \emph{Proceedings of the TwentyThird ACM Symposium on Operating Systems Principles} SOSP 11, 2011.
+\bibitem{CVE2005-1125}
+CVE-2005-1125. \url{http://www.cvedetails.com/cve/CVE-2005-1125/}
 \bibitem{CVE2006-4814}
 CVE-2006-4814. \url{http://www.cvedetails.com/cve/CVE-2006-4814/}
 \bibitem{RHELbug180663}
 Red Hat Bugzilla --- Bug 180663.\\\url{https://bugzilla.redhat.com/show_bug.cgi?id=180663}
 \bibitem{Woo1995}
-Woo, Steven Cameron, et al. "The SPLASH-2 programs: Characterization and methodological considerations." \emph{ACM SIGARCH Computer Architecture News}, Vol. 23. No. 2. ACM, 1995.
+Woo, Steven Cameron, et al. ``The SPLASH-2 programs: Characterization and methodological considerations." \emph{ACM SIGARCH Computer Architecture News}, Vol. 23. No. 2. ACM, 1995.
 \bibitem{Singh1992}
-Singh, Jaswinder Pal, Wolf-Dietrich Weber, and Anoop Gupta. "SPLASH: Stanford parallel applications for shared-memory." \emph{ACM SIGARCH Computer Architecture News} 20.1 (1992): 5-44.
+Singh, Jaswinder Pal, Wolf-Dietrich Weber, and Anoop Gupta. ``SPLASH: Stanford parallel applications for shared-memory." \emph{ACM SIGARCH Computer Architecture News} 20.1 (1992): 5-44.
 \bibitem{Hanrahan1991}
-Hanrahan, Pat, David Salzman, and Larry Aupperle. "A rapid hierarchical radiosity algorithm." \emph{ACM SIGGRAPH Computer Graphics}, Vol. 25. No. 4. ACM, 1991.
+Hanrahan, Pat, David Salzman, and Larry Aupperle. ``A rapid hierarchical radiosity algorithm." \emph{ACM SIGGRAPH Computer Graphics}, Vol. 25. No. 4. ACM, 1991.
+\bibitem{Conrad2009}
+Conrad, Jay. ``Tutorial: Function Interposition in Linux." \emph{jayconrad.com.} Jay Conrad, 30 Jun. 2009. \guilsinglleft\url{http://jayconrod.com/posts/23/tutorial-function-interposition-in-linux}\guilsinglright\ 4 Oct. 2014. 
 \end{thebibliography}
 
 %\theendnotes
