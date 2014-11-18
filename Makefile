@@ -1,7 +1,5 @@
-report.pdf : report.tex usenix.sty report.out libsafe-PoC.c
+report.pdf : report.tex usenix.sty libsafe-PoC.c
 	pdflatex report.tex
-
-report.out :
 	pdflatex report.tex
 
 .PHONY : clean

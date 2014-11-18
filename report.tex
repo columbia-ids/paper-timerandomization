@@ -4,9 +4,9 @@
 \usepackage{usenix,epsfig,endnotes,hyperref,listings,textcomp}
 \usepackage[T1]{fontenc}
 \lstset{
-	basicstyle=\ttfamily,
+	basicstyle=\footnotesize,
 	breaklines=true,
-	breakatwhitespace=false,
+	breakatwhitespace=true,
 	escapechar=\%,
 	numbers=left,
 	tabsize=2,
@@ -71,14 +71,17 @@ A static global variable `dying' is used in Libsafe to indicate when an unsafe a
 	\item Thread B is scheduled, and attempts another exploit before Libsafe has exited thread A.
 	\item Because the `dying' flag is set, thread B's exploit is not caught by Libsafe, and it succeeds.
 \end{enumerate}
-The proof-of-concept exploit (Figure \ref{fig_poc}) often realizes the above sequence of events.
+The proof-of-concept exploit (Figure \ref{fig_poc}) often realizes the above sequence of events, effectively bypassing Libsafe.
 \begin{figure}
 \lstinputlisting{libsafe-PoC.c}
-\caption{The proof of concept exploit for concurrency bug CVE-2005-1125 \cite{CVE2005-1125}.}
+\caption{The proof of concept exploit for concurrency bug CVE-2005-1125 \cite{CVE2005-1125}.  Both functions \texttt{func1} and \texttt{func2} attempt to overflow buffers in their own stack frames.  Either function running alone would be caught by Libsafe at the illegal calls to \texttt{strcpy}, but when run in parallel, the concurrency bug may allow one call to \texttt{strcpy} to succeed.}
 \label{fig_poc}
 \end{figure}
-\subsection{Instrumentation}
+\subsection{Instrumentation \cite{Conrad2009}}
+Time randomization was applied to Libsafe by interposing external library calls made by Libsafe each with random numbers of inline assembly NOP instructions.  This was accomplished by first specifying a max delay (per interposition).  Then, for each of the external library functions that Libsafe uses, a random integer between zero and the max delay was selected.  Finally, that number was used as the loop limit on a loop of assembly NOPs for that external library function.  The interpositions of the NOP loops were compiled into a dynamic library file, and that file was specified to be preloaded with the LD\_PRELOAD environment variable.
 
+%TODO: add numbers of randomizations and range of maxdelay
+The average time to make a (legal) \texttt{strcpy} function call, and the proof of concept exploit success rate were measured for several randomizations for each max delay ranging from 0 up to 50,000.
 
 \section{Analysis}
 
