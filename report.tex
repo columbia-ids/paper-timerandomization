@@ -81,16 +81,25 @@ The proof-of-concept exploit (Figure \ref{fig_poc}) often realizes the above seq
 Time randomization was applied to Libsafe by interposing external library calls made by Libsafe each with random numbers of inline assembly NOP instructions.  This was accomplished by first specifying a max delay (per interposition).  Then, for each of the external library functions that Libsafe uses, a random integer between zero and the max delay was selected.  Finally, that number was used as the loop limit on a loop of assembly NOPs for that external library function.  The interpositions of the NOP loops were compiled into a dynamic library file, and that file was specified to be preloaded with the LD\_PRELOAD environment variable.
 
 %TODO: add numbers of randomizations and range of maxdelay
-The average time to make a (legal) \texttt{strcpy} function call, and the proof of concept exploit success rate were measured for several randomizations for each max delay ranging from 0 up to 50,000.
+The average time to make a (legal) \texttt{strcpy} function call, and the proof of concept exploit success rate were measured for several randomizations for each max delay ranging from 0 up to 50,000.  The dynamic libray file used contains 64 external library calls made by Libsafe when the \texttt{strcpy} function is called.
 
 \section{Analysis}
-
+The baseline results of the proof-of-concept without library interposition has a runtime of 78 ns and a 99.67\% exploit success rate.  %TODO: Add graphs and mention analysis of graphs
 \section{Future Work}
-
+The next steps are to reduce the overhead associated with time randomization.
+\subsection{Heuristics}
+Introducing heuristics would aid in reducing overhead of function calls.  Identifying certain functions in which time randomization have greater impact, as well as removing time randomization on functions. Instrumenting the next function call after synchronization fuctions, such as pthread library calls, is a possible heuristics.  
+\subsection{Alternative Instrumentation Methods}
+Alternative methods of applying time randomization might aid in reducing function overheads.  Intercepting the function calls made by the binary and introducing delays directly by injecting NOPs will remove the extra steps taken by introducing dynamic library with C code.  Modifying the scheduler is another possible route to add time delays.
+\subsection{Macrobenchmarks}
+This paper analyzes the proof-of-concept exploit as a microbenchmark, howerver it is important to determine exploit success rates and overhead introduced to macrobenchmarks as well. Webservers and databases, such as Apache or MySQL, would serve as good macrobenchmarks and indicators of time randomization method on actual systems.
+macrobenchmarks to analyze the effects of time randomization on production or live software.
 \section{Related Work}
 
 \section{Conclusion}
+Although we cannot say in the general case that time randomization is an effective method of thwarting concurrency bugs, it appears that time randomization reduce the effectiveness of the proof-of-concept exploit of CVE-2005-1125.  Further work is required to determine the effectiveness of time randomization on practical or real world systems.
 
+Our current approach using purely random library interposition across all external function calls seems to be too costly in terms of performance.  We will need to improve this performance by implementing heuristics and exploring other methods of adding a time delay.
 
 %\section{Preliminary Effectiveness Results}
 %\begin{figure}
