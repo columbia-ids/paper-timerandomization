@@ -3,6 +3,9 @@
 \documentclass[letterpaper,twocolumn,10pt]{article}
 \usepackage{usenix,epsfig,endnotes,hyperref,listings,textcomp}
 \usepackage[T1]{fontenc}
+\usepackage{algorithm}
+%\usepackage{algorithmic}
+\usepackage{algpseudocode}
 \lstset{
 	basicstyle=\footnotesize,
 	breaklines=true,
@@ -50,6 +53,7 @@ Columbia University
 \subsection*{Abstract}
 TODO
 
+
 \section{Introduction}
 With the pervasiveness of multicore architectures, multithreading is an important - and often necessary - tool when programming for performance.  However, programming with multiple threads is generally more difficult than programming for serial execution.  Each thread has the potential to contain any bug of a serial program, and on top of that, the uncertain interleaving of concurrent threads has the potential for concurrency bugs (e.g. data races).
 
@@ -84,6 +88,49 @@ Time randomization was applied to Libsafe by interposing external library calls 
 %TODO: add numbers of randomizations and range of maxdelay
 The average time to make a (legal) \texttt{strcpy} function call, and the proof of concept exploit success rate were measured for several randomizations for each max delay ranging from 0 up to 50,000.  The dynamic library file used contains 64 external library calls made by Libsafe when the \texttt{strcpy} function is called.
 
+\begin{algorithm}
+\caption{Run Experiment}
+\begin{algorithmic}[1]
+\Function{run}{$max\_delay\_limit$, $iteration\_limit$}
+\State $max\_delay,iteration \gets 0$
+\While{$max\_delay \leq max\_delay\_limit$}
+	\While{$iteration \leq iteration\_limit$}
+		\State $interpose.so \gets randomize(max\_delay)$
+		\State $caught \gets repeatbug(interpose.so)$
+		\State $time \gets microbenchmark$
+		\State \texttt{record $time$ and $caught$}
+		\State $iteration++$
+	\EndWhile
+	\State $max\_delay++$
+\EndWhile
+\EndFunction
+\State
+\Function{randomize}{$delay$}
+\State $interpose.so \gets$ shared object file
+\ForAll{Libsafe external library call $ext\_call$}
+	\State create new library call $lib$
+	\State insert \textbf{RAND}(0,$delay$) NOPs into $lib$
+	\State insert call to $ext\_call$ into $lib$
+	\State add $lib$ to $interpose.so$
+\EndFor
+\State \Return{$interpose.c$}
+\EndFunction
+\State
+\Function{repeatbug}{$interpose.so$}
+\State $i,count \gets 0$
+\While{$i \leq 1000$}
+	\State LD\_PRELOAD Libsafe and $interpose.so$
+	\State run proof-of-concept show in $Figure 1$
+	\If{Libsafe catches exploit}
+		\State $count += 1$
+	\EndIf
+	\State $i++$
+\EndWhile
+\State \Return{$count$}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
 \section{Analysis}
 The baseline results of the proof-of-concept without library interposition has a runtime of 78 ns and a 99.67\% exploit success rate.  %TODO: Add graphs and mention analysis of graphs
 \section{Future Work}
@@ -98,7 +145,7 @@ macrobenchmarks to analyze the effects of time randomization on production or li
 \section{Related Work}
 
 \section{Conclusion}
-Although we cannot say in the general case that time randomization is an effective method of thwarting concurrency bugs, it appears that time randomization reduce the effectiveness of the proof-of-concept exploit of CVE-2005-1125.  Further work is required to determine the effectiveness of time randomization on practical or real world systems.
+Although we cannot say in the general case that time randomization is an effective method of thwarting concurrency bugs, we have demonstrated that time randomization reduce the effectiveness of the proof-of-concept exploit of CVE-2005-1125.  Further work is required to determine the effectiveness of time randomization on practical or real world systems.
 
 Our current approach using purely random library interposition across all external function calls seems to be too costly in terms of performance.  We will need to improve this performance by implementing heuristics and exploring other methods of adding a time delay.
 
