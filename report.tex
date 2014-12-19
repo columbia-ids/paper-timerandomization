@@ -88,20 +88,20 @@ The proof-of-concept exploit (Figure \ref{fig_poc}) often realizes the above seq
 \end{figure}
 \subsection{Instrumentation \cite{Conrad2009}}
 Time randomization was applied to Libsafe by interposing external library calls made by Libsafe each with random numbers of inline assembly NOP instructions.  This was accomplished by first specifying a max delay (per interposition).  Then, for each of the external library functions that Libsafe uses, a random integer between zero and the max delay was selected.  Finally, that number was used as the loop limit on a loop of assembly NOPs for that external library function.  The interpositions of the NOP loops were compiled into a dynamic library file, and that file was specified to be preloaded with the LD\_PRELOAD environment variable.
-
 %TODO: add numbers of randomizations and range of maxdelay
+
 The average time to make a (legal) \texttt{strcpy} function call, and the proof of concept exploit success rate were measured for several randomizations for each max delay ranging from 0 up to 50,000.  The dynamic library file used contains 64 external library calls made by Libsafe when the \texttt{strcpy} function is called.
 
 \begin{algorithm}
 \caption{Run Experiment}
 \begin{algorithmic}[1]
-\Function{run}{$max\_delay\_limit$, $iteration\_limit$}
+\Function{run}{$max\_delay\_limit$, $iteration\_limit$, $ext\_calls$}
 \State $max\_delay,iteration \gets 0$
 \While{$max\_delay \leq max\_delay\_limit$}
 	\While{$iteration \leq iteration\_limit$}
 		\State $interpose.so \gets randomize(max\_delay)$
 		\State $caught \gets repeatbug(interpose.so)$
-		\State $time \gets microbenchmark$
+		\State $time \gets run microbenchmark$
 		\State \texttt{record $time$ and $caught$}
 		\State $iteration++$
 	\EndWhile
@@ -109,12 +109,12 @@ The average time to make a (legal) \texttt{strcpy} function call, and the proof 
 \EndWhile
 \EndFunction
 \State
-\Function{randomize}{$delay$}
+\Function{randomize}{$delay$, $ext\_calls$}
 \State $interpose.so \gets$ shared object file
-\ForAll{Libsafe external library call $ext\_call$}
+\ForAll{$ext\_lib\_call$ in $ext\_calls$}
 	\State create new library call $lib$
 	\State insert \textbf{RAND}(0,$delay$) NOPs into $lib$
-	\State insert call to $ext\_call$ into $lib$
+	\State insert call to $ext\_lib\_call$ into $lib$
 	\State add $lib$ to $interpose.so$
 \EndFor
 \State \Return{$interpose.c$}
@@ -134,7 +134,14 @@ The average time to make a (legal) \texttt{strcpy} function call, and the proof 
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
+\subsection{Algorithm Implementation}
+The psuedocode as described by Algorithm 1 explains the steps we took to introduce time randomization to Libsafe and record the overhead of each execution of the proof-of-concept code with.  To implementation this algorithm, we split up the procedure and functions into individual Python and shell scripts.
 
+The python script run\_tests.py implements the run function, however the script does not require an $ext\_calls$ input.  $ext\_call$ is stored as func\_names.txt.  func\_names.txt is a list of all external functions to be used with this experiment.  To obtain this list, func\_names.txt starts off containing a list of all library calls in the C standard and linux/GNU specific calls as well. However, not all library calls are used by Libsafe when calling the \textbf{strcpy} function.  To filter out unused library functions, we use \textbf{ltrace} on the proof-of-concept code that uses \textbf{strcpy} to obtain a list of external functions called.  All functions not listed in this output is commented out from func\_names.txt.
+
+By default, run\_tests.py has $max\_delay\_limit$ set to 10,0000 and $iteration\_limit$ set to 50.  Theses defaults are the parameters used for our experimentation. For 0 to $max\_delay\_limit$, a new directory is created to store the test results.  For each $max\_delay\_limit$, from 0 to $iteration\_limit$, run generate and randomize interpose.so, run repeatbug-interpose.py and run test-benchmark.sh in order.  Timing results and number of exploits caught by repeatbug-interpose.py and test-benchmark.sh is recorded for each $max\_delay$ and $iteration$.
+
+Randomizing and generating interpose.so is done by gen\_interpose.py.  The wrapper for this script is in the makefile by using \'make random MAX\_DELAY=$max\_delay$\'.
 \section{Results}
 The baseline results of the proof-of-concept without library interposition has a runtime of 78 ns and a 99.67\% exploit success rate.  %TODO: Add graphs and mention analysis of graphs
 \section{Future Work}
