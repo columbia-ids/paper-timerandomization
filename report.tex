@@ -223,12 +223,12 @@ Our current approach using purely random library interposition across all extern
 %\caption{An example targeted timing delay in the CentOS Linux kernel 2.4.21 in function do\_mmap2 in arch/i386/kernel/sys\_i386.c, line 57.}
 %\label{fig_mmapcode}
 %\end{figure}
-\begin{figure}
-\centering
-\includegraphics[width=\columnwidth]{prelimgraph}
-\caption{The effect of placing targeted timing delays in the (buggy) CentOS Linux kernel 2.4.21.  Delays between 0 and 5,000{\textmu}s were inserted strategically to alter concurrent thread timing, and the number of failed exploit script runs prior to a successful exploit strictly increased with the length of the inserted delay.}
-\label{fig_prelimgraph}
-\end{figure}
+% \begin{figure}
+% \centering
+% \includegraphics[width=\columnwidth]{prelimgraph}
+% \caption{The effect of placing targeted timing delays in the (buggy) CentOS Linux kernel 2.4.21.  Delays between 0 and 5,000{\textmu}s were inserted strategically to alter concurrent thread timing, and the number of failed exploit script runs prior to a successful exploit strictly increased with the length of the inserted delay.}
+% \label{fig_prelimgraph}
+% \end{figure}
 %To motivate the plausibility of our approach, we first tested the effects of targeted timing delays in buggy multithreaded code for which we have an exploit script.  The CentOS 3.9 kernel (from Linux 2.4.21) contains a critical concurrency bug that causes a system hang when exploited \cite{CVE2006-4814}.  The bug is a deadlock on the mmap semaphore `mmap\_sem' that is triggered by a specific interleaving of concurrent threads, one calling the mmap system call and the other calling the mincore system call.  The Red Hat bug report \cite{RHELbug180663} provides a script which creates two threads - one that repeatedly calls mincore in a loop, and another that repeatedly calls mmap in a loop.  By placing calls to usleep() just before the call to down\_write on mmap\_sem in the i386 architecture-specific implementation of mmap (Figure \ref{fig_mmapcode}), we were able to alter the timing of the thread interleaving.  We observed that the number of exploit script runs required for a successful exploit strictly increased with the duration of the sleep inserted (Figure \ref{fig_prelimgraph}).
 %
 %\section{Preliminary Performance Cost Results}
