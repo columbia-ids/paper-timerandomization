@@ -143,7 +143,7 @@ By default, run\_tests.py has $max\_delay\_limit$ set to 10,0000 and $iteration\
 
 Randomizing and generating interpose.so is done by gen\_interpose.py.  The wrapper for this script is in the makefile by using \'make random MAX\_DELAY=$max\_delay$\'.  gen\_interpose.py opens the func\_names.txt that contains the function prototypes and parses the functions.  For each uncommented out function within the list, the script constructs new a function that have the same return values, names and parameter.  The body of this new function has a loop inserted into it that executes NOPs.  The number of times it executes the NOPs is a random number choosen from 0 and $max\_delay$.  The result functions are output to interpose.so, which serves as the dynamic library that is loaded with LD\_PRELOAD.
 
-Testing with interpose.so is done in the repeatbug-interpose.py script.  This script runs bug-interpose.so for 1000 times, and returns the amount of times the exploit is caught by Libsafe.  bug-interpose.py is uses LD\_PRELOAD to load Libsafe before interpose.so, to ensure the proof-of-concept exploit calls Libsafe functions before interpose.so functions. test-benchmark.sh is just uses LD\_PRELOAD to include Libsafe, before interpose.so as well.  It runs the baseline test and the code for this baseline testing is shown in Figure 2.
+Testing with interpose.so is done in the repeatbug-interpose.py script.  This script runs bug-interpose.so for 1000 times, and returns the amount of times the exploit is caught by Libsafe.  bug-interpose.py is uses LD\_PRELOAD to load Libsafe before interpose.so, to ensure the proof-of-concept exploit calls Libsafe functions before interpose.so functions. test-benchmark.sh is just uses LD\_PRELOAD to include Libsafe, before interpose.so as well.  It runs the baseline test and the code for this baseline testing is shown in Figure \ref{fig_baseline}.
 
 
 
@@ -155,27 +155,33 @@ Testing with interpose.so is done in the repeatbug-interpose.py script.  This sc
 
 \section{Results}
 
-% \begin{figure}
-% \centering
-% \includegraphics[width=\columnwidth]{ratefraction5.pdf}
-% \caption{test}
-% \label{ratefraction5}
-% \end{figure}
 
-% \begin{figure}
-% \centering
-% \includegraphics[width=\columnwidth]{successrate.pdf}
-% \caption{test}
-% \label{successrate}
-% \end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{successrate.pdf}
+\caption{Graph of exploit success rates with a given strcpy overhead}
+\label{fig_successrate}
+\end{figure}
 
-% \begin{figure}
-% \centering
-% \includegraphics[width=\columnwidth]{successratezoom.pdf}
-% \caption{test}
-% \label{successratezoom}
-% \end{figure}
-The baseline results of the proof-of-concept without library interposition has a runtime of 78 ns and a 99.67\% exploit success rate.  %TODO: Add graphs and mention analysis of graphs
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{successratezoom.pdf}
+\caption{Same graph as Figure \ref{fig_successrate} with strcpy overhead limited to 150\%}
+\label{fig_successratezoom}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{ratefraction5.pdf}
+\caption{Bar graph of the fraction of exploit success rates under 5\% for a given strcpy overhead}
+\label{fig_ratefraction5}
+\end{figure}
+The baseline results of the proof-of-concept without library interposition has a runtime of 78 ns and a 99.67\% exploit success rate. Figure \ref{fig_successrate} shows the success rate of exploits with a given \textbf{strcpy} call overhead.  The x-axis shows the overhead of calling \textbf{strcpy} as a runtime multipler.  The y-axis shows the percents of exploits that were successful, or exploits attempts that Libsafe did not caught.  As shown on this graph, as the overhead increases, the exploit success rate decreases.  Eventually as the overhead increases, the success rates plummets down strictly below 10\%.
+
+Figure \ref{fig_successratezoom} shows the same data and has the same x and y axis as Figure \ref{fig_successrate}.  This graph zooms in on the x-axis and limits the runtime mutiplier.  This graph shows that even introducing an runtime mutiplier overhead of 20-30 will decrease the exploit success rate considerably below 10\%.
+
+Figure \ref{fig_ratefraction5} is a bar graph showing the fraction of all exploit success rates that are below 5\% for a given strcpy overhead.  The x-axis is the runtime mutiplier of running \textbf{strcpy} and the y-axis is the fraction of fraction of all exploit success rates that are below 5\%.  Having a runtime mutltiplier of just 30 is enough to bring the fraction of exploit success rates under 5\% to 0.5.  In other words, half of all exploit success rates are under 5\% when the runtime mutiplier overhead is at 30.  As the runtime mutiplier increases, the rate  of exploit success rates being under 5\% increases.
+%TODO: Add graphs and mention analysis of graphs
 \section{Future Work}
 The next steps are to reduce the overhead associated with time randomization.
 \subsection{Heuristics}
