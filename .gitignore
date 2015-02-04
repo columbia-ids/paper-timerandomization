@@ -2,5 +2,5 @@
 *.log
 *.out
 *.ent
-report.pdf
+*TimeRandomization.pdf
 .DS_Store
