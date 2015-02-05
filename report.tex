@@ -26,6 +26,8 @@
 
 %for single author (just remove % characters)
 \author{
+%{\rm Anonymized for Review}\\
+%Do not distribute.
 {\rm David M. Tagatac}\\
 Columbia University
 \and
@@ -52,19 +54,39 @@ Columbia University
 Multithreaded programming is here to stay, and concurrency bugs are the focus of a growing number of attacks.
 While most defensive efforts against such attacks seek to identify bugs during debugging, an alternative method seeks to make exploitation harder without the need to first identify the bugs - or even the fact that there are any.
 Time randomization introduces more diversity among instances of the same software.
-Because concurrency attacks inherently depend on the timing between and among threads, diversity in thread timing decreases the chance that a successful attack on one system will succeed on another.
+Because concurrency attacks inherently depend on the timing between and among threads, diversity in thread timing may decrease the chance that a successful attack on one system will succeed on another.
 
 We study three implementations of time randomization, all using the injection of NOPs to alter program timing.  The results indicate that the overhead introduced by these implementations is impractically high.  However, the effectiveness of the method, especially when NOPs are injected before library function calls following synchronization points, indicates that more efficient time randomization is worth pursuing as a defense against concurrency attacks.
 
 \section{Introduction}
-With the pervasiveness of multicore architectures, multithreading is an important - and often necessary - tool when programming for performance.  However, programming with multiple threads is generally more difficult than programming for serial execution.  Each thread has the potential to contain any bug of a serial program, and on top of that, the uncertain interleaving of concurrent threads has the potential for concurrency bugs (e.g. data races).
+With the pervasiveness of multicore architectures, multithreading is an important - and often necessary - tool when programming for performance.
+However, programming with multiple threads is generally more difficult than programming for serial execution.
+Each thread has the potential to contain any bug of a serial program, and on top of that, the uncertain interleaving of concurrent threads has the potential for concurrency bugs (e.g. data races).
 
-Lu et al. did a survey of concurrency bugs \cite{Lu2008}, and Yang et al. has demonstrated that attacks on buggy multithreaded programs are a real concern \cite{Yang2012}.  Much of the effort in combating this threat has gone into tools and systems which detect data races in order to aid debugging \cite{Savage1997, Flanagan2004, Laadan2011, Pratikakis2011, Kasikci2013}.  An alternative approach is to guide multithreaded programs into memoized synchronization schedules \cite{Cui2011b}.  This approach does not dwell on race detection, but rather on removing the nondeterminism from the portions of multithreaded programs where races are most likely.  However, schedule memoization in its most automated form is still susceptible to attack whenever the attacker can trigger a different schedule by changing the input.
+Partial taxonomies of concurrency bugs have been constructed \cite{Farchi2003, Lu2008}, and it has been demonstrated that attacks on buggy multithreaded programs are a real concern \cite{Yang2012}.
+Much of the effort in combating this threat has gone into tools and systems which detect data races in order to aid debugging \cite{Savage1997, Flanagan2004, Laadan2011, Pratikakis2011, Kasikci2013}.
+An alternative approach is to guide multithreaded programs into memoized synchronization schedules \cite{Cui2010}.
+This approach does not dwell on race detection, but rather on removing the nondeterminism from the portions of multithreaded programs where races are most likely.
+However, schedule memoization in its most automated form is still susceptible to attack whenever the attacker can trigger a different schedule by changing the input.
 
-We address the threat of concurrency attacks from yet another angle.  Much like the way that address space layout randomization thwarts attacks that depend on absolute and/or relative code and data addresses in memory, we propose to thwart concurrency attacks that depend on specific thread timing by randomizing the delays between and among threads.  Like the memoization approach described above, we also focus on the synchronization schedule (the interleaving of the various threads in a multithreaded program).  However, instead of removing nondeterminism to increase reproducibility, we attempt to randomize the synchronization schedule to remove the possibility that the relative timing of two (or more) threads can be studied and used to craft an attack.  For this subset of concurrency attacks which depend on thread timing, we hypothesize that random injection of timing delays between concurrent threads will reduce the chance of any specific attack's success.  If such an attack can address different thread timing with correspondingly different input timing, at least randomization increases the cost to the attacker to determine the appropriate input timing; moreover, that knowledge is only useful for one system until the next randomization.
+We address the threat of concurrency attacks from yet another angle: automated software diversity.
+Software homogeneity is dangerous in that it provides economies of scale to attackers \cite{Geer2003b}.
+The relatively high cost of constructing an exploit for one bug is ameliorated by the opportunity to reuse that same exploit on every identical instance of the software.
+As a result, automated software diversity is an active area of research for software in general \cite{Larsen2014}.
+Concurrency vulnerabilities subject a homogenous world of software to the same dangers for the same reasons.
+
+Our contribution is the experimental analysis of three implementations of automated software diversity through instruction level randomization via NOP injection:
+\begin{enumerate}
+	\item Injection of random-length NOP loops before every library function call.
+	\item Injection of random-length NOP loops before every function call immediately preceding a synchronization mechanism.
+	\item Injection of random-length NOP loops before every function call immediately following a synchronization mechanism.
+\end{enumerate}
+
+We find all three implementations above to be effective in reducing exploit success rates on both real bugs and canonical examples, ranging from X to X.  However, the overhead is too high to recommend these implementations as practical solutions.  We propose future directions for achieving the benefits of this defense without overhead, or with more tolerable overhead.
+%Much like the way that address space layout randomization thwarts attacks that depend on absolute and/or relative code and data addresses in memory, we propose to thwart concurrency attacks that depend on specific thread timing by randomizing the delays between and among threads.  Like the memoization approach described above, we also focus on the synchronization schedule (the interleaving of the various threads in a multithreaded program).  However, instead of removing nondeterminism to increase reproducibility, we attempt to randomize the synchronization schedule to remove the possibility that the relative timing of two (or more) threads can be studied and used to craft an attack.  For this subset of concurrency attacks which depend on thread timing, we hypothesize that random injection of timing delays between concurrent threads will reduce the chance of any specific attack's success.  If such an attack can address different thread timing with correspondingly different input timing, at least randomization increases the cost to the attacker to determine the appropriate input timing; moreover, that knowledge is only useful for one system until the next randomization.
 
 \section{Time Randomization}
-Consider the following scenario: A remote attacker is communicating with some server software, and has somehow become aware of a concurrency bug in that software.  He has devised a way to exploit the bug, which includes a method for inducing a buggy thread interleaving.  For concreteness, let's assume that the bug is exposed when a save operation is attempted by one thread during the critical section of another save operation in another thread (e.g. after some checking has been done, but before the results have been used, sometimes referred to as a time of check to time of use attack).  If the server immediately spawns threads to execute save operations in response to client requests, the attacker's work consists of identifying the proper delay between two save threads such that the critical sections intersect.  The critical sections in this context are sometimes referred to as a vulnerability window \cite{Yang2011}.
+Consider the following scenario: A remote attacker is communicating with some server software, and has somehow become aware of a concurrency bug in that software.  He has devised a way to exploit the bug, which includes a method for inducing a buggy thread interleaving.  For concreteness, let's assume that the bug is exposed when a save operation is attempted by one thread during the critical section of another save operation in another thread (e.g. after some checking has been done, but before the results have been used, sometimes referred to as a time of check to time of use attack).  If the server immediately spawns threads to execute save operations in response to client requests, the attacker's work consists of identifying the proper delay between two save threads such that the critical sections intersect.  The critical sections in this context are sometimes referred to as a vulnerability window \cite{Yang2012}.
 
 If the server software is available to the attacker, he can simply study it on a similar system (which he controls) to determine the appropriate delay required to expose the bug.  Armed with this knowledge, he stands a good chance of exploiting the bug on the target system by sending requests with the same delay.
 
