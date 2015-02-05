@@ -1,0 +1,412 @@
+%%%%%%%%%%%%%
+% Concurrency
+%%%%%%%%%%%%%
+@inproceedings{Fonseca2014,
+address = {Broomfield, CO},
+author = {Fonseca, Pedro and Rodrigues, Rodrigo and Brandenburg, Bj\"{o}rn B},
+booktitle = {11th USENIX Symposium on Operating Systems Design and Implementation (OSDI 14)},
+file = {:Users/tag/Documents/Mendeley Desktop/Fonseca, Rodrigues, Brandenburg/11th USENIX Symposium on Operating Systems Design and Implementation (OSDI 14)/Fonseca, Rodrigues, Brandenburg - 2014 - SKI Exposing Kernel Concurrency Bugs through Systematic Schedule Exploration.pdf:pdf},
+isbn = {978-1-931971-16-4},
+mendeley-groups = {Concurrency},
+pages = {415--431},
+publisher = {USENIX Association},
+title = {{SKI: Exposing Kernel Concurrency Bugs through Systematic Schedule Exploration}},
+url = {https://www.usenix.org/conference/osdi14/technical-sessions/presentation/fonseca},
+year = {2014}
+}
+@inproceedings{Kasikci2013,
+address = {New York, New York, USA},
+author = {Kasikci, Baris and Zamfir, Cristian and Candea, George},
+booktitle = {Proceedings of the Twenty-Fourth ACM Symposium on Operating Systems Principles - SOSP '13},
+doi = {10.1145/2517349.2522736},
+file = {:Users/tag/Documents/Mendeley Desktop/Kasikci, Zamfir, Candea/Proceedings of the Twenty-Fourth ACM Symposium on Operating Systems Principles - SOSP '13/Kasikci, Zamfir, Candea - 2013 - RaceMob Crowdsourced Data Race Detection.pdf:pdf},
+isbn = {9781450323888},
+keywords = {()},
+mendeley-groups = {Concurrency},
+pages = {406--422},
+publisher = {ACM Press},
+title = {{RaceMob: Crowdsourced Data Race Detection}},
+url = {http://dl.acm.org/citation.cfm?id=2522736 http://dl.acm.org/citation.cfm?doid=2517349.2522736},
+year = {2013}
+}
+@inproceedings{Yang2013,
+abstract = {Our accelerating computational demand and the rise of multicore hardware have made parallel programs, especially shared-memory multithreaded programs, increasingly pervasive and critical. Yet, these programs remain extremely difficult to write, test, analyze, debug, and verify. Conventional wisdom has attributed these difficulties to nondeterminism, and researchers have recently dedicated much effort to bringing determinism into multithreading. In this paper, we argue that determinism is not as useful as commonly perceived: it is neither sufficient nor necessary for reliability.We present our view on why multithreaded programs are difficult to get right, describe a promising approach we call stable multithreading to dramatically improve reliability, and summarize our last four years’ research on building and applying stable multithreading systems.},
+author = {Yang, Junfeng and Cui, Heming and Wu, Jingyue},
+booktitle = {5th USENIX Workshop on Hot Topics in Parallelism HotPar'13},
+file = {:Users/tag/Documents/Mendeley Desktop/Yang, Cui, Wu/5th USENIX Workshop on Hot Topics in Parallelism HotPar'13/Yang, Cui, Wu - 2013 - Determinism Is Overrated What Really Makes Multithreaded Programs Hard to Get Right and What Can Be Done about It.pdf:pdf},
+mendeley-groups = {Concurrency},
+title = {{Determinism Is Overrated: What Really Makes Multithreaded Programs Hard to Get Right and What Can Be Done about It?}},
+url = {https://www.usenix.org/conference/hotpar13/determinism-is-overrated},
+year = {2013}
+}
+@article{Cui2013,
+abstract = {son is that the contract between developers and runtimes grants exponentially many schedules to the runtimes. We present P ARROT , a simple, practical runtime with a new contract to developers. By default, it orders thread synchronizations in the well-defined round-robin order, vastly reducing schedules to provide determinism (more precisely, deterministic synchronizations) and stability (i.e., robustness against input or code perturbations, a more useful property than determinism). When default schedules are slow, it allows developers to write intu- itive performance hints in their code to switch or add schedules for speed. We believe this “meet in the mid- dle” contract eases writing correct, efficient programs. We further present an ecosystem formed by integrat- ing P ARROT with a model checker called DBUG . This ecosystem is more effective than either system alone: DBUG checks the schedules that matter to P ARROT , and P ARROT greatly increases the coverage of DBUG . Results on a diverse set of 108 programs, roughly 10 × more than any prior evaluation, show that P ARROT is easy to use (averaging 1.2 lines of hints per program); achieves low overhead (6.9\% for 55 real-world pro- grams and 12.7\% for all 108 programs), 10 × better than two prior systems; scales well to the maximum allowed cores on a 24-core server and to different scales/types of workloads; and increases DBUG ’s coverage by 10 6 – 10 19734 for 56 programs. P ARROT ’s source code, en- tire benchmark suite, and raw results are available at github.com/columbia/smt-mc},
+author = {Cui, Heming and Simsa, Jiri and Lin, Yi-hong and Li, Hao and Blum, Ben and Xu, Xinan and Yang, Junfeng and Gibson, Garth a. and Bryant, Randal E.},
+doi = {10.1145/2517349.2522735},
+file = {:Users/tag/Documents/Mendeley Desktop/Cui et al/Proc. of SOSP/Cui et al. - 2013 - PARROT A Practical Runtime for Deterministic, Stable, and Reliable Threads.pdf:pdf},
+isbn = {9781450323888},
+journal = {Proc. of SOSP},
+keywords = {deterministic multithreading,granted without fee provided,ing,made or,or classroom use is,or hard copies of,part or all of,permission to make digital,software model checking,stable multithread-,state space reduction,that copies are not,this work for personal},
+mendeley-groups = {Concurrency},
+pages = {388--405},
+title = {{PARROT: A Practical Runtime for Deterministic, Stable, and Reliable Threads}},
+url = {http://dl.acm.org/citation.cfm?doid=2517349.2522735},
+year = {2013}
+}
+@inproceedings{Yang2012,
+abstract = {Just as errors in sequential programs can lead to security exploits, errors in concurrent programs can lead to concurrency attacks. Questions such as whether these attacks are feasible and what characteristics they have remain largely unknown. In this paper, we present a preliminary study of concurrency attacks and the security implications of real world concurrency errors. Our study yields several interesting findings. For instance, we observe that the exploitability of a concurrency error depends on the duration of the timing window within which the error may occur. We further observe that attackers can increase this window through carefully crafted inputs. We also find that four out of five commonly used sequential defenses become unsafe when applied to concurrent programs. Based on our findings, we propose new defense directions and fixes to existing defenses.},
+author = {Yang, Junfeng and Cui, Ang and Stolfo, Salvatore J. and Sethumadhavan, Simha},
+booktitle = {HotPar'12 Proceedings of the 4th USENIX conference on Hot Topics in Parallelism},
+file = {:Users/tag/Documents/Mendeley Desktop/Yang et al/HotPar'12 Proceedings of the 4th USENIX conference on Hot Topics in Parallelism/Yang et al. - 2012 - Concurrency Attacks.pdf:pdf},
+mendeley-groups = {Concurrency},
+month = jun,
+pages = {15},
+publisher = {USENIX Association},
+title = {{Concurrency Attacks}},
+url = {http://dl.acm.org/citation.cfm?id=2342788.2342803},
+year = {2012}
+}
+@article{Jonik2012,
+author = {Jonik, Dan and Varbedian, Jason},
+file = {:Users/tag/Documents/Mendeley Desktop/Jonik, Varbedian/fastrack-android.googlecode.com/Jonik, Varbedian - 2012 - Applying Desktop Race Detector Techniques to Mobile Systems.pdf:pdf},
+journal = {fastrack-android.googlecode.com},
+mendeley-groups = {Concurrency},
+title = {{Applying Desktop Race Detector Techniques to Mobile Systems}},
+url = {http://fastrack-android.googlecode.com/svn/trunk/fasttrack/paper/fasttrackmobile.pdf},
+year = {2012}
+}
+@article{Pappas2012,
+author = {Pappas, Vasilis and Polychronakis, Michalis and Keromytis, Angelos D.},
+doi = {10.1109/SP.2012.41},
+file = {:Users/tag/Documents/Mendeley Desktop/Pappas, Polychronakis, Keromytis/2012 IEEE Symposium on Security and Privacy/Pappas, Polychronakis, Keromytis - 2012 - Smashing the Gadgets Hindering Return-Oriented Programming Using In-place Code Randomization.pdf:pdf},
+isbn = {978-1-4673-1244-8},
+journal = {2012 IEEE Symposium on Security and Privacy},
+mendeley-groups = {Concurrency},
+month = may,
+pages = {601--615},
+publisher = {Ieee},
+title = {{Smashing the Gadgets: Hindering Return-Oriented Programming Using In-place Code Randomization}},
+url = {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=6234439},
+year = {2012}
+}
+@inproceedings{Laadan2011,
+abstract = {While thread races have drawn huge attention from the research community, little has been done for process races, where multiple—possibly sequential—processes access a shared resource, such as a file, without proper synchronization. We present a preliminary study of real process races and show that they are numerous, danger- ous, and difficult to detect. To address this problem, we present the design of RACEPRO, an in-vivomodel check- ing system for automatically detecting process races in deployed systems, along with preliminary results from a RACEPRO prototype. To the best of our knowledge, we are the first to study real process races, and RACEPRO is the first system to detect them. 1},
+author = {Laadan, Oren and Tsai, Chia-Che and Viennot, Nicolas and Blinn, Chris and Du, Peter Senyao and Yang, Junfeng and Nieh, Jason},
+booktitle = {Proceedings of the 13th USENIX conference on Hot topics in operating systems},
+file = {:Users/tag/Documents/Mendeley Desktop/Laadan et al/Proceedings of the 13th USENIX conference on Hot topics in operating systems/Laadan et al. - 2011 - Finding Concurrency Errors in Sequential Code—OS-level, In-vivo Model Checking of Process Races.pdf:pdf},
+mendeley-groups = {Concurrency},
+pages = {1--5},
+publisher = {USENIX Association},
+title = {{Finding Concurrency Errors in Sequential Code --- OS-level, In-vivo Model Checking of Process Races}},
+url = {http://static.usenix.org/events/hotos/tech/final\_files/Laadan.pdf},
+year = {2011}
+}
+@inproceedings{Cui2011b,
+abstract = {Deterministic multithreading (DMT) eliminates many pernicious software problems caused by nondeterminism. It works by constraining a program to repeat the same thread interleavings, or schedules, when given same input. Despite much recent research, it remains an open challenge to build both deterministic and efficient DMT systems for general programs on commodity hardware. To deterministically resolve a data race, a DMT system must enforce a deterministic schedule of shared memory accesses, or mem-schedule, which can incur prohibitive overhead. By using schedules consisting only of synchronization operations, or sync-schedule, this overhead can be avoided. However, a sync-schedule is deterministic only for race-free programs, but most programs have races. Our key insight is that races tend to occur only within minor portions of an execution, and a dominant majority of the execution is still race-free. Thus, we can resort to a mem-schedule only for the racy portions and enforce a sync-schedule otherwise, combining the efficiency of sync-schedules and the determinism of memschedules. We call these combined schedules hybrid schedules. Based on this insight, we have built PEREGRINE, an efficient deterministic multithreading system. When a program first runs on an input, PEREGRINE records an execution trace. It then relaxes this trace into a hybrid schedule and reuses the schedule on future compatible inputs efficiently and deterministically. PEREGRINE further improves efficiency with two new techniques: determinism-preserving slicing to generalize a schedule to more inputs while preserving determinism, and schedule-guided simplification to precisely analyze a program according to a specific schedule. Our evaluation on a diverse set of programs shows that PEREGRINE is deterministic and efficient, and can frequently reuse schedules for half of the evaluated programs.},
+author = {Cui, Heming and Wu, Jingyue and Gallagher, John and Guo, Huayang and Yang, Junfeng},
+booktitle = {Proceedings of the TwentyThird ACM Symposium on Operating Systems Principles SOSP 11},
+doi = {10.1145/2043556.2043588},
+file = {:Users/tag/Documents/Mendeley Desktop/Cui et al/Proceedings of the TwentyThird ACM Symposium on Operating Systems Principles SOSP 11/Cui et al. - 2011 - Efficient Deterministic Multithreading through Schedule Relaxation.pdf:pdf},
+isbn = {9781450309776},
+keywords = {11,2011,cascais,cation,deterministic multithreading,october 23 26,portugal,program simplifi,program slicing,sosp,symbolic execution},
+mendeley-groups = {Concurrency},
+number = {1},
+pages = {337},
+publisher = {ACM Press},
+title = {{Efficient Deterministic Multithreading through Schedule Relaxation}},
+url = {http://dl.acm.org/citation.cfm?doid=2043556.2043588},
+year = {2011}
+}
+@article{Pratikakis2011,
+author = {Pratikakis, Polyvios and Foster, Jeffrey S. and Hicks, Michael},
+doi = {10.1145/1889997.1890000},
+file = {:Users/tag/Documents/Mendeley Desktop/Pratikakis, Foster, Hicks/ACM Transactions on Programming Languages and Systems/Pratikakis, Foster, Hicks - 2011 - LOCKSMITH Practical Static Race Detection for C.pdf:pdf},
+issn = {01640925},
+journal = {ACM Transactions on Programming Languages and Systems},
+mendeley-groups = {Concurrency},
+month = jan,
+number = {1},
+pages = {1--55},
+title = {{LOCKSMITH: Practical Static Race Detection for C}},
+url = {http://portal.acm.org/citation.cfm?doid=1889997.1890000},
+volume = {33},
+year = {2011}
+}
+@inproceedings{Cui2010,
+abstract = {A deterministic multithreading (DMT) system eliminates nondeterminism in thread scheduling, simplifying the development of multithreaded programs. However, existing DMT systems are unstable; they may force a program to (ad)venture into vastly different schedules even for slightly different inputs or execution environments, defeating many benefits of determinism. Moreover, few existing DMT systems work with server programs whose inputs arrive continuously and nondeterministically. TERN is a stable DMT system. The key novelty in TERN is the idea of schedule memoization that memoizes past working schedules and reuses them on future inputs, making program behaviors stable across different inputs. A second novelty in TERN is the idea of windowing that extends schedule memoization to server programs by splitting continuous request streams into windows of requests. Our TERN implementation runs on Linux. It operates as user-space schedulers, requiring no changes to the OS and only a few lines of changes to the application programs. We evaluated TERN on a diverse set of 14 programs (e.g., Apache and MySQL) with real and synthetic workloads. Our results show that TERN is easy to use, makes programs more deterministic and stable, and has reasonable overhead.},
+author = {Cui, Heming and Wu, Jingyue and Tsai, Chia-Che and Yang, Junfeng},
+booktitle = {OSDI'10 Proceedings of the 9th USENIX conference on Operating systems design and implementation},
+file = {:Users/tag/Documents/Mendeley Desktop/Cui et al/OSDI'10 Proceedings of the 9th USENIX conference on Operating systems design and implementation/Cui et al. - 2010 - Stable Deterministic Multithreading through Schedule Memoization.pdf:pdf},
+mendeley-groups = {Concurrency},
+month = oct,
+pages = {1--13},
+publisher = {USENIX Association},
+title = {{Stable Deterministic Multithreading through Schedule Memoization}},
+url = {http://dl.acm.org/citation.cfm?id=1924943.1924958},
+year = {2010}
+}
+@article{Kornau2010,
+author = {Kornau, Tim},
+file = {:Users/tag/Documents/Mendeley Desktop/Kornau/Master's thesis, Ruhr-Universitat Bochum/Kornau - 2010 - Return oriented programming for the ARM architecture.pdf:pdf},
+journal = {Master's thesis, Ruhr-Universitat Bochum},
+mendeley-groups = {Concurrency},
+title = {{Return oriented programming for the ARM architecture}},
+url = {http://www.bxi.es/Reversing-Exploiting/ROP/Return Oriented Programming for ARM.pdf},
+year = {2010}
+}
+@inproceedings{Serebryany2009,
+address = {New York, New York, USA},
+author = {Serebryany, Konstantin and Iskhodzhanov, Timur},
+booktitle = {Proceedings of the Workshop on Binary Instrumentation and Applications - WBIA '09},
+doi = {10.1145/1791194.1791203},
+file = {:Users/tag/Documents/Mendeley Desktop/Serebryany, Iskhodzhanov/Proceedings of the Workshop on Binary Instrumentation and Applications - WBIA '09/Serebryany, Iskhodzhanov - 2009 - ThreadSanitizer data race detection in practice.pdf:pdf},
+isbn = {9781605587936},
+keywords = {concurrency bugs,dynamic data race detection,valgrind},
+mendeley-groups = {Concurrency},
+pages = {62},
+publisher = {ACM Press},
+title = {{ThreadSanitizer: data race detection in practice}},
+url = {http://dl.acm.org/citation.cfm?id=1791203 http://portal.acm.org/citation.cfm?doid=1791194.1791203},
+year = {2009}
+}
+@inproceedings{Kaiser2009,
+author = {Kaiser, Hartmut and Brodowicz, Maciek and Sterling, Thomas},
+booktitle = {2009 International Conference on Parallel Processing Workshops},
+doi = {10.1109/ICPPW.2009.14},
+file = {:Users/tag/Documents/Mendeley Desktop/Kaiser, Brodowicz, Sterling/2009 International Conference on Parallel Processing Workshops/Kaiser, Brodowicz, Sterling - 2009 - ParalleX An Advanced Parallel Execution Model for Scaling-Impaired Applications.pdf:pdf},
+isbn = {978-1-4244-4923-1},
+mendeley-groups = {Concurrency},
+month = sep,
+pages = {394--401},
+publisher = {IEEE},
+title = {{ParalleX An Advanced Parallel Execution Model for Scaling-Impaired Applications}},
+url = {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=5364511},
+year = {2009}
+}
+@inproceedings{Lu2008,
+address = {New York, New York, USA},
+author = {Lu, Shan and Park, Soyeon and Seo, Eunsoo and Zhou, Yuanyuan},
+booktitle = {Proceedings of the 13th international conference on Architectural support for programming languages and operating systems - ASPLOS XIII},
+doi = {10.1145/1346281.1346323},
+file = {:Users/tag/Documents/Mendeley Desktop/Lu et al/Proceedings of the 13th international conference on Architectural support for programming languages and operating systems - ASPLOS XIII/Lu et al. - 2008 - Learning from mistakes - A Comprehensive Study on Real World Concurrency Bug Characteristics.pdf:pdf},
+isbn = {9781595939586},
+keywords = {bug character-,concurrency bug,concurrent program},
+mendeley-groups = {Concurrency},
+pages = {329},
+publisher = {ACM Press},
+title = {{Learning from mistakes - A Comprehensive Study on Real World Concurrency Bug Characteristics}},
+url = {http://portal.acm.org/citation.cfm?doid=1346281.1346323},
+year = {2008}
+}
+@article{Cox2006a,
+abstract = {We present an architectural framework for systematically using automated diversity to provide high assurance detection and disruption of large classes of attacks. The framework executes a set of automatically diversified variants on the same inputs, and monitors their behavior to detect divergences. The benefit of this approach is that it requires an attacker to simultaneously compromise all system variants with the same input. By constructing variants with disjoint exploitation sets, we can make it impossible to carry out large classes of important attacks. In contrast to previous approaches that use automated diversity for security but rely on keeping secrets to provide probabilistic security properties, the security of our approach does not rely on keeping any secrets. In this paper, we introduce the N-variant systems framework, present a model for analyzing security properties of N-variant systems, define variations that can be used to detect attacks that involve referencing absolute memory addresses and executing injected code, and describe and present performance results from a prototype implementation.},
+author = {Cox, Benjamin and Evans, David and Filipi, Adrian and Rowanhill, Jonathan and Hu, Wei and Davidson, Jack and Knight, John and Nguyen-tuong, Anh and Hiser, Jason},
+file = {:Users/tag/Documents/Mendeley Desktop/Cox et al/Proceedings of the 15th USENIX Security Symposium, Vancouver, BC, August 2006/Cox et al. - 2006 - N-Variant Systems A Secretless Framework for Security through Diversity.pdf:pdf},
+journal = {Proceedings of the 15th USENIX Security Symposium, Vancouver, BC, August 2006},
+mendeley-groups = {Concurrency},
+pages = {1--16},
+title = {{N-Variant Systems A Secretless Framework for Security through Diversity}},
+url = {http://www.cs.virginia.edu/~evans/pubs/nvariant/},
+year = {2006}
+}
+@article{Bron2005,
+abstract = {Coverage analysis is a useful testing technology. However, some coverage models are more acceptable to the industry than others. In the field of testing multi-threaded applications, there is a need for a coverage model that can be used to evaluate tests for concurrent completeness and to find new testing requirements. We present a new coverage model: synchronization coverage. This model is simple to understand and the action items generated by each uncovered task are clear to testers and developers. We propose that synchronization coverage could, and should, become one of the more commonly used coverage models.},
+author = {Bron, Arkady and Farchi, Eitan and Magid, Yonit and Nir, Yarden and Ur, Shmuel},
+doi = {10.1145/1065944.1065972},
+file = {:Users/tag/Documents/Mendeley Desktop/Bron et al/PPoPP 05 Proceedings of the tenth ACM SIGPLAN symposium on Principles and practice of parallel programming/Bron et al. - 2005 - Applications of Synchronization Coverage.pdf:pdf},
+isbn = {1595930809},
+journal = {PPoPP 05 Proceedings of the tenth ACM SIGPLAN symposium on Principles and practice of parallel programming},
+keywords = {coverage,multi threading,testing},
+mendeley-groups = {Concurrency},
+pages = {206--212},
+title = {{Applications of Synchronization Coverage}},
+url = {http://doi.acm.org/10.1145/1065944.1065972},
+year = {2005}
+}
+@article{Flanagan2004,
+author = {Flanagan, C. and Freund, S.N.},
+doi = {10.1109/IPDPS.2004.1303345},
+file = {:Users/tag/Documents/Mendeley Desktop/Flanagan, Freund/18th International Parallel and Distributed Processing Symposium, 2004. Proceedings/Flanagan, Freund - 2004 - Atomizer a dynamic atomicity checker for multithreaded programs (summary).pdf:pdf},
+isbn = {0-7695-2132-0},
+journal = {18th International Parallel and Distributed Processing Symposium, 2004. Proceedings.},
+keywords = {atomicity,dynamic analysis,reduction},
+mendeley-groups = {Concurrency},
+pages = {269--271},
+publisher = {Ieee},
+title = {{Atomizer: a dynamic atomicity checker for multithreaded programs (summary)}},
+url = {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=1303345},
+year = {2004}
+}
+@article{OCallahan2003,
+author = {O'Callahan, Robert and Choi, Jong-Deok},
+doi = {10.1145/966049.781528},
+file = {:Users/tag/Documents/Mendeley Desktop/O'Callahan, Choi/ACM SIGPLAN Notices/O'Callahan, Choi - 2003 - Hybrid dynamic data race detection.pdf:pdf},
+isbn = {1581135882},
+issn = {03621340},
+journal = {ACM SIGPLAN Notices},
+keywords = {happens-before lockset hybrid,java dynamic race detection},
+mendeley-groups = {Concurrency},
+month = oct,
+number = {10},
+pages = {167},
+title = {{Hybrid dynamic data race detection}},
+url = {http://portal.acm.org/citation.cfm?doid=966049.781528},
+volume = {38},
+year = {2003}
+}
+@article{Farchi2003,
+abstract = { We present and categorize a taxonomy of concurrent bug patterns. We then use the taxonomy to create new timing heuristics for ConTest. Initial industrial experience indicates that these heuristics improve the bug finding ability of ConTest. We also show how concurrent bug patterns can be derived from concurrent design patterns. Further research is required to complete the concurrent bug taxonomy and formal experiments are needed to show that heuristics derived from the taxonomy improve the bug finding ability of ConTest.},
+author = {Farchi, E. and Nir, Y. and Ur, S.},
+doi = {10.1109/IPDPS.2003.1213511},
+file = {:Users/tag/Documents/Mendeley Desktop/Farchi, Nir, Ur/Proceedings International Parallel and Distributed Processing Symposium/Farchi, Nir, Ur - 2003 - Concurrent bug patterns and how to test them.pdf:pdf},
+isbn = {0-7695-1926-1},
+issn = {1530-2075},
+journal = {Proceedings International Parallel and Distributed Processing Symposium},
+mendeley-groups = {Concurrency},
+number = {C},
+title = {{Concurrent bug patterns and how to test them}},
+volume = {00},
+year = {2003}
+}
+@article{Edelstein2002,
+abstract = {We describe ConTest, a tool for detecting synchronization faults in multithreaded Java\&\#x2122; programs. The program under test is seeded with a sleep( ), yield( ), or priority( ) primitive at shared memory accesses and synchronization events. At run time, ConTest makes random or coverage-based decisions as to whether the seeded primitive is to be executed. Thus, the probability of finding concurrent faults is increased. A replay algorithm facilitates debugging by saving the order of shared memory accesses and synchronization events.},
+author = {Edelstein, O. and Farchi, E. and Nir, Y. and Ratsaby, G. and Ur, S.},
+doi = {10.1147/sj.411.0111},
+file = {:Users/tag/Documents/Mendeley Desktop/Edelstein et al/IBM Systems Journal/Edelstein et al. - 2002 - Multithreaded Java program test generation.pdf:pdf},
+isbn = {0018-8670 VO  - 41},
+issn = {0018-8670},
+journal = {IBM Systems Journal},
+mendeley-groups = {Concurrency},
+number = {1},
+pages = {111--125},
+title = {{Multithreaded Java program test generation}},
+volume = {41},
+year = {2002}
+}
+@article{Savage1997,
+author = {Savage, Stefan and Burrows, Michael and Nelson, Greg and Sobalvarro, Patrick and Anderson, Thomas},
+doi = {10.1145/265924.265927},
+file = {:Users/tag/Documents/Mendeley Desktop/Savage et al/ACM Transactions on Computer Systems/Savage et al. - 1997 - Eraser a dynamic data race detector for multithreaded programs.pdf:pdf},
+issn = {07342071},
+journal = {ACM Transactions on Computer Systems},
+mendeley-groups = {Concurrency},
+month = nov,
+number = {4},
+pages = {391--411},
+title = {{Eraser: a dynamic data race detector for multithreaded programs}},
+url = {http://portal.acm.org/citation.cfm?doid=265924.265927},
+volume = {15},
+year = {1997}
+}
+@article{Netzer1992,
+author = {Netzer, Robert H. B. and Miller, Barton P.},
+doi = {10.1145/130616.130623},
+file = {:Users/tag/Documents/Mendeley Desktop/Netzer, Miller/ACM Letters on Programming Languages and Systems/Netzer, Miller - 1992 - What are race conditions Some issues and formalizations.pdf:pdf},
+issn = {10574514},
+journal = {ACM Letters on Programming Languages and Systems},
+mendeley-groups = {Concurrency},
+month = mar,
+number = {1},
+pages = {74--88},
+title = {{What are race conditions?: Some issues and formalizations}},
+url = {http://dl.acm.org/citation.cfm?id=130623 http://portal.acm.org/citation.cfm?doid=130616.130623},
+volume = {1},
+year = {1992}
+}
+
+%%%%%%%%%%%%%%%%%%%%
+% Software Diversity
+%%%%%%%%%%%%%%%%%%%%
+@article{Cohen1993,
+abstract = {In this paper, we introduce the use of program evolution as a technique for defending against automated attacks on operating systems.},
+author = {Cohen, Frederick B.},
+doi = {10.1016/0167-4048(93)90054-9},
+file = {:Users/tag/Documents/Mendeley Desktop/Cohen/Computers \& Security/Cohen - 1993 - Operating system protection through program evolution.pdf:pdf},
+issn = {01674048},
+journal = {Computers \& Security},
+keywords = {trusted},
+mendeley-groups = {Software Diversity},
+pages = {565--584},
+title = {{Operating system protection through program evolution}},
+volume = {12},
+year = {1993}
+}
+@article{Geer2003b,
+author = {Geer, D. and Bace, R. and Gutmann, P. and Metzger, P. and Pfleeger, C.P. and Quarterman, J.S. and Schneier, B.},
+file = {:Users/tag/Documents/Mendeley Desktop/Geer et al/Computer and Communications Industry Association (CCIA), Sep/Geer et al. - 2003 - Cyber insecurity The cost of monopoly.pdf:pdf},
+journal = {Computer and Communications Industry Association (CCIA), Sep},
+mendeley-groups = {Software Diversity},
+title = {{Cyber insecurity: The cost of monopoly}},
+url = {http://scholar.google.com/scholar?hl=en\&btnG=Search\&q=intitle:Cyber+Insecurity:+The+Cost+of+Monopoly\#0},
+volume = {24},
+year = {2003}
+}
+@article{Larsen2014,
+author = {Larsen, Per and Homescu, Andrei and Brunthaler, Stefan and Franz, Michael},
+doi = {10.1109/SP.2014.25},
+file = {:Users/tag/Documents/Mendeley Desktop/Larsen et al/Ieee S\&P/Larsen et al. - 2014 - SoK Automated Software Diversity.pdf:pdf},
+journal = {Ieee S\&P},
+mendeley-groups = {Software Diversity},
+title = {{SoK : Automated Software Diversity}},
+year = {2014}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Performance Testing Software
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@inproceedings{hanrahan1991rapid,
+  title={A rapid hierarchical radiosity algorithm},
+  author={Hanrahan, Pat and Salzman, David and Aupperle, Larry},
+  booktitle={ACM SIGGRAPH Computer Graphics},
+  volume={25},
+  number={4},
+  pages={197--206},
+  year={1991},
+  organization={ACM}
+}
+@article{singh1992splash,
+  title={SPLASH: Stanford parallel applications for shared-memory},
+  author={Singh, Jaswinder Pal and Weber, Wolf-Dietrich and Gupta, Anoop},
+  journal={ACM SIGARCH Computer Architecture News},
+  volume={20},
+  number={1},
+  pages={5--44},
+  year={1992},
+  publisher={ACM}
+}
+@inproceedings{woo1995splash,
+  title={The SPLASH-2 programs: Characterization and methodological considerations},
+  author={Woo, Steven Cameron and Ohara, Moriyoshi and Torrie, Evan and Singh, Jaswinder Pal and Gupta, Anoop},
+  booktitle={ACM SIGARCH Computer Architecture News},
+  volume={23},
+  number={2},
+  pages={24--36},
+  year={1995},
+  organization={ACM}
+}
+
+%%%%%%%%%%
+% Websites
+%%%%%%%%%%
+@misc{CVE2005-1125,
+howpublished = {\url{http://www.cvedetails.com/cve/CVE-2005-1125/}},
+key = {zzz}
+}
+@misc{CVE2006-4814,
+howpublished = {\url{http://www.cvedetails.com/cve/CVE-2006-4814/}},
+key = {zzz}
+}
+@misc{RHELbug180663,
+title = {Red Hat Bugzilla --- Bug 180663},
+howpublished = {url{https://bugzilla.redhat.com/show_bug.cgi?id=180663}},
+key = {zzz}
+}
+@misc{Conrad2009,
+author = {Conrad, Jay},
+title = {{Tutorial: Function Interposition in Linux}},
+day = {30},
+month = jun,
+year = {2009},
+howpublished = {\url{http://jayconrod.com/posts/23/tutorial-function-interposition-in-linux}},
+urldate = {2014-10-04}
+}
