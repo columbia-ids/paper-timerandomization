@@ -49,7 +49,12 @@ Columbia University
 %\thispagestyle{empty}
 
 \subsection*{Abstract}
-\textbf{\textit{Multithreaded programming is here to stay, and concurrency bugs are the focus of a growing number of attacks.  While most defensive efforts against such attacks seek to identify bugs during debugging, our method seeks to make exploitation harder without the need to first identify the bugs - or even the fact that there are any.  Time randomization introduces more nondeterminism into the timing between threads.  We show that for a particular concurrency bug, and proof of concept exploit, time randomization dramatically decreases exploit success rate.}}
+Multithreaded programming is here to stay, and concurrency bugs are the focus of a growing number of attacks.
+While most defensive efforts against such attacks seek to identify bugs during debugging, an alternative method seeks to make exploitation harder without the need to first identify the bugs - or even the fact that there are any.
+Time randomization introduces more diversity among instances of the same software.
+Because concurrency attacks inherently depend on the timing between and among threads, diversity in thread timing decreases the chance that a successful attack on one system will succeed on another.
+
+We study three implementations of time randomization, all using the injection of NOPs to alter program timing.  The results indicate that the overhead introduced by these implementations is impractically high.  However, the effectiveness of the method, especially when NOPs are injected before library function calls following synchronization points, indicates that more efficient time randomization is worth pursuing as a defense against concurrency attacks.
 
 \section{Introduction}
 With the pervasiveness of multicore architectures, multithreading is an important - and often necessary - tool when programming for performance.  However, programming with multiple threads is generally more difficult than programming for serial execution.  Each thread has the potential to contain any bug of a serial program, and on top of that, the uncertain interleaving of concurrent threads has the potential for concurrency bugs (e.g. data races).
