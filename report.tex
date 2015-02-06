@@ -78,8 +78,8 @@ Concurrency vulnerabilities subject a homogenous world of software to the same d
 Our contribution is the experimental analysis of three implementations of automated software diversity through instruction level randomization via NOP injection:
 \begin{enumerate}
 	\item Injection of random-length NOP loops before every library function call.
-	\item Injection of random-length NOP loops before every function call immediately preceding a synchronization mechanism.
-	\item Injection of random-length NOP loops before every function call immediately following a synchronization mechanism.
+	\item Injection of random-length NOP loops before every library function call immediately preceding a synchronization mechanism.
+	\item Injection of random-length NOP loops before every library function call immediately following a synchronization mechanism.
 \end{enumerate}
 
 We find all three implementations above to be effective in reducing exploit success rates on both real bugs and canonical examples, ranging from X to X.  However, the overhead is too high to recommend these implementations as practical solutions.  We propose future directions for achieving the benefits of this defense without overhead, or with more tolerable overhead.
