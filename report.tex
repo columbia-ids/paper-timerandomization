@@ -84,42 +84,109 @@ Our contribution is the experimental analysis of three implementations of automa
 
 We find all three implementations above to be effective in reducing exploit success rates on both real bugs and canonical examples, ranging from X to X.  However, the overhead is too high to recommend these implementations as practical solutions.  We propose future directions for achieving the benefits of this defense without overhead, or with more tolerable overhead.
 
+\section{Time Randomization}
+\subsection{Threat Model}
+The type of attack that time randomization seeks to thwart has the following properties:
+\begin{itemize}
+	\item The attack targets a concurrency bug.
+	\item The attacker can gain knowledge about the relative timing between two or more threads relavent to the bug.
+	\item The attacker leverages this knowledge to craft the attack.
+\end{itemize}
+Note that there are many ways to gain knowledge about relative thread timing, including results from fuzzing experiments.
+In the case that the fuzzing is done on a binary, it may not even be obvious how many threads are involved.
+Nevertheless, positive fuzzing results can be considered knowledge about relative thread timing which can then be used to craft an attack.
+
+As an example, consider the following scenario:
+A remote attacker is communicating with some server software, and has somehow become aware of a concurrency bug in that software.
+He has devised a way to exploit the bug, which includes a method for inducing a buggy thread interleaving.
+For concreteness, let's assume that the bug is exposed when a save operation is attempted by one thread during the critical section of another save operation in another thread (e.g. after some checking has been done, but before the results have been used, sometimes referred to as a time of check to time of use attack).
+If the server immediately spawns threads to execute save operations in response to client requests, the attacker's work consists of identifying the proper delay between two save threads such that the critical sections intersect.
+The critical sections in this context are sometimes referred to as a vulnerability window \cite{Yang2012}.
+
+If the server software is available to the attacker, he can simply study it on a similar system (which he controls) to determine the appropriate delay required to expose the bug.
+Armed with this knowledge, he stands a good chance of exploiting the bug on the target system by sending requests with the same delay.
+\subsection{Automated Diversity}
+Time randomization aims to make this type of attack much harder.
+By making the relative timing between threads less predictable, the cost of carrying out the attack above is dramatically increased.
+
+\section{Experimental Design}
+To test both the efficacy and the performance of time randomization as a mechanism to thwart concurrency bug exploitation, we applied time randomization to two canonical and two real concurrency bugs.
+\subsection{Canonical Bug: Nonatomic Code Region Assumed to be Atomic}
+\cite{Farchi2003} presented a partial concurrency bug taxonomy, and \cite{Lu2008} later showed that in a narrow study of real world concurrency bugs, the vast majority are one of two types:
+\begin{enumerate}
+	\item Atomicity Violation: The desired serializability among multiple memory accesses is violated.
+	\item Order Violation: The desired order between two memory accesses is flipped.
+\end{enumerate}
+To test time randomization on the first type, a simple concurrency bug was constructed mimicking a "nonatomic operations assumed to be atomic" programmer error.
+\subsection{Canonical Bug: Order Violation}
+TODO
+\subsection{Real Bug: Libsafe CVE-2005-1125}
+Libsafe is a library which protects processes against the exploitation of buffer overflow vulnerabilities in process stacks, as well as format string vulnerabilities.  It does this by intercepting all calls to C standard library functions known to be vulnerable, and then running ``safe" versions of those functions which issue warnings about exploit attempts before exiting without allowing the exploits to succeed.
+
+A static global variable `dying' is used in Libsafe to indicate when an unsafe action has already been detected, and Libsafe is issuing warnings and exiting.  In this case, Libsafe stops checking for new exploit attempts.  However, this variable is not protected by any synchronization mechanisms, so in the case of a multithreaded program, the following sequence of events is possible:
+\begin{enumerate}
+	\item Thread A attempts an exploit.
+	\item The exploit is caught by Libsafe, the `dying' flag is set, and Libsafe begins the warning and exit procedure.
+	\item Thread B is scheduled, and attempts another exploit before Libsafe has exited thread A.
+	\item Because the `dying' flag is set, thread B's exploit is not caught by Libsafe, and it succeeds.
+\end{enumerate}
+The proof-of-concept exploit (Figure \ref{fig_poc}) often realizes the above sequence of events, effectively bypassing Libsafe.
+\begin{figure}
+\lstinputlisting{libsafe-PoC.c}
+\caption{The proof of concept exploit for concurrency bug CVE-2005-1125 \cite{CVE2005-1125}.  Both functions \texttt{func1} and \texttt{func2} attempt to overflow buffers in their own stack frames.  Either function running alone would be caught by Libsafe at the illegal calls to \texttt{strcpy}, but when run in parallel, the concurrency bug may allow one call to \texttt{strcpy} to succeed.}
+\label{fig_poc}
+\end{figure}
+Time randomization was applied to Libsafe by interposing external library calls \cite{Conrad2009} made by Libsafe each with random numbers of inline assembly NOP instructions.  This was accomplished by first specifying a max delay (per interposition).  Then, for each of the external library functions that Libsafe uses, a random integer between zero and the max delay was selected.  Finally, that number was used as the loop limit on a loop of assembly NOPs for that external library function.  The interpositions of the NOP loops were compiled into a dynamic library file, and that file was specified to be preloaded with the LD\_PRELOAD environment variable.
+The average time to make a (legal) \texttt{strcpy} function call, and the proof of concept exploit success rate were measured for several randomizations for each max delay ranging from 0 up to 50,000.  The dynamic library file used contains 64 external library calls made by Libsafe when the \texttt{strcpy} function is called.
+\subsection{Real Bug: Libvirt CVE-2014-1447}
+
 \section{Results}
+
+
 
 \begin{figure}
 \centering
 \includegraphics[width=\columnwidth]{figures/nonatomic-post}
-\caption{Graph of exploit success rates with a given strcpy overhead}
+\caption{Exploit cost (in number of exploit attempts) as a function of the microbenchmark after applying diversity implementation 3 to a canonical "nonatomic-region-assumed-to-be-atomic" concurrency bug.}
 \label{fig_nonatomic-post}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics[width=\columnwidth]{figures/libsafe-all}
-\caption{Graph of exploit success rates with a given strcpy overhead}
+\caption{Exploit success rate as a function of the microbenchmark after applying diversity implementation 1 to Libsafe with concurrency bug CVE-2005-1125.}
 \label{fig_libsafe-all}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics[width=\columnwidth]{figures/libsafe-all-zoom}
-\caption{Graph of exploit success rates with a given strcpy overhead}
+\caption{Exploit success rate as a function of the microbenchmark after applying diversity implementation 1 to Libsafe with concurrency bug CVE-2005-1125 (a zoom-in of Figure \ref{fig_libsafe-all}).}
 \label{fig_libsafe-all-zoom}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics[width=\columnwidth]{figures/libsafe-post}
-\caption{Graph of exploit success rates with a given strcpy overhead}
+\caption{Exploit success rate as a function of the number of NOPs injected after applying diversity implementation 3 to Libsafe with concurrency bug CVE-2005-1125.}
 \label{fig_libsafe-post}
 \end{figure}
 
-\begin{figure*}
+\begin{figure}
 \centering
-\includegraphics[width=\textwidth]{figures/libvirt-post}
-\caption{Graph of exploit success rates with a given strcpy overhead}
+\includegraphics[width=\columnwidth]{figures/libvirt-post}
+\caption{Exploit cost (in time) as a function of the microbenchmark after applying diversity implementation 3 to Libvirt with concurrency bug CVE-2014-1447.}
 \label{fig_libvirt-post}
-\end{figure*}
+\end{figure}
+
+\section{Future Directions}
+TODO
+
+\section{Related Work}
+TODO
+
+\section{Conclusion}
+TODO
 
 {\footnotesize \bibliographystyle{acm}
 \bibliography{references}}
@@ -131,6 +198,7 @@ We find all three implementations above to be effective in reducing exploit succ
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\section{Introduction}
 %Much like the way that address space layout randomization thwarts attacks that depend on absolute and/or relative code and data addresses in memory, we propose to thwart concurrency attacks that depend on specific thread timing by randomizing the delays between and among threads.  Like the memoization approach described above, we also focus on the synchronization schedule (the interleaving of the various threads in a multithreaded program).  However, instead of removing nondeterminism to increase reproducibility, we attempt to randomize the synchronization schedule to remove the possibility that the relative timing of two (or more) threads can be studied and used to craft an attack.  For this subset of concurrency attacks which depend on thread timing, we hypothesize that random injection of timing delays between concurrent threads will reduce the chance of any specific attack's success.  If such an attack can address different thread timing with correspondingly different input timing, at least randomization increases the cost to the attacker to determine the appropriate input timing; moreover, that knowledge is only useful for one system until the next randomization.
+%
 %\section{Time Randomization}
 %Consider the following scenario: A remote attacker is communicating with some server software, and has somehow become aware of a concurrency bug in that software.  He has devised a way to exploit the bug, which includes a method for inducing a buggy thread interleaving.  For concreteness, let's assume that the bug is exposed when a save operation is attempted by one thread during the critical section of another save operation in another thread (e.g. after some checking has been done, but before the results have been used, sometimes referred to as a time of check to time of use attack).  If the server immediately spawns threads to execute save operations in response to client requests, the attacker's work consists of identifying the proper delay between two save threads such that the critical sections intersect.  The critical sections in this context are sometimes referred to as a vulnerability window \cite{Yang2012}.
 %
