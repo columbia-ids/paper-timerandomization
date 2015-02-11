@@ -117,7 +117,7 @@ To test both the efficacy and the performance of time randomization as a mechani
 	\item Atomicity Violation: The desired serializability among multiple memory accesses is violated.
 	\item Order Violation: The desired order between two memory accesses is flipped.
 \end{enumerate}
-To test time randomization on the first type, a simple concurrency bug was constructed mimicking a "nonatomic operations assumed to be atomic" programmer error.
+To test time randomization on the first type, a simple concurrency bug was constructed mimicking a ``nonatomic operations assumed to be atomic" programmer error.  In particular, in Python, the statement \texttt{x+=1} is nonatomic, but may be mistaken to be atomic due to its compact syntax.  Our simple concurrency bug contains a loop that expects this statement (unprotected by synchronization mechanisms) to always increment \texttt{x} by one.  An ``exploit" runs in a separate thread, modifying \texttt{x} periodically.  The exploit succeeds when the statement \texttt{x+=1} in the first thread fails to increment \texttt{x} by one.
 \subsection{Canonical Bug: Order Violation}
 TODO
 \subsection{Real Bug: Libsafe CVE-2005-1125}
