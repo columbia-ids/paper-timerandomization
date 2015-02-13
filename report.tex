@@ -111,13 +111,33 @@ By making the relative timing between threads less predictable, the cost of carr
 
 \section{Experimental Design}
 To test both the efficacy and the performance of time randomization as a mechanism to thwart concurrency bug exploitation, we applied time randomization to two canonical and two real concurrency bugs.
-\subsection{Canonical Bug: Nonatomic Code Region Assumed to be Atomic}
+\subsection{Canonical Bug: Nonatomic Operations Assumed to be Atomic}
 \cite{Farchi2003} presented a partial concurrency bug taxonomy, and \cite{Lu2008} later showed that in a narrow study of real world concurrency bugs, the vast majority are one of two types:
 \begin{enumerate}
 	\item Atomicity Violation: The desired serializability among multiple memory accesses is violated.
 	\item Order Violation: The desired order between two memory accesses is flipped.
 \end{enumerate}
-To test time randomization on the first type, a simple concurrency bug was constructed mimicking a ``nonatomic operations assumed to be atomic" programmer error.  In particular, in Python, the statement \texttt{x+=1} is nonatomic, but may be mistaken to be atomic due to its compact syntax.  Our simple concurrency bug contains a loop that expects this statement (unprotected by synchronization mechanisms) to always increment \texttt{x} by one.  An ``exploit" runs in a separate thread, modifying \texttt{x} periodically.  The exploit succeeds when the statement \texttt{x+=1} in the first thread fails to increment \texttt{x} by one.
+To test time randomization on the first type, a simple concurrency bug was constructed mimicking a ``nonatomic operations assumed to be atomic" programmer error \cite{Farchi2003}.
+In particular, in Python, the statement \texttt{x+=1} is nonatomic, but may be mistaken to be atomic due to its compact syntax.
+Our simple concurrency bug (Figure \ref{fig_nonatomic}) contains a loop that expects this statement (unprotected by synchronization mechanisms) to always increment \texttt{x} by one.
+An ``exploit" runs in a separate thread, modifying \texttt{x} periodically.
+The exploit succeeds when the statement \texttt{x+=1} in the first thread fails to increment \texttt{x} by exactly one.
+In other words, the exploit thread modifies \texttt{x} within the vulnerability window (between when \texttt{x} is read from memory, and when it is written back to memory by the first thread).
+
+\begin{figure}
+	\lstinputlisting{nonatomic.py}
+	\caption{A canonical atomicity violation concurrency bug.  The \texttt{xplusplus} function assumes the nonatomic statement \texttt{x+=1} to be atomic.  The \texttt{fuzzer} function, run in a separate thread, attempts to exploit this assumption by modifying \texttt{x} within the vulnerability window (between when \texttt{x} is read from memory, and when it is written back to memory).}
+	\label{fig_nonatomic}
+\end{figure}
+
+Knowledge of the time required to execute the instructions encoded by the statement \texttt{x+=1} can be utilized by the exploit thread to achieve ``exploitation" in fewer loops.
+Note in Figure \ref{fig_nonatomic} that the exploit thread is identical to the buggy thread except for a \texttt{sleep()} at the beginning of each loop iteration.
+The \texttt{sleep()} has a duration of half of the time required to complete the statement \texttt{x+=1}.
+This sleep can be thought of as shifting the exploit thread loop (\texttt{fuzz}) with respect to the buggy thread loop (\texttt{xplusplus}).
+In the best case (for the exploit), this corresponds to altering \texttt{x} at intervals of half of the vulnerability window (modulo the time for one loop iteration).
+Of course the shift is imperfect due to the nondeterminism in thread scheduling, but the effect is significant in practice.
+The table below shows the average number of `exploit loop' iterations required to alter \texttt{x} within the vulnerability window over ten runs.
+This measurement is repeated for values of \texttt{HALF} equal to (0, 2.8e-05, 2.8e-04, 2.8e-03, and 2.8e-02), where the measured time to complete the statement \texttt{x+=1} on the test system was approximately 
 \subsection{Canonical Bug: Order Violation}
 TODO
 \subsection{Real Bug: Libsafe CVE-2005-1125}
@@ -132,12 +152,17 @@ A static global variable `dying' is used in Libsafe to indicate when an unsafe a
 \end{enumerate}
 The proof-of-concept exploit (Figure \ref{fig_poc}) often realizes the above sequence of events, effectively bypassing Libsafe.
 \begin{figure}
-\lstinputlisting{libsafe-PoC.c}
-\caption{The proof of concept exploit for concurrency bug CVE-2005-1125 \cite{CVE2005-1125}.  Both functions \texttt{func1} and \texttt{func2} attempt to overflow buffers in their own stack frames.  Either function running alone would be caught by Libsafe at the illegal calls to \texttt{strcpy}, but when run in parallel, the concurrency bug may allow one call to \texttt{strcpy} to succeed.}
-\label{fig_poc}
+	\lstinputlisting{libsafe-PoC.c}
+	\caption{The proof of concept exploit for concurrency bug CVE-2005-1125 \cite{CVE2005-1125}.  Both functions \texttt{func1} and \texttt{func2} attempt to overflow buffers in their own stack frames.  Either function running alone would be caught by Libsafe at the illegal calls to \texttt{strcpy}, but when run in parallel, the concurrency bug may allow one call to \texttt{strcpy} to succeed.}
+	\label{fig_poc}
 \end{figure}
-Time randomization was applied to Libsafe by interposing external library calls \cite{Conrad2009} made by Libsafe each with random numbers of inline assembly NOP instructions.  This was accomplished by first specifying a max delay (per interposition).  Then, for each of the external library functions that Libsafe uses, a random integer between zero and the max delay was selected.  Finally, that number was used as the loop limit on a loop of assembly NOPs for that external library function.  The interpositions of the NOP loops were compiled into a dynamic library file, and that file was specified to be preloaded with the LD\_PRELOAD environment variable.
-The average time to make a (legal) \texttt{strcpy} function call, and the proof of concept exploit success rate were measured for several randomizations for each max delay ranging from 0 up to 50,000.  The dynamic library file used contains 64 external library calls made by Libsafe when the \texttt{strcpy} function is called.
+Time randomization was applied to Libsafe by interposing external library calls \cite{Conrad2009} made by Libsafe each with random numbers of inline assembly NOP instructions.
+This was accomplished by first specifying a max delay (per interposition).
+Then, for each of the external library functions that Libsafe uses, a random integer between zero and the max delay was selected.
+Finally, that number was used as the loop limit on a loop of assembly NOPs for that external library function.
+The interpositions of the NOP loops were compiled into a dynamic library file, and that file was specified to be preloaded with the LD\_PRELOAD environment variable.
+The average time to make a (legal) \texttt{strcpy} function call, and the proof of concept exploit success rate were measured for several randomizations for each max delay ranging from 0 up to 50,000.
+The dynamic library file used contains 64 external library calls made by Libsafe when the \texttt{strcpy} function is called.
 \subsection{Real Bug: Libvirt CVE-2014-1447}
 
 \section{Results}
@@ -145,38 +170,38 @@ The average time to make a (legal) \texttt{strcpy} function call, and the proof 
 
 
 \begin{figure}
-\centering
-\includegraphics[width=\columnwidth]{figures/nonatomic-post}
-\caption{Exploit cost (in number of exploit attempts) as a function of the microbenchmark after applying diversity implementation 3 to a canonical "nonatomic-region-assumed-to-be-atomic" concurrency bug.}
-\label{fig_nonatomic-post}
+	\centering
+	\includegraphics[width=\columnwidth]{figures/nonatomic-post}
+	\caption{Exploit cost (in number of exploit attempts) as a function of the microbenchmark after applying diversity implementation 3 to a canonical "nonatomic-region-assumed-to-be-atomic" concurrency bug.}
+	\label{fig_nonatomic-post}
 \end{figure}
 
 \begin{figure}
-\centering
-\includegraphics[width=\columnwidth]{figures/libsafe-all}
-\caption{Exploit success rate as a function of the microbenchmark after applying diversity implementation 1 to Libsafe with concurrency bug CVE-2005-1125.}
-\label{fig_libsafe-all}
+	\centering
+	\includegraphics[width=\columnwidth]{figures/libsafe-all}
+	\caption{Exploit success rate as a function of the microbenchmark after applying diversity implementation 1 to Libsafe with concurrency bug CVE-2005-1125.}
+	\label{fig_libsafe-all}
 \end{figure}
 
 \begin{figure}
-\centering
-\includegraphics[width=\columnwidth]{figures/libsafe-all-zoom}
-\caption{Exploit success rate as a function of the microbenchmark after applying diversity implementation 1 to Libsafe with concurrency bug CVE-2005-1125 (a zoom-in of Figure \ref{fig_libsafe-all}).}
-\label{fig_libsafe-all-zoom}
+	\centering
+	\includegraphics[width=\columnwidth]{figures/libsafe-all-zoom}
+	\caption{Exploit success rate as a function of the microbenchmark after applying diversity implementation 1 to Libsafe with concurrency bug CVE-2005-1125 (a zoom-in of Figure \ref{fig_libsafe-all}).}
+	\label{fig_libsafe-all-zoom}
 \end{figure}
 
 \begin{figure}
-\centering
-\includegraphics[width=\columnwidth]{figures/libsafe-post}
-\caption{Exploit success rate as a function of the number of NOPs injected after applying diversity implementation 3 to Libsafe with concurrency bug CVE-2005-1125.}
-\label{fig_libsafe-post}
+	\centering
+	\includegraphics[width=\columnwidth]{figures/libsafe-post}
+	\caption{Exploit success rate as a function of the number of NOPs injected after applying diversity implementation 3 to Libsafe with concurrency bug CVE-2005-1125.}
+	\label{fig_libsafe-post}
 \end{figure}
 
 \begin{figure}
-\centering
-\includegraphics[width=\columnwidth]{figures/libvirt-post}
+	\centering
+	\includegraphics[width=\columnwidth]{figures/libvirt-post}
 \caption{Exploit cost (in time) as a function of the microbenchmark after applying diversity implementation 3 to Libvirt with concurrency bug CVE-2014-1447.}
-\label{fig_libvirt-post}
+	\label{fig_libvirt-post}
 \end{figure}
 
 \section{Future Directions}
