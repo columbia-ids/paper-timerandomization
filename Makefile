@@ -6,12 +6,7 @@ $(date)TimeRandomization.pdf : report.tex abstract.tex intro.tex time-randomizat
 	pdflatex -draftmode -jobname $(date)TimeRandomization report.tex
 	pdflatex -jobname $(date)TimeRandomization report.tex
 
-abstract.pdf : abstract.tex abstract-only.tex
-	pdflatex -jobname abstract abstract-only.tex
-
-.PHONY : abstract clean
-
-abstract : abstract.pdf
+.PHONY : clean
 
 clean :
-	rm -vf *TimeRandomization.pdf abstract.pdf *.aux *.log *.out *.ent *.bbl *.blg
+	rm -vf *TimeRandomization.pdf *.aux *.log *.out *.ent *.bbl *.blg
