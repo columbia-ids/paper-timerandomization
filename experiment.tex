@@ -28,8 +28,8 @@ The time required to complete the operations encoded in the statement \texttt{x+
 %Of course the shift is imperfect due to the nondeterminism in thread scheduling, but the effect is significant in practice.
 %The table below shows the average number of `exploit loop' iterations required to alter \texttt{x} within the vulnerability window over ten runs.
 %This measurement is repeated for values of \texttt{HALF} equal to (0, 2.8e-05, 2.8e-04, 2.8e-03, and 2.8e-02), where the measured time to complete the statement \texttt{x+=1} on the test system was approximately
-\subsection{Canonical Bug: Order Violation}
-TODO
+%\subsection{Canonical Bug: Order Violation}
+%TODO
 \subsection{Real Bug: Libsafe CVE-2005-1125}
 Libsafe \cite{Tsai2001} is a library which protects processes against the exploitation of buffer overflow vulnerabilities in process stacks, as well as format string vulnerabilities.  It does this by intercepting all calls to C standard library functions known to be vulnerable, and then running ``safe" versions of those functions which issue warnings about exploit attempts before exiting without allowing the exploits to succeed.
 
