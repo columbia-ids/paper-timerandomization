@@ -1,6 +1,9 @@
 date = $(shell date '+%Y%m%d')
+SECTIONS = report abstract intro time-randomization experiment results future related conclusion
+CODE_FILES = libsafe-PoC.c nonatomic.py
+FIGURES = libsafe-all-zoom libsafe-all libsafe-post libsafe-pre libvirt-post libvirt-pre nonatomic-post
 
-$(date)TimeRandomization.pdf : report.tex abstract.tex intro.tex time-randomization.tex experiment.tex results.tex future.tex related.tex conclusion.tex usenix.sty libsafe-PoC.c nonatomic.py references.bib
+$(date)TimeRandomization.pdf : usenix.sty $(SECTIONS:=.tex) $(CODE_FILES) $(addprefix figures/, $(FIGURES:=.pdf)) references.bib
 	pdflatex -draftmode -jobname $(date)TimeRandomization report.tex
 	bibtex $(date)TimeRandomization
 	pdflatex -draftmode -jobname $(date)TimeRandomization report.tex
