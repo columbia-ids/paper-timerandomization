@@ -1,0 +1,6 @@
+It is clear from these results that, at the very least, time randomization increases the exploitation cost for some concurrency bugs.
+Then the major argument against employing it universally becomes performance overhead.
+While overheads on effective randomizations were unacceptably high using the NOP injection implementations tested here (at least 12x for implementation 1 and at least 5x for implementation 3), it is not clear that significant overhead is necessary for time randomization in general.
+Part of the effect of time randomization via NOP injection is to modify thread interleavings by signaling with NOPs to the scheduler that another thread can be scheduled.
+The randomization between and among threads achieved here with NOP injection could conceivably be achieved directly in the scheduler via random synchronization schedules.
+By modifying the scheduler directly, it may be possible to obtain the same benefits shown here with minimal overhead.
