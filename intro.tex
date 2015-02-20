@@ -1,6 +1,9 @@
-With the pervasiveness of multicore architectures, multithreading is an important - and often necessary - tool when programming for performance.
+With the pervasiveness of multicore architectures, multithreading is an
+important---and often necessary---tool when programming for performance.
 However, programming with multiple threads is generally more difficult than programming for serial execution.
-Each thread has the potential to contain any bug of a serial program, and on top of that, the uncertain interleaving of concurrent threads has the potential for concurrency bugs (e.g. data races).
+Each thread has the potential to contain any bug of a serial program, and on
+top of that, the uncertain interleaving of concurrent threads has the
+potential for concurrency bugs (e.g., data races).
 
 Partial taxonomies of concurrency bugs have been constructed \cite{Farchi2003, Lu2008}, and it has been demonstrated that attacks on buggy multithreaded programs are a real concern \cite{Yang2012}.
 Much of the effort in combating this threat has gone into tools and systems which detect data races in order to aid debugging \cite{Savage1997, Flanagan2004, Laadan2011, Pratikakis2011, Kasikci2013}.

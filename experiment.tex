@@ -5,10 +5,11 @@ To test both the efficacy and the performance of time randomization as a mechani
 	\item Atomicity Violation: The desired serializability among multiple memory accesses is violated.
 	\item Order Violation: The desired order between two memory accesses is flipped.
 \end{enumerate}
-To test time randomization on the first type, a simple concurrency bug was constructed mimicking a ``nonatomic operations assumed to be atomic" programmer error \cite{Farchi2003}.
+To test time randomization on the first type, a simple concurrency bug was
+constructed mimicking a ``nonatomic operations assumed to be atomic'' programmer error \cite{Farchi2003}.
 In particular, in Python, the statement \texttt{x+=1} is nonatomic, but may be mistaken to be atomic due to its compact syntax.
 Our simple concurrency bug (Figure \ref{fig_nonatomic}) contains a loop that expects this statement (unprotected by synchronization mechanisms) to always increment \texttt{x} by one.
-An ``exploit" runs in a separate thread, modifying \texttt{x} periodically.
+An ``exploit'' runs in a separate thread, modifying \texttt{x} periodically.
 The exploit succeeds when the statement \texttt{x+=1} in the first thread fails to increment \texttt{x} by exactly one.
 In other words, the exploit thread modifies \texttt{x} within the vulnerability window (between when \texttt{x} is read from memory, and when it is written back to memory by the first thread).
 \begin{figure}
@@ -20,7 +21,9 @@ In other words, the exploit thread modifies \texttt{x} within the vulnerability 
 Time randomization was applied to this bug as described in \autoref{automated-diversity}.
 The time required to complete the operations encoded in the statement \texttt{x+=1} (averaged over 10,000,000 sequential executions of that statement), and the number of exploit loop iterations required to succeed were measured for a single randomization for each max delay, where max delay was varied from 0 to 1,000,000.
 %TODO: discuss sleep in exploit thread
-%Knowledge of the time required to execute the instructions encoded by the statement \texttt{x+=1} can be utilized by the exploit thread to achieve ``exploitation" in fewer loops.
+%Knowledge of the time required to execute the instructions encoded by the
+%statement \texttt{x+=1} can be utilized by the exploit thread to achieve
+%``exploitation'' in fewer loops.
 %Note in Figure \ref{fig_nonatomic} that the exploit thread is identical to the buggy thread except for a \texttt{sleep()} at the beginning of each loop iteration.
 %The \texttt{sleep()} has a duration of half of the time required to complete the statement \texttt{x+=1}.
 %This sleep can be thought of as shifting the exploit thread loop (\texttt{fuzz}) with respect to the buggy thread loop (\texttt{xplusplus}).
@@ -31,7 +34,10 @@ The time required to complete the operations encoded in the statement \texttt{x+
 %\subsection{Canonical Bug: Order Violation}
 %TODO
 \subsection{Real Bug: Libsafe CVE-2005-1125}
-Libsafe \cite{Tsai2001} is a library which protects processes against the exploitation of buffer overflow vulnerabilities in process stacks, as well as format string vulnerabilities.  It does this by intercepting all calls to C standard library functions known to be vulnerable, and then running ``safe" versions of those functions which issue warnings about exploit attempts before exiting without allowing the exploits to succeed.
+Libsafe \cite{Tsai2001} is a library which protects processes against the
+exploitation of buffer overflow vulnerabilities in process stacks, as well as
+format string vulnerabilities.  It does this by intercepting all calls to C
+standard library functions known to be vulnerable, and then running ``safe'' versions of those functions which issue warnings about exploit attempts before exiting without allowing the exploits to succeed.
 
 A static global variable `dying' is used in Libsafe to indicate when an unsafe action has already been detected, and Libsafe is issuing warnings and exiting.  In this case, Libsafe stops checking for new exploit attempts.  However, this variable is not protected by any synchronization mechanisms, so in the case of a multithreaded program, the following sequence of events is possible:
 \begin{enumerate}
@@ -53,17 +59,22 @@ Automated diversity implementations 2 and 3 were a special cases in that only on
 In these cases, we were able to exactly characterize the effects of NOP injection as a function of the number of NOPs injected into that function.
 \subsection{Real Bug: Libvirt CVE-2014-1447}
 Libvirt \cite{libvirt} is a toolkit for interacting with virtual machines and hypervisors.
-This toolkit consists, in part, of a daemon `libvirtd' which listens for and responds to virtual machine management requests (e.g. to connect to a remote host, or shutdown a VM).
+This toolkit consists, in part, of a daemon `libvirtd' which listens for and
+responds to virtual machine management requests (e.g., to connect to a remote host, or shutdown a VM).
 
 Prior to version 1.2.1, the Libvirt daemon suffered from concurrency bug CVE-2014-1447 which allows an unauthenticated client to crash the daemon with seemingly innocuous requests to connect to a host.
 After receiving a request from a client to open a connection, the daemon spawns a thread to open and maintain that connection.
-The spawned thread will eventually dereference a pointer called ``client->keepalive" as part of opening the connection.
-However, during this vulnerability window, the client may close the connection, which the daemon will handle in the main thread by (among other things) setting ``client->keepalive" to NULL.
+The spawned thread will eventually dereference a pointer called
+``client->keepalive'' as part of opening the connection.
+However, during this vulnerability window, the client may close the
+connection, which the daemon will handle in the main thread by (among other
+things) setting ``client->keepalive'' to NULL.
 Then when the spawned thread dereferences this pointer, the daemon crashes. \cite{RHELbug1047577}
 
 The Libvirt developers' proof of concept makes two changes to Libvirt in order to reliably reproduce this bug.
 First, the client is modified to exit as soon as it has requested a connection.
-Second, the daemon is modified to sleep in threads spawned to open new connections, before dereferencing the ``client->keepalive" pointer.
+Second, the daemon is modified to sleep in threads spawned to open new
+connections, before dereferencing the ``client->keepalive'' pointer.
 The first modification is within an attacker's ability, in our threat model.
 However, the second modification requires control of the daemon, which we assume the attacker does not yet have.
 An alternate exploit requiring only the first modification was applied to Libvirt 0.9.8.

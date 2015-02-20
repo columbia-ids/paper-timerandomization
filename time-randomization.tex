@@ -2,7 +2,8 @@
 The type of attack that time randomization seeks to thwart has the following properties:
 \begin{itemize}
 	\item The attack targets a concurrency bug.
-	\item The attacker can gain knowledge about the relative timing between two or more threads relavent to the bug.
+	\item The attacker can gain knowledge about the relative timing between two
+  or more threads relevant to the bug.
 	\item The attacker leverages this knowledge to craft the attack.
 \end{itemize}
 Note that there are many ways to gain knowledge about relative thread timing, including results from fuzzing experiments.
@@ -12,7 +13,9 @@ Nevertheless, positive fuzzing results can be considered knowledge about relativ
 As an example, consider the following scenario:
 A remote attacker is communicating with some server software, and has somehow become aware of a concurrency bug in that software.
 He has devised a way to exploit the bug, which includes a method for inducing a buggy thread interleaving.
-For concreteness, let's assume that the bug is exposed when a save operation is attempted by one thread during the critical section of another save operation in another thread (e.g. after some checking has been done, but before the results have been used, sometimes referred to as a time of check to time of use attack).
+For concreteness, let's assume that the bug is exposed when a save operation
+is attempted by one thread during the critical section of another save
+operation in another thread (e.g., after some checking has been done, but before the results have been used, sometimes referred to as a time of check to time of use attack).
 If the server immediately spawns threads to execute save operations in response to client requests, the attacker's work consists of identifying the proper delay between two save threads such that the critical sections intersect.
 The critical sections in this context are sometimes referred to as a vulnerability window \cite{Yang2012}.
 
@@ -35,6 +38,9 @@ Using the log from that ltrace run,
 	\item the second implementation chooses every external library function call immediately preceding a synchronization mechanism, and
 	\item the third implementation chooses every external library function call immediately following a synchronization mechanism.
 \end{enumerate}
-Functions were only excluded in the rare cases that the function takes a variable argument list, or interposing the function interferes with the interposition method itself (e.g. \texttt{sigsetjmp}).
+Functions were only excluded in the rare cases that the function takes a
+variable argument list, or interposing the function interferes with the
+interposition method itself (e.g., \texttt{sigsetjmp}).
 Both cases are unsuitable for the interposition method used in this work.
-As all of the experiments were conducted on Linux, ``synchronization mechanisms" were generally identified as \texttt{pthread} function calls, except for the case of Libvirt which redefines its own synchronization mechanisms.
+As all of the experiments were conducted on Linux, ``synchronization
+mechanisms'' were generally identified as \texttt{pthread} function calls, except for the case of Libvirt which redefines its own synchronization mechanisms.
