@@ -1,6 +1,6 @@
 To test both the efficacy and the performance of time randomization as a mechanism to thwart concurrency bug exploitation, we applied time randomization to two canonical and two real concurrency bugs.
 \subsection{Real Bug: Libsafe CVE-2005-1125}
-Libsafe \cite{Tsai2001} is a library which protects processes against the
+Libsafe~\cite{Tsai2001} is a library which protects processes against the
 exploitation of buffer overflow vulnerabilities in process stacks, as well as
 format string vulnerabilities.  It does this by intercepting all calls to C
 standard library functions known to be vulnerable, and then running ``safe'' versions of those functions which issue warnings about exploit attempts before exiting without allowing the exploits to succeed.
@@ -15,7 +15,7 @@ A static global variable `dying' is used in Libsafe to indicate when an unsafe a
 The proof-of-concept exploit (Figure \ref{fig_poc})\cite{Bugtraq13190} often realizes the above sequence of events, effectively bypassing Libsafe.
 \begin{figure}
 	\lstinputlisting{libsafe-PoC.c}
-	\caption{The proof of concept exploit for concurrency bug CVE-2005-1125 \cite{CVE-2005-1125}.  Both functions \texttt{func1} and \texttt{func2} attempt to overflow buffers in their own stack frames.  Either function running alone would be caught by Libsafe at the illegal calls to \texttt{strcpy}, but when run in parallel, the concurrency bug may allow one call to \texttt{strcpy} to succeed.}
+	\caption{The proof of concept exploit for concurrency bug CVE-2005-1125~\cite{CVE-2005-1125}.  Both functions \texttt{func1} and \texttt{func2} attempt to overflow buffers in their own stack frames.  Either function running alone would be caught by Libsafe at the illegal calls to \texttt{strcpy}, but when run in parallel, the concurrency bug may allow one call to \texttt{strcpy} to succeed.}
 	\label{fig_poc}
 \end{figure}
 
@@ -24,23 +24,23 @@ The time required to make a (legal) \texttt{strcpy} function call (using Libsafe
 Automated diversity implementations 2 and 3 were a special cases in that only one external library function was identified as immediately preceding a synchronization mechanism and only one external library function was identified as immediately following a synchronization mechanism.
 In these cases, we were able to exactly characterize the effects of NOP injection as a function of the number of NOPs injected into that function.
 \subsection{Real Bug: Libvirt CVE-2014-1447}
-Libvirt \cite{libvirt} is a toolkit for interacting with virtual machines and hypervisors.
+Libvirt~\cite{libvirt} is a toolkit for interacting with virtual machines and hypervisors.
 This toolkit consists, in part, of a daemon `libvirtd' which listens for and
 responds to virtual machine management requests (e.g., to connect to a remote host, or shutdown a VM).
 
 Prior to version 1.2.1, the Libvirt daemon suffered from concurrency bug CVE-2014-1447 which allows an unauthenticated client to crash the daemon with seemingly innocuous requests to connect to a host.
 After receiving a request from a client to open a connection, the daemon spawns a thread to open and maintain that connection.
 The spawned thread will eventually dereference a pointer called
-``client->keepalive'' as part of opening the connection.
+\texttt{client->keepalive} as part of opening the connection.
 However, during this vulnerability window, the client may close the
 connection, which the daemon will handle in the main thread by (among other
-things) setting ``client->keepalive'' to NULL.
-Then when the spawned thread dereferences this pointer, the daemon crashes. \cite{RHELbug1047577}
+things) setting \texttt{client->keepalive} to \texttt{NULL}.
+Then when the spawned thread dereferences this pointer, the daemon crashes.~\cite{RHELbug1047577}
 
 The Libvirt developers' proof of concept makes two changes to Libvirt in order to reliably reproduce this bug.
 First, the client is modified to exit as soon as it has requested a connection.
 Second, the daemon is modified to sleep in threads spawned to open new
-connections, before dereferencing the ``client->keepalive'' pointer.
+connections, before dereferencing the \texttt{client->keepalive} pointer.
 The first modification is within an attacker's ability, in our threat model.
 However, the second modification requires control of the daemon, which we assume the attacker does not yet have.
 An alternate exploit requiring only the first modification was applied to Libvirt 0.9.8.
@@ -51,13 +51,13 @@ Time randomization was applied to the Libvirt daemon as described in \autoref{au
 The time required to open and close a connection properly (with the unmodified client averaged over 10,000 sequential connections) was measured, and the time required for the alternate exploit described above to crash the daemon was measured five times for a single randomization for each max delay, where max delay was varied from 0 to 1,000,000.
 All exploit attempts were interrupted and considered failed attempts after ten minutes if they did not succeed before then.
 \subsection{Canonical Bug: Nonatomic Operations Assumed to be Atomic}
-Farchi et al. presented a partial concurrency bug taxonomy \cite{Farchi2003}, and Lu et al. later showed that in a narrow study of real world concurrency bugs, the vast majority are one of two types \cite{Lu2008}:
+Farchi et al. presented a partial concurrency bug taxonomy~\cite{Farchi2003}, and Lu et al. later showed that in a narrow study of real world concurrency bugs, the vast majority are one of two types~\cite{Lu2008}:
 \begin{enumerate}
 	\item Atomicity Violation: The desired serializability among multiple memory accesses is violated.
 	\item Order Violation: The desired order between two memory accesses is flipped.
 \end{enumerate}
 To test time randomization on the first type, a simple concurrency bug was
-constructed mimicking a ``nonatomic operations assumed to be atomic'' programmer error \cite{Farchi2003}.
+constructed mimicking a ``nonatomic operations assumed to be atomic'' programmer error~\cite{Farchi2003}.
 In particular, in Python, the statement \texttt{x+=1} is nonatomic, but may be mistaken to be atomic due to its compact syntax.
 Our simple concurrency bug (Figure \ref{fig_nonatomic}) contains a loop that expects this statement (unprotected by synchronization mechanisms) to always increment \texttt{x} by one.
 An ``exploit'' runs in a separate thread, modifying \texttt{x} periodically.

@@ -5,16 +5,16 @@ Each thread has the potential to contain any bug of a serial program, and on
 top of that, the uncertain interleaving of concurrent threads has the
 potential for concurrency bugs (e.g., data races).
 
-Partial taxonomies of concurrency bugs have been constructed \cite{Farchi2003, Lu2008}, and it has been demonstrated that attacks on buggy multithreaded programs are a real concern \cite{Yang2012}.
-Much of the effort in combating this threat has gone into tools and systems which detect data races in order to aid debugging \cite{Savage1997, Flanagan2004, Laadan2011, Pratikakis2011, Kasikci2013}.
-An alternative approach is to guide multithreaded programs into memoized synchronization schedules \cite{Cui2010}.
+Partial taxonomies of concurrency bugs have been constructed~\cite{Farchi2003, Lu2008}, and it has been demonstrated that attacks on buggy multithreaded programs are a real concern~\cite{Yang2012}.
+Much of the effort in combating this threat has gone into tools and systems which detect data races in order to aid debugging~\cite{Savage1997, Flanagan2004, Laadan2011, Pratikakis2011, Kasikci2013}.
+An alternative approach is to guide multithreaded programs into memoized synchronization schedules~\cite{Cui2010}.
 This approach does not dwell on race detection, but rather on removing the nondeterminism from the portions of multithreaded programs where races are most likely.
 However, schedule memoization in its most automated form is still susceptible to attack whenever the attacker can trigger a different schedule by changing the input.
 
 We address the threat of concurrency attacks from yet another angle: automated software diversity.
-Software homogeneity is dangerous in that it provides economies of scale to attackers \cite{Geer2003b}.
+Software homogeneity is dangerous in that it provides economies of scale to attackers~\cite{Geer2003b}.
 The relatively high cost of constructing an exploit for one bug is ameliorated by the opportunity to reuse that same exploit on every identical instance of the software.
-As a result, automated software diversity is an active area of research for software in general \cite{Larsen2014}.
+As a result, automated software diversity is an active area of research for software in general~\cite{Larsen2014}.
 Concurrency vulnerabilities subject a homogenous world of software to the same dangers for the same reasons.
 
 Our contribution is the experimental analysis of three implementations of automated software diversity through instruction level randomization via NOP injection:

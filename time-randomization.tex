@@ -17,7 +17,7 @@ For concreteness, let's assume that the bug is exposed when a save operation
 is attempted by one thread during the critical section of another save
 operation in another thread (e.g., after some checking has been done, but before the results have been used, sometimes referred to as a time of check to time of use attack).
 If the server immediately spawns threads to execute save operations in response to client requests, the attacker's work consists of identifying the proper delay between two save threads such that the critical sections intersect.
-The critical sections in this context are sometimes referred to as a vulnerability window \cite{Yang2012}.
+The critical sections in this context are sometimes referred to as a vulnerability window~\cite{Yang2012}.
 
 If the server software is available to the attacker, they can simply study it on a similar system (which they control) to determine the appropriate delay required to expose the bug.
 Armed with this knowledge, they stand a good chance of exploiting the bug on the target system by sending requests with the same delay.
@@ -25,13 +25,13 @@ Armed with this knowledge, they stand a good chance of exploiting the bug on the
 Time randomization aims to make this type of attack much harder.
 By making the relative timing between threads less predictable, the cost of carrying out the attack above is dramatically increased.
 
-The three implementations for introducing automated diversity explored in this work consist of interposing external library calls \cite{Conrad2009} made by the software to be protected each with random numbers of inline assembly NOP instructions.
+The three implementations for introducing automated diversity explored in this work consist of interposing external library calls~\cite{Conrad2009} made by the software to be protected each with random numbers of inline assembly NOP instructions.
 This was accomplished by first specifying a max delay (per interposition).
 Then, for each of the external library functions chosen for interposition, a random integer between zero and the max delay was selected.
 Finally, that number was used as the loop limit on a loop of assembly NOPs for that external library function.
 The interpositions of the NOP loops were compiled into a dynamic library file, and that file was specified to be preloaded with the LD\_PRELOAD environment variable.
 The three implementations vary only in the way that the library functions are chosen for interposition.
-In all implementations, \texttt{ltrace} \cite{cespedesltrace} is run on the unmodified program to be protected while it is being subjected to an exploit attempt.
+In all implementations, \texttt{ltrace}~\cite{cespedesltrace} is run on the unmodified program to be protected while it is being subjected to an exploit attempt.
 Using the log from that ltrace run,
 \begin{enumerate}
 	\item the first implementation chooses every external library function call for interposition,
