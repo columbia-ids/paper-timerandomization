@@ -1,9 +1,10 @@
 #nonatomic.py
 import threading, time
 
-# approximately half of the time required to complete the operations
-# encoded by the statement (x+=1) on the test system
-HALF=2.8e-05
+# the time required to complete the operations encoded by the statement (x+=1)
+# on the test system
+INCTIME = 2.8e-07
+STEP = INCTIME*100
 # the global variable
 x=0
 
@@ -28,7 +29,7 @@ def fuzzer(l):
 			x = 5
 			break
 		count += 1
-		time.sleep(HALF)
+		time.sleep(STEP)
 		x += 1
 		l.acquire()
 		x -= 1

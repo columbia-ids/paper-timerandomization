@@ -12,15 +12,15 @@ Nevertheless, positive fuzzing results can be considered knowledge about relativ
 
 As an example, consider the following scenario:
 A remote attacker is communicating with some server software, and has somehow become aware of a concurrency bug in that software.
-He has devised a way to exploit the bug, which includes a method for inducing a buggy thread interleaving.
+They have devised a way to exploit the bug, which includes a method for inducing a buggy thread interleaving.
 For concreteness, let's assume that the bug is exposed when a save operation
 is attempted by one thread during the critical section of another save
 operation in another thread (e.g., after some checking has been done, but before the results have been used, sometimes referred to as a time of check to time of use attack).
 If the server immediately spawns threads to execute save operations in response to client requests, the attacker's work consists of identifying the proper delay between two save threads such that the critical sections intersect.
 The critical sections in this context are sometimes referred to as a vulnerability window \cite{Yang2012}.
 
-If the server software is available to the attacker, he can simply study it on a similar system (which he controls) to determine the appropriate delay required to expose the bug.
-Armed with this knowledge, he stands a good chance of exploiting the bug on the target system by sending requests with the same delay.
+If the server software is available to the attacker, they can simply study it on a similar system (which they control) to determine the appropriate delay required to expose the bug.
+Armed with this knowledge, they stand a good chance of exploiting the bug on the target system by sending requests with the same delay.
 \subsection{Automated Diversity}\label{automated-diversity}
 Time randomization aims to make this type of attack much harder.
 By making the relative timing between threads less predictable, the cost of carrying out the attack above is dramatically increased.

@@ -3,13 +3,11 @@
 \documentclass[letterpaper,twocolumn,10pt]{article}
 \usepackage{usenix,epsfig,endnotes,hyperref,listings,textcomp}
 \usepackage[T1]{fontenc}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
 \renewcommand{\sectionautorefname}{\S}
 \renewcommand{\subsectionautorefname}{\S}
 \renewcommand{\subsubsectionautorefname}{\S}
 \lstset{
-	basicstyle=\footnotesize,
+	basicstyle=\footnotesize\ttfamily,
 	breaklines=true,
 	breakatwhitespace=true,
 	escapechar=\%,
@@ -17,8 +15,9 @@
 	tabsize=2,
 	xleftmargin=2em
 }
-
-\newcommand{\note}[1]{{[\textbf{#1}]}}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.85}
 
 \begin{document}
 
