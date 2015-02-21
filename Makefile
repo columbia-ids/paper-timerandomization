@@ -3,7 +3,7 @@ SECTIONS = report abstract intro time-randomization experiment results future re
 CODE_FILES = libsafe-PoC.c nonatomic.py
 FIGURES = libsafe-all-zoom libsafe-all libsafe-post libsafe-pre libvirt-post libvirt-pre nonatomic-post
 
-$(date)TimeRandomization.pdf : usenix.sty $(SECTIONS:=.tex) $(CODE_FILES) $(addprefix figures/, $(FIGURES:=.pdf)) references.bib
+$(date)TimeRandomization.pdf : usenix.sty $(SECTIONS:=.tex) $(CODE_FILES) $(addprefix figures/, $(FIGURES:=.png)) references.bib
 	pdflatex -draftmode -jobname $(date)TimeRandomization report.tex
 	bibtex $(date)TimeRandomization
 	pdflatex -draftmode -jobname $(date)TimeRandomization report.tex
