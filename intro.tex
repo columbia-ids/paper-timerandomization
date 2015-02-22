@@ -17,13 +17,15 @@ The relatively high cost of constructing an exploit for one bug is ameliorated b
 As a result, automated software diversity is an active area of research for software in general~\cite{Larsen2014}.
 Concurrency vulnerabilities subject a homogenous world of software to the same dangers for the same reasons.
 
-Our contribution is the experimental analysis of three implementations of automated software diversity through instruction level randomization via NOP injection:
-\begin{enumerate}
-	\item Injection of random-length NOP loops before every library function call.
-	\item Injection of random-length NOP loops before every library function call immediately preceding a synchronization mechanism.
-	\item Injection of random-length NOP loops before every library function call immediately following a synchronization mechanism.
-\end{enumerate}
+Focusing on the applicability of diversity-based defenses to concurrency attacks, what we call ``time randomization'' is the randomization of synchronization schedules and thread interleavings, as well as the relative timing between and among threads.
+The majority of diversification strategies systematized by Larsen et al.~\cite{Larsen2014}, like ASLR and instruction reordering, focus on mitigating attacks which depend on the predictability of absolute and/or relative addresses in memory (e.g., code reuse attacks or stack smashing attacks).
+Time randomization instead focuses on mitigating attacks which depend on the predictability of relative thread timing.
+This approach to defenses against concurrency attacks has the distinct advantage that it does not require knowledge of the bug.
+In other words, time randomization can be applied independent of bug detection and fixing.
+This highlights another point---that time randomization is not mutually exclusive of other defenses against concurrency attacks; they can be applied together in concert.
 
-We find the first and third implementations above to be effective in increasing exploit cost on two real-world concurrency bugs.
-However, the overhead is too high to recommend these implementations as practical solutions.
-We propose future directions for achieving the benefits of this defense without overhead, or with more tolerable overhead.
+There are several possibile ways to implement time randomization.
+This work analyzes three implementations which can be considered automated software diversity via function-level garbage code insertion.
+All three implementations involve the insertion of NOPs into multithreaded programs, one of which is a mostly unfocused randomization, and two of which specifically target synchronization mechanisms as a heuristic for time randomization.
+We find two of the implementations tested to be effective in increasing exploit cost on two real-world concurrency bugs.
+We propose future directions involving system-level time randomization for achieving the benefits of this defense with more tolerable overhead.

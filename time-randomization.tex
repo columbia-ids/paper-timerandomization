@@ -1,6 +1,6 @@
 \subsection{Threat Model}
 The type of attack that time randomization seeks to thwart has the following properties:
-\begin{itemize}
+\begin{itemize}\addtolength{\itemsep}{-.35\baselineskip}
 	\item The attack targets a concurrency bug.
 	\item The attacker can gain knowledge about the relative timing between two
   or more threads relevant to the bug.
@@ -33,7 +33,7 @@ The interpositions of the NOP loops were compiled into a dynamic library file, a
 The three implementations vary only in the way that the library functions are chosen for interposition.
 In all implementations, \texttt{ltrace}~\cite{cespedesltrace} is run on the unmodified program to be protected while it is being subjected to an exploit attempt.
 Using the log from that ltrace run,
-\begin{enumerate}
+\begin{enumerate}\addtolength{\itemsep}{-.35\baselineskip}
 	\item the first implementation chooses every external library function call for interposition,
 	\item the second implementation chooses every external library function call immediately preceding a synchronization mechanism, and
 	\item the third implementation chooses every external library function call immediately following a synchronization mechanism.
