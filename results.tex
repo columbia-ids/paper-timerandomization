@@ -1,5 +1,10 @@
-The results vary somewhat widely with the bug analyzed and the automated diversity transformation used.
+We evaluated \textbf{T1}-\textbf{T3} on Libsafe CVE-2005-1125, \textbf{T2} and \textbf{T3} on Libvirt CVE-2014-1447, and \textbf{T3} on the canonical ``nonatomic operations assumed to be atomic'' bug.
+For each evaluation, exploit cost or exploit success rate was evaluated for each of many applications of the transformation under study.
+The exploit cost or success rate was then compared to either the microbenchmark overhead, or the number of NOPs injected, as appropriate for each experiment.
+Libsafe and ``nonatomic operations assumed to be atomic'' experiments were run on a dedicated dual core 3.4GHz Pentium D running Debian.
+Libvirt experiments were run on a 2.8GHz dual-socket hex-core Intel Xeon with 24 hyper-threading cores running Ubuntu.
 In all figures, the horizontal red line indicates the average measurement for the unmodified bug (without time randomization).
+The results vary somewhat widely with the bug analyzed and the automated diversity transformation used.
 
 Applying transformation 1 (interposition of all external library function calls) to Libsafe resulted in a dramatic decrease in exploit success rate with increasing microbenchmark overhead (Figures \ref{fig_libsafe-all} and \ref{fig_libsafe-all-zoom}).
 Between 1x overhead and 12x overhead, no randomizations resulted in less than a 5\% success rate.
