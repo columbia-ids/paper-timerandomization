@@ -21,9 +21,11 @@ The critical sections in this context are sometimes referred to as a vulnerabili
 
 If the server software is available to the attacker, they can simply study it on a similar system (which they control) to determine the appropriate delay required to expose the bug.
 Armed with this knowledge, they stand a good chance of exploiting the bug on the target system by sending requests with the same delay.
-\subsection{Automated Diversity}\label{automated-diversity}
+\subsection{Implementation}\label{implementation}
 Time randomization aims to make this type of attack much harder.
 By making the relative timing between threads less predictable, the cost of carrying out the attack above is dramatically increased.
+
+
 
 The three implementations for introducing automated diversity explored in this work consist of interposing external library calls~\cite{Conrad2009} made by the software to be protected each with random numbers of inline assembly NOP instructions.
 This was accomplished by first specifying a max delay (per interposition).

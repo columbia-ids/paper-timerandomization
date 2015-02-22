@@ -20,9 +20,9 @@ Concurrency vulnerabilities subject a homogenous world of software to the same d
 Focusing on the applicability of diversity-based defenses to concurrency attacks, what we call ``time randomization'' is the randomization of synchronization schedules and thread interleavings, as well as the relative timing between and among threads.
 The majority of diversification strategies systematized by Larsen et al.~\cite{Larsen2014}, like ASLR and instruction reordering, focus on mitigating attacks which depend on the predictability of absolute and/or relative addresses in memory (e.g., code reuse attacks or stack smashing attacks).
 Time randomization instead focuses on mitigating attacks which depend on the predictability of relative thread timing.
-This approach to defenses against concurrency attacks has the distinct advantage that it does not require knowledge of the bug.
+This approach to defenses against concurrency attacks has the advantage that it does not require knowledge of the bug.
 In other words, time randomization can be applied independent of bug detection and fixing.
-This highlights another point---that time randomization is not mutually exclusive of other defenses against concurrency attacks; they can be applied together in concert.
+This highlights another point---that time randomization does not exclude other defenses against concurrency attacks; they can be applied together in concert.
 
 There are several possibile ways to implement time randomization.
 This work analyzes three implementations which can be considered automated software diversity via function-level garbage code insertion.

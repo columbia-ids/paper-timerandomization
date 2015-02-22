@@ -4,3 +4,7 @@ While overheads on effective randomizations were unacceptably high using the NOP
 Part of the effect of time randomization via NOP injection is to modify thread interleavings by signaling with NOPs to the scheduler that another thread can be scheduled.
 The randomization between and among threads achieved here with NOP injection could conceivably be achieved directly in the scheduler via random synchronization schedules.
 By modifying the scheduler directly, it may be possible to obtain the same benefits shown here with minimal overhead.
+
+Alternatively, a more complicated heuristic could be applied to the garbage code insertion implementations investigated here.
+More specifically, measurements could be taken of the extent to which relative thread timing has been randomized, and of some performance metric.
+These measurements could be used to decide whether to keep a specific randomization or generate a new one, as well as to calibrate randomization parameters.
