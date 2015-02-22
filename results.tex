@@ -1,7 +1,7 @@
-The results vary somewhat widely with the bug analyzed and the automated diversity implementation used.
+The results vary somewhat widely with the bug analyzed and the automated diversity transformation used.
 In all figures, the horizontal red line indicates the average measurement for the unmodified bug (without time randomization).
 
-Applying implementation 1 (interposition of all external library function calls) to Libsafe resulted in a dramatic decrease in exploit success rate with increasing microbenchmark overhead (Figures \ref{fig_libsafe-all} and \ref{fig_libsafe-all-zoom}).
+Applying transformation 1 (interposition of all external library function calls) to Libsafe resulted in a dramatic decrease in exploit success rate with increasing microbenchmark overhead (Figures \ref{fig_libsafe-all} and \ref{fig_libsafe-all-zoom}).
 Between 1x overhead and 12x overhead, no randomizations resulted in less than a 5\% success rate.
 Between 20x and 25x overhead, 27.5\% of randomizations resulted in less than a 5\% exploit success rate.
 Between 40x and 45x overhead, 61.5\% of randomizations resulted in less than a 5\% exploit success rate.
@@ -9,31 +9,31 @@ Beyond 1,040x overhead, 100\% of randomizations resulted in less than a 5\% expl
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/libsafe-all}
-	\caption{Exploit success rate as a function of the microbenchmark after applying diversity implementation 1 to Libsafe with concurrency bug CVE-2005-1125.}
+	\caption{Exploit success rate as a function of the microbenchmark after applying \textbf{T1} to Libsafe with concurrency bug CVE-2005-1125.}
 	\label{fig_libsafe-all}
 \end{figure}
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/libsafe-all-zoom}
 	\caption{
-		Exploit success rate as a function of the microbenchmark after applying diversity implementation 1 to Libsafe with concurrency bug CVE-2005-1125 (a zoom-in of Figure \ref{fig_libsafe-all}).
+		Exploit success rate as a function of the microbenchmark after applying \textbf{T1} to Libsafe with concurrency bug CVE-2005-1125 (a zoom-in of Figure \ref{fig_libsafe-all}).
 		There is a clear inverse correlation between microbenchmark overhead and exploit success rate.
 	}
 	\label{fig_libsafe-all-zoom}
 \end{figure}
 
-Applying implementation 2 to Libsafe had no noticeable effect on exploit success rate (Figure \ref{fig_libsafe-pre}) or microbenchmark overhead.
+Applying \textbf{T2} to Libsafe had no noticeable effect on exploit success rate (Figure \ref{fig_libsafe-pre}) or microbenchmark overhead.
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/libsafe-pre}
 	\caption{
-		Exploit success rate as a function of the microbenchmark after applying diversity implementation 2 to Libsafe with concurrency bug CVE-2005-1125.
-		This implementation does not appear to have an effect on exploit success rate for this bug.
+		Exploit success rate as a function of the microbenchmark after applying diversity \textbf{T2} to Libsafe with concurrency bug CVE-2005-1125.
+		This transformation does not appear to have an effect on exploit success rate for this bug.
 	}
 	\label{fig_libsafe-pre}
 \end{figure}
 
-Applying implementation 3 to Libsafe had a very marked effect on exploit success rate (Figure \ref{fig_libsafe-post}).
+Applying \textbf{T3} to Libsafe had a very marked effect on exploit success rate (Figure \ref{fig_libsafe-post}).
 In particular, exploit success rate remains high for low numbers of NOPs.
 Then, for inserted NOP loops of lengths greater than 200,000, exploit success rate begins to drop.
 For inserted NOP loops of lengths between 250,000 and 350,000, exploit success rate fluctuates between 35\% and 65\%.
@@ -42,47 +42,47 @@ Finally, for inserted NOP loops of lengths greater than 350,000, exploit rates d
 	\centering
 	\includegraphics[width=\columnwidth]{figures/libsafe-post}
 	\caption{
-		Exploit success rate as a function of the number of NOPs injected after applying diversity implementation 3 to Libsafe with concurrency bug CVE-2005-1125.
+		Exploit success rate as a function of the number of NOPs injected after applying \textbf{T3} to Libsafe with concurrency bug CVE-2005-1125.
 		A very clear inverse correlation between NOP loop length and exploit success rate is shown.
 	}
 	\label{fig_libsafe-post}
 \end{figure}
 
-Applying implementation 2 to Libvirt did not seem to have much of an effect on exploit cost.
+Applying \textbf{T2} to Libvirt did not seem to have much of an effect on exploit cost.
 The characteristic of most exploit attempts succeeding quickly, and a few taking much longer appears to be consistent throughout the range of microbenchmark values recorded (Figure \ref{fig_libvirt-pre}).
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/libvirt-pre}
 	\caption{
-		Exploit cost (in time) as a function of the microbenchmark after applying diversity implementation 2 to Libvirt with concurrency bug CVE-2014-1447.
-		This implementation does not appear to have an effect on exploit success rate for this bug.
+		Exploit cost (in time) as a function of the microbenchmark after applying \textbf{T2} to Libvirt with concurrency bug CVE-2014-1447.
+		This transformation does not appear to have an effect on exploit success rate for this bug.
 	}
 	\label{fig_libvirt-pre}
 \end{figure}
 
-Implementation 3 applied to Libvirt, as in the case of Libsafe, had a significant effect on exploit cost.
+\textbf{T3} applied to Libvirt, as in the case of Libsafe, had a significant effect on exploit cost.
 For microbenchmark connection times of less than 10 milliseconds, less than 4\% of exploit attempts took longer than the baseline exploit time of 1.11 seconds, where the baseline exploit time was obtained for a Libvirt daemon without any time randomization.
 By contrast, for microbenchmark times of greater than 10 milliseconds, nearly 85\% of exploit attempts took longer than the baseline exploit time.
-Looking at the graph (Figure \ref{fig_libvirt-post}), we can see a similar shape to the one obtained when applying implementation 2 to Libvirt - the bifurcation between exploit attempts that succeed quickly within seconds, and those which take hundreds of seconds to succeed.
-However, after applying automated diversity implementation 3, a significantly greater proportion of exploit attempts fell into the second branch of that bifurcation, taking hundreds of seconds to succeed, or failing to succeed within ten minutes (and being categorized as failed attempts).
+Looking at the graph (Figure \ref{fig_libvirt-post}), we can see a similar shape to the one obtained when applying \textbf{T2} to Libvirt - the bifurcation between exploit attempts that succeed quickly within seconds, and those which take hundreds of seconds to succeed.
+However, after applying automated \textbf{T3}, a significantly greater proportion of exploit attempts fell into the second branch of that bifurcation, taking hundreds of seconds to succeed, or failing to succeed within ten minutes (and being categorized as failed attempts).
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/libvirt-post}
 	\caption{
-		Exploit cost (in time) as a function of the microbenchmark after applying diversity implementation 3 to Libvirt with concurrency bug CVE-2014-1447.
+		Exploit cost (in time) as a function of the microbenchmark after applying diversity \textbf{T3} to Libvirt with concurrency bug CVE-2014-1447.
 		Beyond microbenchmark measurements of 10 milliseconds, most of exploit costs observed were much greater than the baseline; often the exploit attempts were stopped artificially early and labeled ``failed exploits''.
-		This implementation thus increases the average exploit cost with increasing microbenchmark overhead.
+		This transformation thus increases the average exploit cost with increasing microbenchmark overhead.
 	}
 	\label{fig_libvirt-post}
 \end{figure}
 
-Applying implementation 3 to the canonical atomicity violation bug appeared to have negligible effect on exploit cost (Figure \ref{fig_nonatomic-post}). 
+Applying \textbf{T3} to the canonical atomicity violation bug appeared to have negligible effect on exploit cost (Figure \ref{fig_nonatomic-post}). 
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/nonatomic-post}
 	\caption{
-		Exploit cost (in number of exploit attempts) as a function of the microbenchmark after applying diversity implementation 3 to a canonical ``nonatomic-operations-assumed-to-be-atomic'' concurrency bug.
-		This implementation does not appear to have an effect on exploit cost for this bug.
+		Exploit cost (in number of exploit attempts) as a function of the microbenchmark after applying \textbf{T3} to a canonical ``nonatomic-operations-assumed-to-be-atomic'' concurrency bug.
+		This transformation does not appear to have an effect on exploit cost for this bug.
 	}
 	\label{fig_nonatomic-post}
 \end{figure}

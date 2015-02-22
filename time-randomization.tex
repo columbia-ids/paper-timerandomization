@@ -22,27 +22,44 @@ The critical sections in this context are sometimes referred to as a vulnerabili
 If the server software is available to the attacker, they can simply study it on a similar system (which they control) to determine the appropriate delay required to expose the bug.
 Armed with this knowledge, they stand a good chance of exploiting the bug on the target system by sending requests with the same delay.
 \subsection{Implementation}\label{implementation}
-Time randomization aims to make this type of attack much harder.
+Time randomization, the randomization of synchronization schedules and thread interleavings, as well as the relative timing between and among threads, aims to make this type of attack much harder.
 By making the relative timing between threads less predictable, the cost of carrying out the attack above is dramatically increased.
 
+Of the various software diversity transformations which have been studied~\cite{Larsen2014}, the ones which are most applicable to time randomization are those which
+\begin{itemize}\addtolength{\itemsep}{-.35\baselineskip}
+	\item add delays to a thread or threads, and those which
+	\item reorder something such that thread interleaving is affected.
+\end{itemize}
+The first category is almost always possible, as adding delays rarely breaks programs.
+However, an obvious drawback to this approach is loss of performance, and this drawback must be weighed against the benefits of the transformation.
+In the second case, the ``something'' reordered can be at any granularity (instruction level, function level, program level, etc.) so long as thread interleaving is affected.
+These types of transformations are less likely to have performance costs, but they are more likely to break the correctness of programs.
+This work studies three transformations in the first category.
 
-
-The three implementations for introducing automated diversity explored in this work consist of interposing external library calls~\cite{Conrad2009} made by the software to be protected each with random numbers of inline assembly NOP instructions.
+The three transformations for introducing automated diversity explored in the context of concurrency attacks in this work consist of interposing external library calls~\cite{Conrad2009} made by the software to be protected each with random numbers of inline assembly NOP instructions.
 This was accomplished by first specifying a max delay (per interposition).
 Then, for each of the external library functions chosen for interposition, a random integer between zero and the max delay was selected.
 Finally, that number was used as the loop limit on a loop of assembly NOPs for that external library function.
 The interpositions of the NOP loops were compiled into a dynamic library file, and that file was specified to be preloaded with the LD\_PRELOAD environment variable.
-The three implementations vary only in the way that the library functions are chosen for interposition.
-In all implementations, \texttt{ltrace}~\cite{cespedesltrace} is run on the unmodified program to be protected while it is being subjected to an exploit attempt.
+
+The three transformations vary only in the way that the library functions are chosen for interposition.
+The first transformation chooses all external library function calls indiscriminately, while the other two use synchronization mechanisms to indicate locations where delays may have the greatest effect on relative thread timing.
+In all transformations, \texttt{ltrace}~\cite{cespedesltrace} is run on the unmodified program to be protected while it is being subjected to an exploit attempt.
 Using the log from that ltrace run,
-\begin{enumerate}\addtolength{\itemsep}{-.35\baselineskip}
-	\item the first implementation chooses every external library function call for interposition,
-	\item the second implementation chooses every external library function call immediately preceding a synchronization mechanism, and
-	\item the third implementation chooses every external library function call immediately following a synchronization mechanism.
-\end{enumerate}
+\begin{description}\addtolength{\itemsep}{-.35\baselineskip}
+	\item[T1] the first transformation chooses every external library function call for interposition,
+	\item[T2] the second transformation chooses every external library function call immediately preceding a synchronization mechanism, and
+	\item[T3] the third transformation chooses every external library function call immediately following a synchronization mechanism.
+\end{description}
+(Hereafter, these transformations are referred to as \textbf{T1}, \textbf{T2}, and \textbf{T3}.)
 Functions were only excluded in the rare cases that the function takes a
 variable argument list, or interposing the function interferes with the
 interposition method itself (e.g., \texttt{sigsetjmp}).
 Both cases are unsuitable for the interposition method used in this work.
 As all of the experiments were conducted on Linux, ``synchronization
 mechanisms'' were generally identified as \texttt{pthread} function calls, except for the case of Libvirt which redefines its own synchronization mechanisms.
+
+In addition to the question of the proper diversity transformation, there is also the question of when (or how often) to diversify.
+We do not address the latter here, except insofar as the transformations tested here dictate that the diversification must be done prior to load time (so that the interposition library is available for preloading).
+As the randomization processes \textbf{T1}-\textbf{T3} require considerable computation, diversification at \textit{each} load time is likely infeasible.
+However, one could certainly imagine these transformations being applied at install time, and even possibly at each reboot.
