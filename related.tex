@@ -10,4 +10,4 @@ Jackson et al. used GCC or LLVM to insert NOPs into register transfer language o
 This diversifying transformation inserts a NOP---with some finite probability--before each instruction, in order to break return-oriented programming and code reuse attacks.
 Homescu et al. went on to measure the performance and efficacy of traditional~\cite{Homescu2013a} and JIT~\cite{Homescu2013} compiler-based automated diversity.
 While the literature for NOP injection as a defense is voluminous, we again believe our work to be the first to investigate it with respect to concurrency attacks.
-Moreover, where compiler-based NOP insertion requires recompiling entire programs, our approach is more lightweight and amenable to more frequent randomization.
+Moreover, where compiler-based NOP insertion requires recompiling entire programs, our approach is more lightweight and amenable to more frequent randomization (e.g., at every reboot).
