@@ -5,6 +5,23 @@ Libsafe and ``nonatomic operations assumed to be atomic'' experiments were run o
 Libvirt experiments were run on a 2.8GHz dual-socket hex-core Intel Xeon with 24 hyper-threading cores running Ubuntu.
 In all figures, the horizontal red line indicates the average measurement for the unmodified bug (without time randomization).
 The results vary somewhat widely with the bug analyzed and the automated diversity transformation used.
+A summary of the results in this section is given in Table \ref{tab_results}.
+\begin{table}
+	\centering
+	\begin{tabular}{ | p{0.6in} | p{0.6in} | p{0.6in} | p{0.6in} | }
+	\hline
+	Bug & Transfor\-mation Applied & Time Randomization Effective? & Figure \\ \hline
+	\hline
+	Libsafe & \textbf{T1} & Yes & \ref{fig_libsafe-all}\&\ref{fig_libsafe-all-zoom} \\ \hline
+	Libsafe & \textbf{T2} & No & \ref{fig_libsafe-pre} \\ \hline
+	Libsafe & \textbf{T3} & Yes & \ref{fig_libsafe-post} \\ \hline
+	Libvirt & \textbf{T2} & No & \ref{fig_libvirt-pre} \\ \hline
+	Libvirt & \textbf{T3} & Yes & \ref{fig_libvirt-post} \\ \hline
+	Canonical Atomicity Violation & \textbf{T3} & No & \ref{fig_nonatomic-post} \\ \hline
+	\end{tabular}
+	\caption{A summary of the results in \autoref{results}.}
+	\label{tab_results}
+\end{table}
 
 Applying transformation 1 (interposition of all external library function calls) to Libsafe resulted in a dramatic decrease in exploit success rate with increasing microbenchmark overhead (Figures \ref{fig_libsafe-all} and \ref{fig_libsafe-all-zoom}).
 Between 1x overhead and 12x overhead, no randomizations resulted in less than a 5\% success rate.
