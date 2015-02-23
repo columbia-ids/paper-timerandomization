@@ -1,4 +1,4 @@
-\subsection{Threat Model}
+\subsection{Threat Model}\label{threat-model}
 The type of attack that time randomization seeks to thwart has the following properties:
 \begin{itemize}\addtolength{\itemsep}{-.35\baselineskip}
 	\item The attack targets a concurrency bug.
@@ -21,9 +21,49 @@ The critical sections in this context are sometimes referred to as a vulnerabili
 
 If the server software is available to the attacker, they can simply study it on a similar system (which they control) to determine the appropriate delay required to expose the bug.
 Armed with this knowledge, they stand a good chance of exploiting the bug on the target system by sending requests with the same delay.
+\begin{figure*}
+	\centering
+	\begin{subfigure}{\columnwidth}
+		\fbox{\includegraphics[width=.95\textwidth]{figures/save_op}}
+		\caption{}
+		\label{fig_save_op}
+	\end{subfigure}
+	\begin{subfigure}{\columnwidth}
+		\fbox{\includegraphics[width=.95\textwidth]{figures/two_threads}}
+		\caption{}
+		\label{fig_two_threads}
+	\end{subfigure}
+	\begin{subfigure}{\columnwidth}
+		\fbox{\includegraphics[width=.95\textwidth]{figures/attack}}
+		\caption{}
+		\label{fig_attack}
+	\end{subfigure}
+	\begin{subfigure}{\columnwidth}
+		\fbox{\includegraphics[width=.95\textwidth]{figures/thwart}}
+		\caption{}
+		\label{fig_thwart}
+	\end{subfigure}
+	\caption{
+		A pictorial representation of the example concurrency attack described in \autoref{threat-model}.
+		\ref{fig_save_op}: A single save operation thread with two significant points---an access check where the thread checks whether the requestor has the proper access rights to make the requested change, and a write where the requested change is made (assuming the access check succeeds).
+		\ref{fig_two_threads}: Two save operation threads.
+		Thread 1 is saving to the (poorly designed) global variable \texttt{my\_pointer}.
+		Thread 2 is saving to the memory location indicated by \texttt{my\_pointer}.
+		We can see the makings for a TOCTOU attack here---if \texttt{my\_pointer} points to a memory location to which the attacker has access, the check in Thread 2 will succeed; but if Thread 1 modifies \texttt{my\_pointer} to point to another memory location to which the attacker should not have access before Thread 2 writes, Thread 2 will write to that memory location.
+		An attacker has thus achieved privilege escalation.
+		\ref{fig_attack}: In fact, if the thread timing (i.e., the timing between thread spawn and the significant points labeled in \ref{fig_save_op}, and the relative timing between Thread 1 and Thread 2) are predictable, the attacker can study that thread timing on another system that they control.
+		They can then determine an appropriate delay between spawning Thread 1 and Thread 2 such that the write to \texttt{my\_pointer} by Thread 1 falls inside the vulnerability window of Thread 2.
+		\ref{fig_thwart}: An example result of time randomization.
+		Here, time randomization has shifted the vulnerability window of Thread 2 with respect to the write by Thread 1 such that the delay calculated by the attacker in \ref{fig_attack} aligns the two.
+		This result can be achieved, for example, by a time randomization transformation which adds a delay between the spawning of Thread 2 and the access check by Thread 2.
+		Note that a delay between the spawning of Thread 1 and the write by Thread 1 would also cause the write to miss the vulnerability window in Thread 2.
+	}
+	\label{fig_exploitation}
+\end{figure*}
 \subsection{Implementation}\label{implementation}
 Time randomization, the randomization of synchronization schedules and thread interleavings, as well as the relative timing between and among threads, aims to make this type of attack much harder.
 By making the relative timing between threads less predictable, the cost of carrying out the attack above is dramatically increased.
+Figure~\ref{fig_exploitation} presents a graphical explanation of this attack and one possible result of time randomization that would cause it to fail.
 
 Of the various software diversity transformations which have been studied~\cite{Larsen2014}, the ones which are most applicable to time randomization are those which
 \begin{itemize}\addtolength{\itemsep}{-.35\baselineskip}
