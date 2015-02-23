@@ -52,13 +52,16 @@ By making the relative timing between threads less predictable, the cost of carr
 Figure~\ref{fig_exploitation} presents a graphical explanation of this attack and one possible result of time randomization that would cause it to fail.
 
 Figure~\ref{fig_save_op} depicts a single save operation thread with two significant points---an access check where the thread checks whether the requestor has the proper access rights to make the requested change, and a write where the requested change is made (assuming the access check succeeds).
+
 Figure~\ref{fig_two_threads} shows two save operation threads.
 Thread 1 is saving to the (poorly designed) global variable \texttt{my\_pointer}.
 Thread 2 is saving to the memory location indicated by \texttt{my\_pointer}.
 We can see the makings for a TOCTOU attack here---if \texttt{my\_pointer} points to a memory location to which the attacker has access, the check in Thread 2 will succeed; but if Thread 1 modifies \texttt{my\_pointer} to point to another memory location to which the attacker should not have access before Thread 2 writes, Thread 2 will write to that memory location.
 An attacker has thus achieved privilege escalation.
+
 In fact, if the thread timing (i.e., the timing between thread spawn and the significant points labeled in Figure~\ref{fig_save_op}, and the relative timing between Thread 1 and Thread 2) are predictable, the attacker can study that thread timing on another system that they control (Figure~\ref{fig_attack}).
 They can then determine an appropriate delay between spawning Thread 1 and Thread 2 such that the write to \texttt{my\_pointer} by Thread 1 falls inside the vulnerability window of Thread 2.
+
 Finally, Figure~\ref{fig_thwart} shows an example result of time randomization.
 Here, time randomization has shifted the vulnerability window of Thread 2 with respect to the write by Thread 1 such that the delay calculated by the attacker in Figure~\ref{fig_attack} no longer aligns the two.
 This result can be achieved, for example, by a time randomization transformation which adds a delay between the spawning of Thread 2 and the access check by Thread 2.
