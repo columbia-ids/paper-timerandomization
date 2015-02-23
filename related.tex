@@ -2,8 +2,11 @@ Automated software diversity as a defense strategy has been systematized by Lars
 That work proposes a taxonomy of cyberattacks and a taxonomy of defenses against those classes of attacks, and surveys many of the studied and unstudied diversification techniques.
 To our knowledge, ours is the first work to investigate automated software diversity specifically as it pertains to concurrency attacks.
 
-NOP injection, also known as ``garbage code insertion'', has been investigated many times.
+NOP injection, also known as ``garbage code insertion'', has been investigated as a defense strategy many times.
 Cohen~\cite{Cohen1993} and Forrest et al.~\cite{Forrest1997} proposed garbage code insertion as a method for diversifying operating system source code as a way to drive up the required complexity of attacks on systems.
-Jackson et al. proposed NOP insertion as a diversification technique to be used by a compiler in automatically diversifying programs~\cite{Jackson2011}.
-
-In perhaps the most pertinent related work, Jackson et al. later 
+Onarlioglu et al. investigated NOP injection as a means to create gadget-less binaries~\cite{Onarlioglu2010}.
+Their approach is deterministic and a distinct defense from automated diversity.
+Jackson et al. used GCC or LLVM to insert NOPs into register transfer language or machine code, respectively, at compile time~\cite{Jackson2013}.
+This diversifying transformation inserts a NOP---with some finite probability--before each instruction, in order to break return-oriented programming and code reuse attacks.
+Homescu et al. went on to measure the performance and efficacy of traditional~\cite{Homescu2013a} and JIT~\cite{Homescu2013} compiler-based automated diversity.
+While the literature for NOP injection as a defense is voluminous, we again believe our work to be the first to investigate it with respect to concurrency attacks.
