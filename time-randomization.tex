@@ -54,7 +54,7 @@ Armed with this knowledge, they stand a good chance of exploiting the bug on the
 		(\ref{fig_attack}): In fact, if the thread timing (i.e., the timing between thread spawn and the significant points labeled in (\ref{fig_save_op}), and the relative timing between Thread 1 and Thread 2) are predictable, the attacker can study that thread timing on another system that they control.
 		They can then determine an appropriate delay between spawning Thread 1 and Thread 2 such that the write to \texttt{my\_pointer} by Thread 1 falls inside the vulnerability window of Thread 2.
 		(\ref{fig_thwart}): An example result of time randomization.
-		Here, time randomization has shifted the vulnerability window of Thread 2 with respect to the write by Thread 1 such that the delay calculated by the attacker in (\ref{fig_attack}) aligns the two.
+		Here, time randomization has shifted the vulnerability window of Thread 2 with respect to the write by Thread 1 such that the delay calculated by the attacker in (\ref{fig_attack}) no longer aligns the two.
 		This result can be achieved, for example, by a time randomization transformation which adds a delay between the spawning of Thread 2 and the access check by Thread 2.
 		Note that a delay between the spawning of Thread 1 and the write by Thread 1 would also cause the write to miss the vulnerability window in Thread 2.
 	}

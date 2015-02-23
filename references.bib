@@ -325,11 +325,46 @@ file = {:Users/tag/Documents/Mendeley Desktop/Cohen/Computers \& Security/Cohen 
 issn = {01674048},
 journal = {Computers \& Security},
 keywords = {trusted},
-mendeley-groups = {Software Diversity},
+mendeley-groups = {Software Diversity,Software Diversity/Garbage Code Insertion},
 pages = {565--584},
 title = {{Operating system protection through program evolution}},
 volume = {12},
 year = {1993}
+}
+@article{Forrest1997,
+abstract = {Diversity is an important source of robustness in biological
+systems. Computers, by contrast, are notable for their lack of
+diversity. Although homogeneous systems have many advantages, the
+beneficial effects of diversity in computing systems have been
+overlooked, specifically in the area of computer security. Several
+methods of achieving software diversity are discussed based on
+randomizations that respect the specified behavior of the program. Such
+randomization could potentially increase the robustness of software
+systems with minimal impact on convenience, usability, and efficiency.
+Randomization of the amount of memory allocated on a stack frame is
+shown to disrupt a simple buffer overflow attack},
+author = {Forrest, S. and Somayaji, a. and Ackley, D.H.},
+doi = {10.1109/HOTOS.1997.595185},
+file = {:Users/tag/Documents/Mendeley Desktop/Forrest, Somayaji, Ackley/Proceedings. The Sixth Workshop on Hot Topics in Operating Systems (Cat. No.97TB100133)/Forrest, Somayaji, Ackley - 1997 - Building diverse computer systems.pdf:pdf},
+isbn = {0-8186-7834-8},
+journal = {Proceedings. The Sixth Workshop on Hot Topics in Operating Systems (Cat. No.97TB100133)},
+mendeley-groups = {Software Diversity,Software Diversity/Garbage Code Insertion},
+title = {{Building diverse computer systems}},
+year = {1997}
+}
+@article{Franz2010,
+abstract = {We contend that the time has come to revisit the idea of software diversity for defense purposes. Four fundamental paradigm shifts that have occurred in the past decade now make it viable to distribute a unique version of every program to every user. We outline a practical approach for providing compiler-generated software diversity on a massive scale. It is based on an "App Store" containing a diversification engine (a "multicompiler") that automatically generates a unique, but functionally identical version of every program each time that a downloader requests it. All the different versions of the same program behave in exactly the same way from the perspective of the end-user, but they implement their functionality in subtly different ways. As a result, any specific attack will succeed only on a small fraction of targets. An attacker would require a large number of different attacks and would have no way of knowing a priori which specific attack will succeed on which specific target. Hence, the cost to the attacker is raised dramatically. Equally importantly, our approach makes it much more difficult for an attacker to generate attack vectors by way of reverse engineering of security patches. An attacker requires two pieces of information to extract a vulnerability from a bug fix: the version of the program that is vulnerable and the specific patch that fixes the vulnerability. In an environment in which software is diversified and every instance of every program is unique, we can set things up so that the attacker never obtains a matching pair of vulnerable program and its corresponding bug fix that could be used to identify the vulnerability. We propose a mechanism for incremental updating of diversified software that has this property.},
+author = {Franz, Michael},
+doi = {10.1145/1900546.1900550},
+file = {:Users/tag/Documents/Mendeley Desktop/Franz/Proceedings of the 2010 workshop on New security \ldots/Franz - 2010 - E unibus pluram massive-scale software diversity as a defense mechanism.pdf:pdf},
+isbn = {9781450304153},
+journal = {Proceedings of the 2010 workshop on New security \ldots},
+keywords = {compiler-generated software diversity,dynamic patching of soft-,nerabilities,patches,reverse engineering of security,service computing architectures,software vul-,ware vulnerabilities},
+mendeley-groups = {Software Diversity},
+pages = {7--16},
+title = {{E unibus pluram: massive-scale software diversity as a defense mechanism}},
+url = {http://dl.acm.org/citation.cfm?id=1900550},
+year = {2010}
 }
 @article{Geer2003b,
 author = {Geer, D. and Bace, R. and Gutmann, P. and Metzger, P. and Pfleeger, C.P. and Quarterman, J.S. and Schneier, B.},
@@ -341,6 +376,95 @@ url = {http://scholar.google.com/scholar?hl=en\&btnG=Search\&q=intitle:Cyber+Ins
 volume = {24},
 year = {2003}
 }
+@article{Giuffrida2012,
+abstract = {n recent years, the deployment of many application-level countermeasures against memory errors and the increasing number of vulnerabilities discovered in the kernel has fostered a renewed interest in kernel-level exploitation. Unfortunately, no comprehensive and well-established mechanism exists to protect the operating system from arbitrary attacks, due to the relatively new development of the area and the challenges involved. In this paper, we propose the first design for fine-grained address space randomization (ASR) inside the operating system (OS), providing an efficient and comprehensive countermeasure against classic and emerging attacks, such as return-oriented programming. To motivate our design, we investigate the differences with application-level ASR and find that some of the well-established assumptions in existing solutions are no longer valid inside the OS; above all, perhaps, that information leakage becomes a major concern in the new context. We show that our ASR strategy outperforms state-of-the-art solutions in terms of both performance and security without affecting the software distribution model. Finally, we present the first comprehensive live rerandomization strategy, which we found to be particularly important inside the OS. Experimental results demonstrate that our techniques yield low run-time performance overhead (less than 5\% on average on both SPEC and syscall-intensive benchmarks) and limited run-time memory footprint increase (around 15\% during the execution of our benchmarks). We believe our techniques can greatly enhance the level of OS security without compromising the performance and reliability of the OS.},
+author = {Giuffrida, Cristiano and Kuijsten, Anton and Tanenbaum, As},
+file = {:Users/tag/Documents/Mendeley Desktop/Giuffrida, Kuijsten, Tanenbaum/21th USENIX conference on Security/Giuffrida, Kuijsten, Tanenbaum - 2012 - Enhanced operating system security through efficient and fine-grained address space randomizatio.pdf:pdf},
+isbn = {978-931971-95-9},
+journal = {21th USENIX conference on Security},
+mendeley-groups = {Software Diversity/Garbage Code Insertion},
+pages = {16},
+title = {{Enhanced operating system security through efficient and fine-grained address space randomization}},
+url = {https://www.usenix.org/sites/default/files/conference/protected-files/giuffrida\_usenixsecurity12\_slides.pdf},
+year = {2012}
+}
+@article{Homescu2013,
+author = {Homescu, Andrei and Brunthaler, Stefan and Franz, Michael},
+doi = {10.1145/2508859.2516675},
+file = {:Users/tag/Documents/Mendeley Desktop/Homescu, Brunthaler, Franz/ACM Conference on Computer and Communications Security 2013/Homescu, Brunthaler, Franz - 2013 - librando Transparent Code Randomization for Just-in-Time Compilers Categories and Subject Descripto.pdf:pdf},
+isbn = {9781450324779},
+issn = {15437221},
+journal = {ACM Conference on Computer and Communications Security 2013},
+keywords = {attacks,binary rewriting,code reuse,diversification,jit compilers,jit spraying,randomiza-,return-oriented programming,security},
+mendeley-groups = {Software Diversity/Garbage Code Insertion},
+pages = {993--1003},
+title = {{librando : Transparent Code Randomization for Just-in-Time Compilers Categories and Subject Descriptors}},
+year = {2013}
+}
+@article{Homescu2013a,
+abstract = {Code-reuse attacks are notoriously hard to defeat, and most current solutions to the problem focus on automated software diversity. This is a promising area of research, as diversity attacks the common denominator enabling code-reuse attacksthe software monoculture. Recent research in this area provides security, but at an unfortunate price: performance overhead. Leveraging previously collected profiling information, compilers can substantially improve subsequent code generation. Traditionally, profile-guided optimization focuses on hot program code, where a program spends most of its execution time. Optimizing rarely executed code does not significantly impact performance, so few optimizations focus on this code. We use profile-guided optimization to reduce the performance overhead of software diversity. The primary insight is that we are free to diversify cold code, but restrict our diversification efforts in hot code. Our work investigates the impact of profiling on an expensive diversification technique: NOP insertion. By differentiating between hot cold and cold code, we optimize NOP insertion overheads from a maximum of 25\% down to a negligible 1\%, while preserving the security properties of the original defense. Consequently, using our profile-guided diversification technique, even randomization techniques having a high performance overhead become practical.},
+author = {Homescu, Andrei and Neisius, Steven and Larsen, Per and Brunthaler, Stefan and Franz, Michael},
+doi = {10.1109/CGO.2013.6494997},
+file = {:Users/tag/Documents/Mendeley Desktop/Homescu et al/Proceedings of the 2013 IEEEACM International Symposium on Code Generation and Optimization, CGO 2013/Homescu et al. - 2013 - Profile-guided automated software diversity.pdf:pdf},
+isbn = {9781467355254},
+journal = {Proceedings of the 2013 IEEE/ACM International Symposium on Code Generation and Optimization, CGO 2013},
+keywords = {Code,NOP insertion,Profiling, Automated Software Diversity, Compilers},
+mendeley-groups = {Software Diversity,Software Diversity/Garbage Code Insertion},
+title = {{Profile-guided automated software diversity}},
+year = {2013}
+}
+@article{Jackson2011,
+author = {Jackson, Todd and Salamat, Babak and Homescu, Andrei and Manivannan, Karthikeyan and Wagner, Gregor and Gal, Andreas and Brunthaler, Stefan and Wimmer, Christian and Franz, Michael},
+doi = {10.1007/978-1-4614-0977-9},
+file = {:Users/tag/Documents/Mendeley Desktop/Jackson et al/Moving Target Defense/Jackson et al. - 2011 - Compiler-Generated Software Diversity.pdf:pdf},
+isbn = {978-1-4614-0976-2},
+journal = {Moving Target Defense},
+mendeley-groups = {Software Diversity,Software Diversity/Garbage Code Insertion},
+pages = {153--159},
+title = {{Compiler-Generated Software Diversity}},
+url = {http://link.springer.com/10.1007/978-1-4614-0977-9},
+volume = {54},
+year = {2011}
+}
+@incollection{Jackson2013,
+author = {Jackson, Todd and Homescu, Andrei and Crane, Stephen and Larsen, Per and Brunthaler, Stefan and Franz, Michael},
+booktitle = {Moving Target Defense II: Application of Game Theory and Adversarial Modeling},
+doi = {10.1007/978-1-4614-0977-9},
+file = {:Users/tag/Documents/Mendeley Desktop/Jackson et al/Moving Target Defense II Application of Game Theory and Adversarial Modeling/Jackson et al. - 2013 - Diversifying the Software Stack Using Randomized NOP Insertion.pdf:pdf},
+isbn = {978-1-4614-0976-2},
+mendeley-groups = {Software Diversity/Garbage Code Insertion},
+pages = {151--173},
+title = {{Diversifying the Software Stack Using Randomized NOP Insertion}},
+url = {http://link.springer.com/10.1007/978-1-4614-0977-9},
+year = {2013}
+}
+@article{Just2004,
+abstract = {The increasing monoculture in operating systems and key applications and the enormous expense of N-version programming for custom applications mean that lack of diversity is a fundamental barrier to achieving survivability even for high value systems that can afford hot spares. This monoculture makes flash worms possible. Our analysis of vulnerabilities and exploits identifies key assumptions required to develop successful attacks. We review the literature on synthetic diversity techniques, focusing primarily on those that can be implemented at the executable code level, since this is where we believe there is the most potential to reduce the common mode failure problem in COTS applications. Finally we propose a functional architecture for synthetic diversity at the executable code level that reduces the common mode failure problem in COTS applications by several orders of magnitude. Copyright 2004 ACM.},
+author = {Just, James E and Cornwell, Mark},
+file = {:Users/tag/Documents/Mendeley Desktop/Just, Cornwell/WORM'04 - Proceedings of the 2004 ACM Workshop on Rapid Malcode/Just, Cornwell - 2004 - Review and analysis of synthetic diversity for breaking monocultures.pdf:pdf},
+isbn = {1581139705},
+journal = {WORM'04 - Proceedings of the 2004 ACM Workshop on Rapid Malcode},
+keywords = {Codes (symbols),Computer architecture,Digital libr},
+mendeley-groups = {Software Diversity},
+pages = {22--32},
+title = {{Review and analysis of synthetic diversity for breaking monocultures}},
+year = {2004}
+}
+@article{Larsen2014a,
+abstract = {Most software attacks rely on some predictable behavior on the target platform, and so mass distribution of identical software facilitates mass exploitation. As a countermeasure, there has been a resurgent interest in moving target defenses in general and biologically inspired artificial software diversity in particular. While the concept of software diversity has interested researchers for over twenty years, technical obstacles have prevented its widespread adoption until now. But now, massive-scale software diversity has become practical due to the Internet (enabling distribution of individualized software) and cloud computing (computational power to perform diversification). In this article, we take stock of the current state of software diversity research, and what we see is quite encouraging. It turns out that the potential show-stopper issues are now mostly solved, but a few lesser concerns still separate us from widespread adoption. We describe these remaining issues and point to a realistic adoption path.},
+author = {Larsen, Per and Brunthaler, Stefan and Franz, Michael},
+doi = {10.1109/MSP.2013.129},
+file = {:Users/tag/Documents/Mendeley Desktop/Larsen, Brunthaler, Franz/IEEE Security and Privacy/Larsen, Brunthaler, Franz - 2014 - Security through diversity Are we there yet.pdf:pdf},
+issn = {15407993},
+journal = {IEEE Security and Privacy},
+keywords = {Compilers,Error handling and recovery,Programming languages,Software engineering,System issues,Testing and debugging},
+mendeley-groups = {Software Diversity},
+number = {April},
+pages = {28--35},
+title = {{Security through diversity: Are we there yet?}},
+volume = {12},
+year = {2014}
+}
 @article{Larsen2014,
 author = {Larsen, Per and Homescu, Andrei and Brunthaler, Stefan and Franz, Michael},
 doi = {10.1109/SP.2014.25},
@@ -349,6 +473,33 @@ journal = {Ieee S\&P},
 mendeley-groups = {Software Diversity},
 title = {{SoK : Automated Software Diversity}},
 year = {2014}
+}
+@article{Shacham2004,
+abstract = {Address-space randomization is a technique used to fortify systems against buffer overflow attacks. The idea is to introduce artificial diversity by randomizing the memory location of certain system components. This mechanism is available for both Linux (via PaX ASLR) and OpenBSD. We study the effectiveness of address-space randomization and find that its utility on 32-bit architectures is limited by the number of bits available for address randomization. In particular, we demonstrate a derandomization attack that will convert any standard buffer-overflow exploit into an exploit that works against systems protected by address-space randomization. The resulting exploit is as effective as the original exploit, although it takes a little longer to compromise a target machine: on average 216 seconds to compromise Apache running on a Linux PaX ASLR system. The attack does not require running code on the stack. We also explore various ways of strengthening address-space randomization and point out weaknesses in each. Surprisingly, increasing the frequency of re-randomizations adds at most 1 bit of security. Furthermore, compile-time randomization appears to be more effective than runtime randomization. We conclude that, on 32-bit architectures, the only benefit of PaX-like address-space randomization is a small slowdown in worm propagation speed. The cost of randomization is extra complexity in system support.},
+author = {Shacham, Hovav and Page, Matthew and Pfaff, Ben and Goh, Eu-Jin and Modadugu, Nagendra and Boneh, Dan},
+doi = {10.1145/1030083.1030124},
+file = {:Users/tag/Documents/Mendeley Desktop/Shacham et al/Proceedings of the 11th ACM conference on Computer and communications security - CCS '04/Shacham et al. - 2004 - On the effectiveness of address-space randomization.pdf:pdf},
+isbn = {1581139616},
+issn = {15437221},
+journal = {Proceedings of the 11th ACM conference on Computer and communications security - CCS '04},
+mendeley-groups = {Software Diversity},
+pages = {298},
+title = {{On the effectiveness of address-space randomization}},
+url = {http://portal.acm.org/citation.cfm?doid=1030083.1030124},
+year = {2004}
+}
+@article{Snow2013,
+abstract = {Fine-grained address space layout randomization (ASLR) has recently been proposed as a method of efficiently mitigating runtime attacks. In this paper, we introduce the design and implementation of a framework based on a novel attack strategy, dubbed just-in-time code reuse, that undermines the benefits of fine-grained ASLR. Specifically, we derail the assumptions embodied in fine-grained ASLR by exploiting the ability to repeatedly abuse a memory disclosure to map an application’s memory layout on-the-fly, dynamically discover API functions and gadgets, and JIT-compile a target program using those gadgets—all within a script environment at the time an exploit is launched. We demonstrate the power of our framework by using it in conjunction with a real-world exploit against Internet Explorer, and also provide extensive evaluations that demonstrate the practicality of just-in-time code reuse attacks. Our findings suggest that fine-grained ASLR may not be as promising as first thought.},
+author = {Snow, Kevin Z. and Monrose, Fabian and Davi, Lucas and Dmitrienko, Alexandra and Liebchen, Christopher and Sadeghi, Ahmad Reza},
+doi = {10.1109/SP.2013.45},
+file = {:Users/tag/Documents/Mendeley Desktop/Snow et al/Proceedings - IEEE Symposium on Security and Privacy/Snow et al. - 2013 - Just-in-time code reuse On the effectiveness of fine-grained address space layout randomization.pdf:pdf},
+isbn = {9780769549774},
+issn = {10816011},
+journal = {Proceedings - IEEE Symposium on Security and Privacy},
+mendeley-groups = {Software Diversity},
+pages = {574--588},
+title = {{Just-in-time code reuse: On the effectiveness of fine-grained address space layout randomization}},
+year = {2013}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
