@@ -1,8 +1,13 @@
-% Based off of the TEMPLATE for Usenix papers (https://www.usenix.org/sites/default/files/template.la_.txt)
-
-\documentclass[letterpaper,twocolumn,10pt]{article}
-\usepackage{usenix,epsfig,endnotes,hyperref,listings,textcomp,flushend,graphicx,subcaption}
-\usepackage[T1]{fontenc}
+% Based off of LLNCS.DEM the demonstration file of
+% the LaTeX macro package from Springer-Verlag
+% for Lecture Notes in Computer Science,
+% version 2.4 for LaTeX2e as of 16. April 2010
+%
+\documentclass{llncs}
+%
+%\usepackage{usenix,epsfig,endnotes,hyperref,listings,textcomp,flushend,graphicx,subcaption}
+\usepackage{subcaption,graphicx,hyperref,listings}
+\captionsetup{compatibility=false}
 \renewcommand{\sectionautorefname}{\S}
 \renewcommand{\subsectionautorefname}{\S}
 \renewcommand{\subsubsectionautorefname}{\S}
@@ -15,44 +20,24 @@
 	tabsize=2,
 	xleftmargin=2em
 }
-\renewcommand{\topfraction}{0.85}
-\renewcommand{\textfraction}{0.1}
-\renewcommand{\floatpagefraction}{0.85}
-
+%
 \begin{document}
+%
+\mainmatter              % start of the contributions
+%
+\title{Hardening Multithreaded Programs Against Exploitation with Diversity}
+%
+\author{Anonymized for Review}
+%
+\institute{Do Not Distribute}
 
-%don't want date printed
-\date{\today}
+\maketitle              % typeset the title of the contribution
 
-%make title bold and 14 pt font (Latex default is non-bold, 16 pt)
-\title{\Large \bf Time Randomization to Thwart Concurrency Bug Exploitation}
-
-%for single author (just remove % characters)
-\author{
-{\rm Anonymized for Review}\\
-Do not distribute.
-%{\rm David M. Tagatac}\\
-%Columbia University
-%\and
-%{\rm Michalis Polychronakis}\\
-%Stony Brook University
-%\and
-%{\rm Salvatore J. Stolfo}\\
-%Columbia University
-% copy the following lines to add more authors
-% \and
-% {\rm Name}\\
-%Name Institution
-} % end author
-
-\maketitle
-% Use the following at camera-ready time to suppress page numbers.
-% Comment it out when you first submit the paper for review.
-%\thispagestyle{empty}
-
-\subsection*{Abstract}
+\begin{abstract}
 \input{abstract}
-
+\keywords{time randomization, concurrency bugs, software diversity}
+\end{abstract}
+%
 \section{Introduction}
 \input{intro}
 
@@ -77,6 +62,9 @@ Do not distribute.
 %\section*{Acknowledgement}
 %This research was supported, in part, by DARPA CRASH.
 
+%
+% ---- Bibliography ----
+%
 {\footnotesize \bibliographystyle{acm}
 \bibliography{references}}
 
