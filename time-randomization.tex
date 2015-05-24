@@ -1,6 +1,6 @@
 \subsection{Threat Model}\label{threat-model}
 The type of attack that time randomization seeks to thwart has the following properties:
-\begin{itemize}\addtolength{\itemsep}{-.35\baselineskip}
+\begin{itemize}
 	\item The attack targets a concurrency bug.
 	\item The attacker can gain knowledge about the relative timing between two
   or more threads relevant to the bug.
@@ -23,22 +23,22 @@ If the server software is available to the attacker, they can simply study it on
 Armed with this knowledge, they stand a good chance of exploiting the bug on the target system by sending requests with the same delay.
 \begin{figure*}
 	\centering
-	\begin{subfigure}{\columnwidth}
+	\begin{subfigure}{.49\columnwidth}
 		\fbox{\includegraphics[width=.95\textwidth]{figures/save_op}}
 		\caption{A single save operation thread.}
 		\label{fig_save_op}
 	\end{subfigure}
-	\begin{subfigure}{\columnwidth}
+	\begin{subfigure}{.49\columnwidth}
 		\fbox{\includegraphics[width=.95\textwidth]{figures/two_threads}}
 		\caption{Two save operation threads.}
 		\label{fig_two_threads}
 	\end{subfigure}
-	\begin{subfigure}{\columnwidth}
+	\begin{subfigure}{.49\columnwidth}
 		\fbox{\includegraphics[width=.95\textwidth]{figures/attack}}
 		\caption{A constructed attack using timing knowledge.}
 		\label{fig_attack}
 	\end{subfigure}
-	\begin{subfigure}{\columnwidth}
+	\begin{subfigure}{.49\columnwidth}
 		\fbox{\includegraphics[width=.95\textwidth]{figures/thwart}}
 		\caption{An example result of time randomization.}
 		\label{fig_thwart}
@@ -68,7 +68,7 @@ This result can be achieved, for example, by a time randomization transformation
 Note that a delay between the spawning of Thread 1 and the write by Thread 1 would also cause the write to miss the vulnerability window in Thread 2.
 
 Of the various software diversity transformations which have been studied~\cite{Larsen2014}, the ones which are most applicable to time randomization are those which
-\begin{itemize}\addtolength{\itemsep}{-.35\baselineskip}
+\begin{itemize}
 	\item add delays to a thread or threads, and those which
 	\item reorder something such that thread interleaving is affected.
 \end{itemize}
@@ -88,7 +88,7 @@ The three transformations vary only in the way that the library functions are ch
 The first transformation chooses all external library function calls indiscriminately, while the other two use synchronization mechanisms to indicate locations where delays may have the greatest effect on relative thread timing.
 In all transformations, \texttt{ltrace}~\cite{cespedesltrace} is run on the unmodified program to be protected while it is being subjected to an exploit attempt.
 Using the log from that ltrace run,
-\begin{description}\addtolength{\itemsep}{-.35\baselineskip}
+\begin{description}
 	\item[T1] the first transformation chooses every external library function call for interposition,
 	\item[T2] the second transformation chooses every external library function call immediately preceding a synchronization mechanism, and
 	\item[T3] the third transformation chooses every external library function call immediately following a synchronization mechanism.
