@@ -81,7 +81,7 @@ This work studies three transformations in the first category.
 The three transformations for introducing automated diversity explored in the context of concurrency attacks in this work consist of interposing external library calls~\cite{Conrad2009} made by the software to be protected each with random numbers of inline assembly NOP instructions.
 This was accomplished by first specifying a max delay (per interposition).
 Then, for each of the external library functions chosen for interposition, a random integer between zero and the max delay was selected.
-Finally, that number was used as the loop limit on a loop of assembly NOPs for that external library function.
+Finally, that number was used as the loop limit on a loop a single assembly NOP for that external library function.
 The interpositions of the NOP loops were compiled into a dynamic library file, and that file was specified to be preloaded with the LD\_PRELOAD environment variable.
 
 The three transformations vary only in the way that the library functions are chosen for interposition.
