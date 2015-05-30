@@ -102,6 +102,7 @@ As all of the experiments were conducted on Linux, ``synchronization
 mechanisms'' were generally identified as \texttt{pthread} function calls, except for the case of Libvirt which redefines its own synchronization mechanisms.
 
 In addition to the question of the proper diversity transformation, there is also the question of when (or how often) to diversify.
-We do not address the latter here, except insofar as the transformations tested here dictate that the diversification must be done prior to load time (so that the interposition library is available for preloading).
+We do not address the latter here, except insofar as the transformations tested here require that the diversification must be done prior to load time (so that the interposition library is available for preloading).
 As the randomization processes \textbf{T1}-\textbf{T3} require considerable computation, diversification at \textit{each} load time is likely infeasible.
-However, one could certainly imagine these transformations being applied at install time, and even possibly at each reboot.
+However, one could certainly imagine these transformations being applied at install time, or at each reboot.
+A more efficient re-randomization method using lookup tables to define the NOP loop lengths may also make re-randomization at load time possible.

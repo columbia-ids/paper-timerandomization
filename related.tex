@@ -11,3 +11,11 @@ This diversifying transformation inserts a NOP---with some finite probability--b
 Homescu et al. went on to measure the performance and efficacy of traditional~\cite{Homescu2013a} and JIT~\cite{Homescu2013} compiler-based automated diversity.
 While the literature for NOP injection as a defense is voluminous, we again believe our work to be the first to investigate it with respect to concurrency attacks.
 Moreover, where compiler-based NOP insertion requires recompiling entire programs, our approach is more lightweight and amenable to more frequent randomization (e.g., at every reboot).
+
+Occasionally, randomized scheduling has been used to \textit{expose} concurrency bugs.
+CalFuzzer~\cite{Joshi2009} is a testing framework that allows for pausing of Java programs at critical ``breakpoints'', and then testing the various possible transitions from those breakpoints for concurrency bugs.
+Burckhardt et al. showed that random insertion of priority change points in a priority-based scheduler has a probability of exposing concurrency bugs that is reasonably high when it can be assumed that the number of scheduling constraints required to reproduce the bug is low~\cite{Burckhardt2010}.
+CTrigger~\cite{Park2009} inserts artificial synchronizations at critical execution points in an attempt to trigger low-probability thread interleavings.
+While these works appear at first glance to contradict time randomization as a defense, this is not the case.
+Time randomization does not propose to fix existing concurrency bugs, but rather to raise the cost to an attacker attempting to trigger, and then exploit a bug using timing information that they have gained about the bug.
+Randomization may at times uncover concurrency bugs that don't usually manifest under normal execution, while also hardening the program against targeted concurrency attacks.
