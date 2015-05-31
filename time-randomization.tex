@@ -78,13 +78,10 @@ In the second case, the ``something'' reordered can be at any granularity (instr
 These types of transformations are less likely to have performance costs, but they are more likely to break the correctness of programs.
 This work studies three transformations in the first category.
 
-The three transformations for introducing automated diversity explored in the context of concurrency attacks in this work consist of interposing external library calls~\cite{Conrad2009} made by the software to be protected each with random numbers of inline assembly NOP instructions.
-This was accomplished by first specifying a max delay (per interposition).
-Then, for each of the external library functions chosen for interposition, a random integer between zero and the max delay was selected.
-Finally, that number was used as the loop limit on a loop a single assembly NOP for that external library function.
-The interpositions of the NOP loops were compiled into a dynamic library file, and that file was specified to be preloaded with the LD\_PRELOAD environment variable.
+The three transformations for introducing automated diversity explored in the context of concurrency attacks in this work consist of interposing external library calls~\cite{Conrod2009} made by the software to be protected each with random numbers of inline assembly NOP instructions.
+This was accomplished in two steps: first by specifying the library functions to be interposed; and second by interposing those functions with NOP loops.
 
-The three transformations vary only in the way that the library functions are chosen for interposition.
+The way that the library functions are chosen for interposition distinguishes among the three transformations studied.
 The first transformation chooses all external library function calls indiscriminately, while the other two use synchronization mechanisms to indicate locations where delays may have the greatest effect on relative thread timing.
 In all transformations, \texttt{ltrace}~\cite{cespedesltrace} is run on the unmodified program to be protected while it is being subjected to an exploit attempt.
 Using the log from that ltrace run,
@@ -100,6 +97,22 @@ interposition method itself (e.g., \texttt{sigsetjmp}).
 Both cases are unsuitable for the interposition method used in this work.
 As all of the experiments were conducted on Linux, ``synchronization
 mechanisms'' were generally identified as \texttt{pthread} function calls, except for the case of Libvirt which redefines its own synchronization mechanisms.
+
+Once, the functions were chosen for interposition, NOP loops were interposed as described in the tutorial cited above~\cite{Conrod2009}.
+First a max delay was specified (per interposition).
+Then, for each of the external library functions chosen for interposition, a random integer between zero and the max delay was selected.
+Finally, that number was used as the loop limit on a loop a single assembly NOP for that external library function.
+The interpositions of the NOP loops were compiled into a dynamic library file, and that file was specified to be preloaded with the LD\_PRELOAD environment variable.
+
+More specifically, a C file was generated (including any necessary headers) which redefined each of the library functions chosen for interposition.
+Each of these redefinitions consisted of exactly the following pieces:
+\begin{enumerate}
+	\item declaration of a function pointer of the same type as the function being redefined (to be used to call the original library function),
+	\item a \texttt{for} loop with a loop limit chosen as described above, and a body consisting of the single statement \texttt{asm("nop;");},
+	\item assignment of the original library function (via \texttt{dlsym}) to the function pointer declared in 1., and
+	\item a call to the original library function, returning the return value.
+\end{enumerate}
+This file was then compiled as a dynamic library \texttt{interpose.so} to be preloaded at runtime before each experiment.
 
 In addition to the question of the proper diversity transformation, there is also the question of when (or how often) to diversify.
 We do not address the latter here, except insofar as the transformations tested here require that the diversification must be done prior to load time (so that the interposition library is available for preloading).
