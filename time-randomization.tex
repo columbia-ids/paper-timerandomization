@@ -101,7 +101,7 @@ mechanisms'' were generally identified as \texttt{pthread} function calls, excep
 Once the functions were chosen for interposition, NOP loops were interposed as described in the tutorial cited above~\cite{Conrod2009}.
 First a max delay was specified (per interposition).
 Then, for each of the external library functions chosen for interposition, a random integer between zero and the max delay was selected.
-Finally, that number was used as the loop limit on a loop a single assembly NOP for that external library function.
+Finally, that number was used as the loop limit on a loop of a single assembly NOP interposed before that external library function.
 The interpositions of the NOP loops were compiled into a dynamic library file, and that file was specified to be preloaded with the LD\_PRELOAD environment variable.
 
 More specifically, a C file was generated (including any necessary headers) which redefined each of the library functions chosen for interposition.
