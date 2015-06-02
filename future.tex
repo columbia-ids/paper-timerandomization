@@ -1,7 +1,7 @@
 It is clear from these results that, at the very least, time randomization increases the exploitation cost for some concurrency bugs.
 \textbf{T3} appears to be more effective than the other two transformations.
 One possible explanation for this is that \textbf{T3} adds delays shortly after synchronization mechanisms.
-If these delays fall in a critical section, or before one, the chances of preemption affecting the thread interleaving about the critical section increase.
+If these delays fall in a critical section, or before one, the chances of scheduler preemption affecting the thread interleaving about the critical section increase.
 This is not to say that the other transformations cannot also have this effect, but in the case of \textbf{T2}, the proximity to a critical section may not be as high, and in the case of \textbf{T1}, the delays are less concentrated about the synchronization mechanisms.
 
 Given the results presented here, the major argument against employing time randomization universally becomes performance overhead.
