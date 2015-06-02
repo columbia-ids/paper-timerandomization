@@ -1,7 +1,10 @@
 It is clear from these results that, at the very least, time randomization increases the exploitation cost for some concurrency bugs.
-%\textbf{T3} appears to be more effective than the other two transformations.
-%One possible explanation for this is that \textbf{T3}
-Then the major argument against employing it universally becomes performance overhead.
+\textbf{T3} appears to be more effective than the other two transformations.
+One possible explanation for this is that \textbf{T3} adds delays shortly after synchronization mechanisms.
+If these delays fall in a critical section, or before one, the chances of preemption affecting the thread interleaving about the critical section increase.
+This is not to say that the other transformations cannot also have this effect, but in the case of \textbf{T2}, the proximity to a critical section may not be as high, and in the case of \textbf{T1}, the delays are less concentrated about the synchronization mechanisms.
+
+Given the results presented here, the major argument against employing time randomization universally becomes performance overhead.
 While overheads on effective randomizations were unacceptably high using the NOP injection implementations tested here (at least 12x for \textbf{T1} and at least 5x for \textbf{T3}), it is not clear that significant overhead is necessary for time randomization in general.
 Part of the effect of time randomization via NOP injection is to modify thread interleavings by signaling with NOPs to the scheduler that another thread can be scheduled.
 The randomization between and among threads achieved here with NOP injection could conceivably be achieved directly in the scheduler via random synchronization schedules.

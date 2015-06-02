@@ -21,6 +21,7 @@ The proof-of-concept exploit (Figure \ref{fig_poc})\cite{Bugtraq13190} often rea
 
 Time randomization was applied to Libsafe as described in \autoref{implementation}.
 The time required to make a (legal) \texttt{strcpy} function call (using Libsafe and averaged over 10,000,000 \texttt{strcpy} calls), and the proof of concept exploit success rate were measured for several randomizations for each max delay, where max delay was varied from 0 to 50,000.
+Recall that the max delay is used as the upper bound on the range from which the NOP loop length for each function interposition is randomly chosen, as described in \autoref{implementation}.
 \textbf{T2} and \textbf{T3} were special cases for this bug in that only one external library function was identified as immediately preceding a synchronization mechanism and only one external library function was identified as immediately following a synchronization mechanism.
 In these cases, we were able to exactly characterize the effects of NOP injection as a function of the number of NOPs injected into that function.
 \subsection{Real Bug: Libvirt CVE-2014-1447}
