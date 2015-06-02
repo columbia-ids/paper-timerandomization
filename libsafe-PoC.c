@@ -10,7 +10,7 @@ void *func1(void *none)
 	{
 		if(!ok)
 			continue;
-		strcpy(buf, "AAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAA");
+		strcpy(buf, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 		break;
 	}
 	puts("func1 overflow!");
@@ -20,7 +20,7 @@ void *func2(void *none)
 {
 	char buf[8];
 	ok = 1;
-	strcpy(buf, "AAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAA");
+	strcpy(buf, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 	puts("func2 overflow!!");
 }
 
