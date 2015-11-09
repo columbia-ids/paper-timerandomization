@@ -12,12 +12,7 @@ A static global variable `dying' is used in Libsafe to indicate when an unsafe a
 	\item Thread B is scheduled, and attempts another exploit before Libsafe has exited thread A.
 	\item Because the `dying' flag is set, thread B's exploit is not caught by Libsafe, and it succeeds.
 \end{enumerate}
-The proof-of-concept exploit (Figure \ref{fig_poc})\cite{Bugtraq13190} often realizes the above sequence of events, effectively bypassing Libsafe.
-\begin{figure}
-	\lstinputlisting{libsafe-PoC.c}
-	\caption{The proof of concept exploit for concurrency bug CVE-2005-1125~\cite{CVE-2005-1125}.  Both functions \texttt{func1} and \texttt{func2} attempt to overflow buffers in their own stack frames.  Either function running alone would be caught by Libsafe at the illegal calls to \texttt{strcpy}, but when run in parallel, the concurrency bug may allow one call to \texttt{strcpy} to succeed.}
-	\label{fig_poc}
-\end{figure}
+The proof-of-concept exploit~\cite{Bugtraq13190} often realizes the above sequence of events, effectively bypassing Libsafe.
 
 Time randomization was applied to Libsafe as described in \autoref{implementation}.
 The time required to make a (legal) \texttt{strcpy} function call (using Libsafe and averaged over 10,000,000 \texttt{strcpy} calls), and the proof of concept exploit success rate were measured for several randomizations for each max delay, where max delay was varied from 0 to 50,000.
@@ -62,15 +57,10 @@ Farchi et al. presented a partial concurrency bug taxonomy~\cite{Farchi2003}, an
 To test time randomization on the first type, a simple concurrency bug was
 constructed mimicking a ``nonatomic operations assumed to be atomic'' programmer error~\cite{Farchi2003}.
 In particular, in Python, the statement \texttt{x+=1} is nonatomic, but may be mistaken to be atomic due to its compact syntax.
-Our simple concurrency bug (Figure \ref{fig_nonatomic}) contains a loop that expects this statement (unprotected by synchronization mechanisms) to always increment \texttt{x} by one.
+Our simple concurrency bug contains a loop that expects this statement (unprotected by synchronization mechanisms) to always increment \texttt{x} by one.
 An ``exploit'' runs in a separate thread, modifying \texttt{x} periodically.
 The exploit succeeds when the statement \texttt{x+=1} in the first thread fails to increment \texttt{x} by exactly one.
 In other words, the exploit thread modifies \texttt{x} within the vulnerability window (between when \texttt{x} is read from memory, and when it is written back to memory by the first thread).
-\begin{figure}
-	\lstinputlisting{nonatomic.py}
-	\caption{A canonical atomicity violation concurrency bug.  The \texttt{xplusplus} function assumes the nonatomic statement \texttt{x+=1} to be atomic.  The \texttt{fuzzer} function, run in a separate thread, attempts to exploit this assumption by modifying \texttt{x} within the vulnerability window (between when \texttt{x} is read from memory, and when it is written back to memory).}
-	\label{fig_nonatomic}
-\end{figure}
 
 Time randomization was applied to this bug as described in \autoref{implementation}.
 The time required to complete the operations encoded in the statement \texttt{x+=1} (averaged over 10,000,000 sequential executions of that statement), and the number of exploit loop iterations required to succeed were measured for a single randomization for each max delay, where max delay was varied from 0 to 1,000,000.
