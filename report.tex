@@ -7,6 +7,13 @@
 \renewcommand{\sectionautorefname}{\S}
 \renewcommand{\subsectionautorefname}{\S}
 \renewcommand{\subsubsectionautorefname}{\S}
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\headsep}{0pt}
+\setlength{\topskip}{0pt}
+\setlength{\topmargin}{0pt}
+\setlength{\topsep}{0pt}
+\setlength{\partopsep}{0pt}
 
 \begin{document}
 
@@ -34,10 +41,13 @@
 
 \maketitle
 
-
 \begin{abstract}
 \input{abstract}
 \end{abstract}
+
+\begin{IEEEkeywords}
+time randomization, concurrency bugs, software diversity.
+\end{IEEEkeywords}
 
 \section{Introduction}
 \input{intro}
@@ -57,8 +67,8 @@
 \section{Related Work}
 \input{related}
 
-\section{Conclusion}
-\input{conclusion}
+%\section{Conclusion}
+%\input{conclusion}
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,references}

@@ -1,4 +1,4 @@
-We evaluated \textbf{T1}-\textbf{T3} on Libsafe CVE-2005-1125 and on Libvirt CVE-2014-1447, and \textbf{T3} on the canonical ``nonatomic operations assumed to be atomic'' bug.
+We evaluated \textbf{T1}-\textbf{T3} on Libsafe CVE-2005-1125 and on Libvirt CVE-2014-1447.
 For each evaluation, exploit cost or exploit success rate was evaluated for each of many applications of the transformation under study.
 The exploit cost or success rate was then compared to either the microbenchmark overhead, or the number of NOPs injected, as appropriate for each experiment.
 Libsafe and ``nonatomic operations assumed to be atomic'' experiments were run on a dedicated dual core 3.4GHz Pentium D running Debian.
@@ -6,26 +6,8 @@ Libvirt experiments testing \textbf{T1} were run on a 2.7GHz dual-socket quad-co
 Libvirt experiments testing \textbf{T2} and \textbf{T3} were run on a 2.8GHz dual-socket hex-core Intel Xeon with 24 hyper-threading cores running Ubuntu.
 In all figures, the horizontal red line indicates the average measurement for the unmodified bug (without time randomization).
 The results vary somewhat widely with the bug analyzed and the automated diversity transformation used.
-A summary of the results in this section is given in Table \ref{tab_results}.
-\begin{table}
-	\centering
-	\begin{tabular}{ | p{0.6in} | p{0.6in} | p{0.6in} | p{0.6in} | }
-	\hline
-	Bug & Transfor\-mation Applied & Time Randomization Effective? & Figure \\ \hline
-	\hline
-	Libsafe & \textbf{T1} & Yes & \ref{fig_libsafe-all}\&\ref{fig_libsafe-all-zoom} \\ \hline
-	Libsafe & \textbf{T2} & No & \ref{fig_libsafe-pre} \\ \hline
-	Libsafe & \textbf{T3} & Yes & \ref{fig_libsafe-post} \\ \hline
-	Libvirt & \textbf{T1} & No & \ref{fig_libvirt-all} \\ \hline
-	Libvirt & \textbf{T2} & No & \ref{fig_libvirt-pre} \\ \hline
-	Libvirt & \textbf{T3} & Yes & \ref{fig_libvirt-post} \\ \hline
-	Canonical Atomicity Violation & \textbf{T3} & No & \ref{fig_nonatomic-post} \\ \hline
-	\end{tabular}
-	\caption{A summary of the results in \autoref{results}.}
-	\label{tab_results}
-\end{table}
 
-Applying transformation 1 (interposition of all external library function calls) to Libsafe resulted in a dramatic decrease in exploit success rate with increasing microbenchmark overhead (Figures \ref{fig_libsafe-all} and \ref{fig_libsafe-all-zoom}).
+Applying transformation 1 (interposition of all external library function calls) to Libsafe resulted in a dramatic decrease in exploit success rate with increasing microbenchmark overhead (Figure \ref{fig_libsafe-all}).
 Between 1x overhead and 12x overhead, no randomizations resulted in less than a 5\% success rate.
 Between 20x and 25x overhead, 27.5\% of randomizations resulted in less than a 5\% exploit success rate.
 Between 40x and 45x overhead, 61.5\% of randomizations resulted in less than a 5\% exploit success rate.
@@ -33,17 +15,9 @@ Beyond 1,040x overhead, 100\% of randomizations resulted in less than a 5\% expl
 \begin{figure}
 	\centering
 	\includegraphics[width=.75\columnwidth]{figures/libsafe-all}
-	\caption{Exploit success rate as a function of the microbenchmark after applying \textbf{T1} to Libsafe with concurrency bug CVE-2005-1125.}
+	\caption{Exploit success rate as a function of the microbenchmark after applying \textbf{T1} to Libsafe with concurrency bug CVE-2005-1125.
+	There is a clear inverse correlation between microbenchmark overhead and exploit success rate.}
 	\label{fig_libsafe-all}
-\end{figure}
-\begin{figure}
-	\centering
-	\includegraphics[width=.75\columnwidth]{figures/libsafe-all-zoom}
-	\caption{
-		Exploit success rate as a function of the microbenchmark after applying \textbf{T1} to Libsafe with concurrency bug CVE-2005-1125 (a zoom-in of Figure \ref{fig_libsafe-all}).
-		There is a clear inverse correlation between microbenchmark overhead and exploit success rate.
-	}
-	\label{fig_libsafe-all-zoom}
 \end{figure}
 
 Applying \textbf{T2} to Libsafe had no noticeable effect on exploit success rate (Figure \ref{fig_libsafe-pre}) or microbenchmark overhead.
@@ -111,15 +85,4 @@ However, after applying automated \textbf{T3}, a significantly greater proportio
 		This transformation thus increases the average exploit cost with increasing microbenchmark overhead.
 	}
 	\label{fig_libvirt-post}
-\end{figure}
-
-Applying \textbf{T3} to the canonical atomicity violation bug appeared to have negligible effect on exploit cost (Figure \ref{fig_nonatomic-post}). 
-\begin{figure}
-	\centering
-	\includegraphics[width=.75\columnwidth]{figures/nonatomic-post}
-	\caption{
-		Exploit cost (in number of exploit attempts) as a function of the microbenchmark after applying \textbf{T3} to a canonical ``nonatomic-operations-assumed-to-be-atomic'' concurrency bug.
-		This transformation does not appear to have an effect on exploit cost for this bug.
-	}
-	\label{fig_nonatomic-post}
 \end{figure}

@@ -1,5 +1,5 @@
 date = $(shell date '+%Y%m%d')
-STYLE_FILES = IEEEtran.cls
+STYLE_FILES = IEEEtran.cls IEEEtran.bst IEEEabrv.bib
 SECTIONS = report abstract intro time-randomization experiment results future related conclusion
 CODE_FILES = libsafe-PoC.c nonatomic.py
 FIGURES = libsafe-all-zoom libsafe-all libsafe-post libsafe-pre libvirt-post libvirt-pre nonatomic-post

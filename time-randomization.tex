@@ -21,51 +21,9 @@ The critical sections in this context are sometimes referred to as a vulnerabili
 
 If the server software is available to the attacker, they can simply study it on a similar system (which they control) to determine the appropriate delay required to expose the bug.
 Armed with this knowledge, they stand a good chance of exploiting the bug on the target system by sending requests with the same delay.
-\begin{figure*}
-	\centering
-	\begin{subfigure}{.49\columnwidth}
-		\fbox{\includegraphics[width=.95\textwidth]{figures/save_op}}
-		\caption{A single save operation thread.}
-		\label{fig_save_op}
-	\end{subfigure}
-	\begin{subfigure}{.49\columnwidth}
-		\fbox{\includegraphics[width=.95\textwidth]{figures/two_threads}}
-		\caption{Two save operation threads.}
-		\label{fig_two_threads}
-	\end{subfigure}
-	\begin{subfigure}{.49\columnwidth}
-		\fbox{\includegraphics[width=.95\textwidth]{figures/attack}}
-		\caption{A constructed attack using timing knowledge.}
-		\label{fig_attack}
-	\end{subfigure}
-	\begin{subfigure}{.49\columnwidth}
-		\fbox{\includegraphics[width=.95\textwidth]{figures/thwart}}
-		\caption{An example result of time randomization.}
-		\label{fig_thwart}
-	\end{subfigure}
-	\caption{A pictorial representation of the example concurrency attack described in \autoref{threat-model}.}
-	\label{fig_exploitation}
-\end{figure*}
 \subsection{Implementation}\label{implementation}
 Time randomization, the randomization of synchronization schedules and thread interleavings, as well as the relative timing between and among threads, aims to make this type of attack much harder.
 By making the relative timing between threads less predictable, the cost of carrying out the attack above is dramatically increased.
-Figure~\ref{fig_exploitation} presents a graphical explanation of this attack and one possible result of time randomization that would cause it to fail.
-
-Figure~\ref{fig_save_op} depicts a single save operation thread with two significant points---an access check where the thread checks whether the requestor has the proper access rights to make the requested change, and a write where the requested change is made (assuming the access check succeeds).
-
-Figure~\ref{fig_two_threads} shows two save operation threads.
-Thread 1 is saving to the (poorly designed) global variable \texttt{my\_pointer}.
-Thread 2 is saving to the memory location indicated by \texttt{my\_pointer}.
-We can see the makings for a TOCTOU attack here---if \texttt{my\_pointer} points to a memory location to which the attacker has access, the check in Thread 2 will succeed; but if Thread 1 modifies \texttt{my\_pointer} to point to another memory location to which the attacker should not have access before Thread 2 writes, Thread 2 will write to that memory location.
-An attacker has thus achieved privilege escalation.
-
-In fact, if the thread timing (i.e., the timing between thread spawn and the significant points labeled in Figure~\ref{fig_save_op}, and the relative timing between Thread 1 and Thread 2) are predictable, the attacker can study that thread timing on another system that they control (Figure~\ref{fig_attack}).
-They can then determine an appropriate delay between spawning Thread 1 and Thread 2 such that the write to \texttt{my\_pointer} by Thread 1 falls inside the vulnerability window of Thread 2.
-
-Finally, Figure~\ref{fig_thwart} shows an example result of time randomization.
-Here, time randomization has shifted the vulnerability window of Thread 2 with respect to the write by Thread 1 such that the delay calculated by the attacker in Figure~\ref{fig_attack} no longer aligns the two.
-This result can be achieved, for example, by a time randomization transformation which adds a delay between the spawning of Thread 2 and the access check by Thread 2.
-Note that a delay between the spawning of Thread 1 and the write by Thread 1 would also cause the write to miss the vulnerability window in Thread 2.
 
 Of the various software diversity transformations which have been studied~\cite{Larsen2014}, the ones which are most applicable to time randomization are those which
 \begin{itemize}
@@ -103,19 +61,3 @@ First a max delay was specified (per interposition).
 Then, for each of the external library functions chosen for interposition, a random integer between zero and the max delay was selected.
 Finally, that number was used as the loop limit on a loop of a single assembly NOP interposed before that external library function.
 The interpositions of the NOP loops were compiled into a dynamic library file, and that file was specified to be preloaded with the LD\_PRELOAD environment variable.
-
-More specifically, a C file was generated (including any necessary headers) which redefined each of the library functions chosen for interposition.
-Each of these redefinitions consisted of exactly the following pieces:
-\begin{enumerate}
-	\item declaration of a function pointer of the same type as the function being redefined (to be used to call the original library function),
-	\item a \texttt{for} loop with a loop limit chosen as described above, and a body consisting of the single statement \texttt{asm("nop;");},
-	\item assignment of the original library function (via \texttt{dlsym}) to the function pointer declared in 1., and
-	\item a call to the original library function, returning the return value.
-\end{enumerate}
-This file was then compiled as a dynamic library \texttt{interpose.so} to be preloaded at runtime before each experiment.
-
-In addition to the question of the proper diversity transformation, there is also the question of when (or how often) to diversify.
-We do not address the latter here, except insofar as the transformations tested here require that the diversification must be done prior to load time (so that the interposition library is available for preloading).
-As the randomization processes \textbf{T1}-\textbf{T3} require considerable computation, diversification at \textit{each} load time is likely infeasible.
-However, one could certainly imagine these transformations being applied at install time, or at each reboot.
-A more efficient re-randomization method using lookup tables to define the NOP loop lengths may also make re-randomization at load time possible.
