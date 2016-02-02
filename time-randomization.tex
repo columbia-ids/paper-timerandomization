@@ -15,7 +15,7 @@ A remote attacker is communicating with some server software, and has somehow be
 They have devised a way to exploit the bug, which includes a method for inducing a buggy thread interleaving.
 For concreteness, let's assume that the bug is exposed when a save operation
 is attempted by one thread during the critical section of another save
-operation in another thread (e.g., after some checking has been done, but before the results have been used, sometimes referred to as a time of check to time of use attack).
+operation in another thread (e.g., after some checking has been done, but before the results have been used, sometimes referred to as a time of check to time of use -- ``TOCTOU'' -- attack).
 If the server immediately spawns threads to execute save operations in response to client requests, the attacker's work consists of identifying the proper delay between two save threads such that the critical sections intersect.
 The critical sections in this context are sometimes referred to as a vulnerability window~\cite{Yang2012}.
 
