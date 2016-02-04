@@ -61,3 +61,13 @@ First a max delay was specified (per interposition).
 Then, for each of the external library functions chosen for interposition, a random integer between zero and the max delay was selected.
 Finally, that number was used as the loop limit on a loop of a single assembly NOP interposed before that external library function.
 The interpositions of the NOP loops were compiled into a dynamic library file, and that file was specified to be preloaded with the LD\_PRELOAD environment variable.
+
+More specifically, a C file was generated (including any necessary headers) which redefined each of the library functions chosen for interposition.
+Each of these redefinitions consisted of exactly the following pieces:
+\begin{enumerate}
+	\item declaration of a function pointer of the same type as the function being redefined (to be used to call the original library function),
+	\item a \texttt{for} loop with a loop limit chosen as described above, and a body consisting of the single statement \texttt{asm("nop;");},
+	\item assignment of the original library function (via \texttt{dlsym}) to the function pointer declared in 1., and
+	\item a call to the original library function, returning the return value.
+\end{enumerate}
+This file was then compiled as a dynamic library \texttt{interpose.so} to be preloaded at runtime before each experiment.

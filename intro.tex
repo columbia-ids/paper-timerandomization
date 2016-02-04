@@ -24,10 +24,9 @@ This approach to defenses against concurrency attacks has the advantage that it 
 In other words, time randomization can be applied independent of bug detection and fixing.
 This highlights another point---that time randomization does not exclude other defenses against concurrency attacks; they can be applied together in concert.
 
-There are several possible ways to implement time randomization.
-This work analyzes three implementations which can be considered automated software diversity transformations via functionally-invariant code insertion.
-All three transformations involve the insertion of NOPs into multithreaded programs, one of which is a mostly unfocused randomization, and two of which specifically target synchronization mechanisms as a heuristic for time randomization.
-We find two of the transformations tested to be effective in increasing exploit cost on two real-world concurrency bugs.
-In the first bug, the most effective transformation resulted in exploit success rates of less than 0.5\% for all experiments beyond a certain threshold of NOPs inserted.
-In the second bug, the most effective transformation resulted in nearly 85\% of exploit attempts taking significantly longer than the baseline exploit time (measured without time randomization).
-Finally, we propose future directions including system-level time randomization for achieving the benefits of this defense with more tolerable overhead.
+This work makes the following contributions:
+\begin{itemize}
+	\item \textbf{Time randomization}, a novel approach to concurrency attack defense involving automated software diversity (\autoref{time-randomization}).
+	\item \textbf{Experimental evaluation} of time randomization on two real-world bugs, with encouraging results -- in one case reducing exploit success rates to less than 0.5\% beyond a certain threshold of NOPs inserted, and in another increasing the exploit time significantly for nearly 85\% of exploit attempts (\autoref{experiment} and \autoref{results}).
+	\item \textbf{A proposal for future work} to build on these results (\autoref{future}).
+\end{itemize}
