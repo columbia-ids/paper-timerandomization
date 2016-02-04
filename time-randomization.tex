@@ -59,7 +59,7 @@ Thread 2 is saving to the memory location indicated by \texttt{my\_pointer}.
 We can see the makings for a TOCTOU attack here---if \texttt{my\_pointer} points to a memory location to which the attacker has access, the check in Thread 2 will succeed; but if Thread 1 modifies \texttt{my\_pointer} to point to another memory location to which the attacker should not have access before Thread 2 writes, Thread 2 will write to that memory location.
 An attacker has thus achieved privilege escalation.
 
-In fact, if the thread timing (i.e., the timing between thread spawn and the significant points labeled in Figure~\ref{fig_save_op}, and the relative timing between Thread 1 and Thread 2) are predictable, the attacker can study that thread timing on another system that they control (Figure~\ref{fig_attack}).
+In fact, if the thread timing (i.e., the timing between thread spawn and the significant points labeled in Figure~\ref{fig_save_op}, and the relative timing between Thread 1 and Thread 2) is predictable, the attacker can study that thread timing on another system that they control (Figure~\ref{fig_attack}).
 They can then determine an appropriate delay between spawning Thread 1 and Thread 2 such that the write to \texttt{my\_pointer} by Thread 1 falls inside the vulnerability window of Thread 2.
 
 Finally, Figure~\ref{fig_thwart} shows an example result of time randomization.
