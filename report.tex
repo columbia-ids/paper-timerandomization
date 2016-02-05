@@ -3,7 +3,7 @@
 \usepackage[pdftex]{graphicx}
 \graphicspath{{figures/}}
 \DeclareGraphicsExtensions{.pdf,.png}
-\usepackage{subcaption,hyperref}
+\usepackage{subcaption,hyperref,balance}
 \renewcommand{\sectionautorefname}{\S}
 \renewcommand{\subsectionautorefname}{\S}
 \renewcommand{\subsubsectionautorefname}{\S}
@@ -61,9 +61,7 @@ time randomization, concurrency bugs, software diversity.
 \section{Related Work}
 \input{related}
 
-%\section{Conclusion}
-%\input{conclusion}
-
+\balance
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,references}
 
