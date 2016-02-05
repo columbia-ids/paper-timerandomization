@@ -38,7 +38,7 @@ This work studies three transformations in the first category.
 
 The three transformations for introducing automated diversity explored in the context of concurrency attacks in this work consist of interposing external library calls~\cite{Conrod2009} made by the software to be protected each with random numbers of inline assembly NOP instructions.
 This was accomplished in two steps: first by specifying the library functions to be interposed; and second by interposing those functions with NOP loops.
-
+\subsubsection{Choosing Which Library Functions to Interpose}\label{choosing}
 The way that the library functions are chosen for interposition distinguishes among the three transformations studied.
 The first transformation chooses all external library function calls indiscriminately, while the other two use synchronization mechanisms to indicate locations where delays may have the greatest effect on relative thread timing.
 In all transformations, \texttt{ltrace}~\cite{cespedesltrace} is run on the unmodified program to be protected while it is being subjected to an exploit attempt.
@@ -55,14 +55,14 @@ interposition method itself (e.g., \texttt{sigsetjmp}).
 Both cases are unsuitable for the interposition method used in this work.
 As all of the experiments were conducted on Linux, ``synchronization
 mechanisms'' were generally identified as \texttt{pthread} function calls, except for the case of Libvirt which redefines its own synchronization mechanisms.
-
+\subsubsection{NOP Loop Injection}
 Once the functions were chosen for interposition, NOP loops were interposed as described in the tutorial cited above~\cite{Conrod2009}.
 First a max delay was specified (per interposition).
 Then, for each of the external library functions chosen for interposition, a random integer between zero and the max delay was selected.
 Finally, that number was used as the loop limit on a loop of a single assembly NOP interposed before that external library function.
 The interpositions of the NOP loops were compiled into a dynamic library file, and that file was specified to be preloaded with the LD\_PRELOAD environment variable.
 
-More specifically, a C file was generated (including any necessary headers) which redefined each of the library functions chosen for interposition.
+More specifically, a C file was generated (including any necessary headers) which redefined each of the library functions chosen for interposition as described in \autoref{choosing}.
 Each of these redefinitions consisted of exactly the following pieces:
 \begin{enumerate}
 	\item declaration of a function pointer of the same type as the function being redefined (to be used to call the original library function),
