@@ -28,10 +28,12 @@ This work makes the following contributions:
 \begin{itemize}
 	\item \textbf{Time randomization}, a novel approach to concurrency attack defense involving automated software diversity.
 	This work analyzes three implementations which can be considered automated software diversity transformations via functionally-invariant code insertion.
+	All three transformations involve the insertion of NOPs into multithreaded programs, one of which is a mostly unfocused randomization, and two of which specifically target synchronization mechanisms as a heuristic for time randomization.
 	(\autoref{time-randomization})
 	\item \textbf{Experimental evaluation} of time randomization on two real-world bugs, with encouraging results.
 	In the first bug, the most effective transformation resulted in exploit success rates of less than 0.5\% for all experiments beyond a certain threshold of NOPs inserted.
-	In the second bug, the most effective transformation resulted in nearly 85\% of exploit attempts taking significantly longer than the baseline exploit time.
+	In the second bug, the most effective transformation resulted in nearly 85\% of exploit attempts taking significantly longer than the baseline exploit time (measured without time randomization).
 	(\autoref{experiment} and \autoref{results})
-	\item \textbf{A proposal for future work} to build on these results (\autoref{future}).
+	\item \textbf{A proposal for future work} to build on these results, including system-level time randomization for achieving the benefits of this defense with more tolerable overhead.
+	(\autoref{future})
 \end{itemize}
