@@ -7,7 +7,7 @@ Libvirt experiments testing \textbf{T2} and \textbf{T3} were run on a 2.8GHz dua
 In all figures, the horizontal red line indicates the average measurement for the unmodified bug (without time randomization).
 The results vary somewhat widely with the bug analyzed and the automated diversity transformation used.
 
-Applying transformation 1 (interposition of all external library function calls) to Libsafe resulted in a dramatic decrease in exploit success rate with increasing microbenchmark overhead (Figure \ref{fig_libsafe-all}).
+Applying transformation 1 (interposition of all external library function calls) to Libsafe resulted in a dramatic decrease in exploit success rate with increasing microbenchmark overhead (Fig. \ref{fig_libsafe-all}).
 Between 1x overhead and 12x overhead, no randomizations resulted in less than a 5\% success rate.
 Between 20x and 25x overhead, 27.5\% of randomizations resulted in less than a 5\% exploit success rate.
 Between 40x and 45x overhead, 61.5\% of randomizations resulted in less than a 5\% exploit success rate.
@@ -20,7 +20,7 @@ Beyond 1,040x overhead, 100\% of randomizations resulted in less than a 5\% expl
 	\label{fig_libsafe-all}
 \end{figure}
 
-Applying \textbf{T2} to Libsafe had no noticeable effect on exploit success rate (Figure \ref{fig_libsafe-pre}) or microbenchmark overhead.
+Applying \textbf{T2} to Libsafe had no noticeable effect on exploit success rate (Fig. \ref{fig_libsafe-pre}) or microbenchmark overhead.
 \begin{figure}
 	\centering
 	\includegraphics[width=.75\columnwidth]{figures/libsafe-pre}
@@ -31,7 +31,7 @@ Applying \textbf{T2} to Libsafe had no noticeable effect on exploit success rate
 	\label{fig_libsafe-pre}
 \end{figure}
 
-Applying \textbf{T3} to Libsafe had a very marked effect on exploit success rate (Figure \ref{fig_libsafe-post}).
+Applying \textbf{T3} to Libsafe had a very marked effect on exploit success rate (Fig. \ref{fig_libsafe-post}).
 In particular, exploit success rate remains high for low numbers of NOPs.
 Then, for inserted NOP loops of lengths greater than 200,000, exploit success rate begins to drop.
 For inserted NOP loops of lengths between 250,000 and 350,000, exploit success rate fluctuates between 35\% and 65\%.
@@ -48,7 +48,7 @@ Finally, for inserted NOP loops of lengths greater than 350,000, exploit rates d
 
 \textbf{T1} affected the exploit cost for the Libvirt bug.
 However, the increase in time required for exploitation is approximately proportional to the increase in microbenchmark measurements.
-The exploit cost increase may therefore be attributed to an overall slowing down of the Libvirt daemon (Figure \ref{fig_libvirt-all}).
+The exploit cost increase may therefore be attributed to an overall slowing down of the Libvirt daemon (Fig. \ref{fig_libvirt-all}).
 \begin{figure}
 	\centering
 	\includegraphics[width=.75\columnwidth]{figures/libvirt-all}
@@ -60,7 +60,7 @@ The exploit cost increase may therefore be attributed to an overall slowing down
 \end{figure}
 
 Applying \textbf{T2} to Libvirt did not seem to have much of an effect on exploit cost.
-The characteristic of most exploit attempts succeeding quickly, and a few taking much longer appears to be consistent throughout the range of microbenchmark values recorded (Figure \ref{fig_libvirt-pre}).
+The characteristic of most exploit attempts succeeding quickly, and a few taking much longer appears to be consistent throughout the range of microbenchmark values recorded (Fig. \ref{fig_libvirt-pre}).
 \begin{figure}
 	\centering
 	\includegraphics[width=.75\columnwidth]{figures/libvirt-pre}
@@ -74,7 +74,7 @@ The characteristic of most exploit attempts succeeding quickly, and a few taking
 \textbf{T3} applied to Libvirt, as in the case of Libsafe, had a significant effect on exploit cost.
 For microbenchmark connection times of less than 10 milliseconds, less than 4\% of exploit attempts took longer than the baseline exploit time of 1.11 seconds, where the baseline exploit time was obtained for a Libvirt daemon without any time randomization.
 By contrast, for microbenchmark times of greater than 10 milliseconds, nearly 85\% of exploit attempts took longer than the baseline exploit time.
-Looking at the graph (Figure \ref{fig_libvirt-post}), we can see a similar shape to the one obtained when applying \textbf{T2} to Libvirt - the bifurcation between exploit attempts that succeed quickly within seconds, and those which take hundreds of seconds to succeed.
+Looking at the graph (Fig. \ref{fig_libvirt-post}), we can see a similar shape to the one obtained when applying \textbf{T2} to Libvirt - the bifurcation between exploit attempts that succeed quickly within seconds, and those which take hundreds of seconds to succeed.
 However, after applying automated \textbf{T3}, a significantly greater proportion of exploit attempts fell into the second branch of that bifurcation, taking hundreds of seconds to succeed, or failing to succeed within ten minutes (and being categorized as failed attempts).
 \begin{figure}
 	\centering
