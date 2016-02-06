@@ -26,7 +26,12 @@ This highlights another point---that time randomization does not exclude other d
 
 This work makes the following contributions:
 \begin{itemize}
-	\item \textbf{Time randomization}, a novel approach to concurrency attack defense involving automated software diversity (\autoref{time-randomization}).
-	\item \textbf{Experimental evaluation} of time randomization on two real-world bugs, with encouraging results -- in one case reducing exploit success rates to less than 0.5\% beyond a certain threshold of NOPs inserted, and in another increasing the exploit time significantly for nearly 85\% of exploit attempts (\autoref{experiment} and \autoref{results}).
+	\item \textbf{Time randomization}, a novel approach to concurrency attack defense involving automated software diversity.
+	This work analyzes three implementations which can be considered automated software diversity transformations via functionally-invariant code insertion.
+	(\autoref{time-randomization})
+	\item \textbf{Experimental evaluation} of time randomization on two real-world bugs, with encouraging results.
+	In the first bug, the most effective transformation resulted in exploit success rates of less than 0.5\% for all experiments beyond a certain threshold of NOPs inserted.
+	In the second bug, the most effective transformation resulted in nearly 85\% of exploit attempts taking significantly longer than the baseline exploit time.
+	(\autoref{experiment} and \autoref{results})
 	\item \textbf{A proposal for future work} to build on these results (\autoref{future}).
 \end{itemize}
