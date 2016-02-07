@@ -2,8 +2,10 @@ Automated software diversity as a defense strategy has been systematized by Lars
 That work proposes a taxonomy of cyberattacks and a taxonomy of defenses against those classes of attacks, and surveys many of the studied and unstudied diversification techniques.
 To our knowledge, ours is the first work to investigate automated software diversity specifically as it pertains to concurrency attacks.
 
-NOP injection, also known as ``garbage code insertion'', has been investigated as a defense strategy many times.
-Cohen~\cite{Cohen1993} and Forrest et al.~\cite{Forrest1997} proposed garbage code insertion as a method for diversifying operating system source code as a way to drive up the required complexity of attacks on systems.
+NOP injection, also known as ``garbage code insertion,'' has been investigated as a defense strategy many times.
+Cohen~\cite{Cohen1993} and Forrest et al.~\cite{Forrest1997} proposed garbage
+code insertion as a method for diversifying operating system source code,
+aiming to drive up the required complexity of attacks.
 Onarlioglu et al. investigated NOP injection as a means to create gadget-less binaries~\cite{Onarlioglu2010}.
 Their approach is deterministic and a distinct defense from automated diversity.
 Jackson et al. used GCC or LLVM to insert NOPs into register transfer language or machine code, respectively, at compile time~\cite{Jackson2013}.
@@ -13,7 +15,7 @@ While the literature for NOP injection as a defense is voluminous, we again beli
 Moreover, where compiler-based NOP insertion requires recompiling entire programs, our approach is more lightweight and amenable to more frequent randomization (e.g., at every reboot).
 
 Occasionally, randomized scheduling has been used to \textit{expose} concurrency bugs.
-CalFuzzer~\cite{Joshi2009} is a testing framework that allows for pausing of Java programs at critical ``breakpoints'', and then testing the various possible transitions from those breakpoints for concurrency bugs.
+CalFuzzer~\cite{Joshi2009} is a testing framework that allows for pausing of Java programs at critical ``breakpoints,'' and then testing the various possible transitions from those breakpoints for concurrency bugs.
 Burckhardt et al. showed that random insertion of priority change points in a priority-based scheduler has a probability of exposing concurrency bugs that is reasonably high when it can be assumed that the number of scheduling constraints required to reproduce the bug is low~\cite{Burckhardt2010}.
 CTrigger~\cite{Park2009} inserts artificial synchronizations at critical execution points in an attempt to trigger low-probability thread interleavings.
 While these works appear at first glance to contradict time randomization as a defense, this is not the case.

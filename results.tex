@@ -7,8 +7,10 @@ Libvirt experiments testing \textbf{T2} and \textbf{T3} were run on a 2.8GHz dua
 In all figures, the horizontal red line indicates the average measurement for the unmodified bug (without time randomization).
 The results vary somewhat widely with the bug analyzed and the automated diversity transformation used.
 
-Applying transformation 1 (interposition of all external library function calls) to Libsafe resulted in a dramatic decrease in exploit success rate with increasing microbenchmark overhead (Fig. \ref{fig_libsafe-all}).
-Between 1x overhead and 12x overhead, no randomizations resulted in less than a 5\% success rate.
+Applying transformation 1
+%(interposition of all external library function calls)
+to Libsafe resulted in a dramatic decrease in exploit success rate with increasing microbenchmark overhead (Fig. \ref{fig_libsafe-all}).
+Between 1x and 12x overhead, no randomizations resulted in less than a 5\% success rate.
 Between 20x and 25x overhead, 27.5\% of randomizations resulted in less than a 5\% exploit success rate.
 Between 40x and 45x overhead, 61.5\% of randomizations resulted in less than a 5\% exploit success rate.
 Beyond 1,040x overhead, 100\% of randomizations resulted in less than a 5\% exploit success rate.
@@ -32,10 +34,10 @@ Applying \textbf{T2} to Libsafe had no noticeable effect on exploit success rate
 \end{figure}
 
 Applying \textbf{T3} to Libsafe had a very marked effect on exploit success rate (Fig. \ref{fig_libsafe-post}).
-In particular, exploit success rate remains high for low numbers of NOPs.
-Then, for inserted NOP loops of lengths greater than 200,000, exploit success rate begins to drop.
-For inserted NOP loops of lengths between 250,000 and 350,000, exploit success rate fluctuates between 35\% and 65\%.
-Finally, for inserted NOP loops of lengths greater than 350,000, exploit rates drop even further, and beyond loop-lengths of 390,000 NOPs, all interpositions resulted in exploit rates less than 0.5\%.
+In particular, the rate remains high for low numbers of NOPs.
+Then, for inserted NOP loops of lengths greater than 200,000, the rate begins to drop.
+For NOP loops of lengths between 250,000 and 350,000, exploit success rate fluctuates between 35\% and 65\%.
+Finally, for NOP loops of lengths greater than 350,000, exploit rates drop even further, and beyond loop-lengths of 390,000 NOPs, all interpositions resulted in exploit rates less than 0.5\%.
 \begin{figure}
 	\centering
 	\includegraphics[width=.75\columnwidth]{figures/libsafe-post}
@@ -81,7 +83,7 @@ However, after applying automated \textbf{T3}, a significantly greater proportio
 	\includegraphics[width=.75\columnwidth]{figures/libvirt-post}
 	\caption{
 		Exploit cost (in time) as a function of the microbenchmark after applying diversity \textbf{T3} to Libvirt with concurrency bug CVE-2014-1447.
-		Beyond microbenchmark measurements of 10 milliseconds, most of exploit costs observed were much greater than the baseline; often the exploit attempts were stopped artificially early and labeled ``failed exploits''.
+		Beyond microbenchmark measurements of 10 milliseconds, most of exploit costs observed were much greater than the baseline; often the exploit attempts were stopped artificially early and labeled ``failed exploits.''
 		This transformation thus increases the average exploit cost with increasing microbenchmark overhead.
 	}
 	\label{fig_libvirt-post}

@@ -6,5 +6,5 @@ Time randomization introduces more diversity among instances of the same softwar
 In much the same way that ASLR-induced diversity in memory locations thwarts attacks crafted for specific addresses, time randomization-induced diversity in thread timing aims to thwart concurrency attacks crafted for specific vulnerability windows.
 
 We study three implementations of time randomization, all using the injection of NOPs to alter program timing.
-The application of these implementations to two real-world concurrency bugs results in a marked increase in the cost to exploit those bugs.
+Their application to two real-world concurrency bugs results in a marked increase in the cost to exploit those bugs.
 After demonstrating the effectiveness of the method, especially when NOPs are injected before library function calls following synchronization points, methods for improving the efficiency of this defense against concurrency attacks in future research are proposed.

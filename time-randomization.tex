@@ -11,7 +11,8 @@ In the case that the fuzzing is done on a binary, it may not even be obvious how
 Nevertheless, positive fuzzing results can be considered knowledge about relative thread timing which can then be used to craft an attack.
 
 As an example, consider the following scenario:
-A remote attacker is communicating with some server software, and has somehow become aware of a concurrency bug in that software.
+A remote attacker is communicating with some server software
+that has a concurrency bug.
 They have devised a way to exploit the bug, which includes a method for inducing a buggy thread interleaving.
 For concreteness, let's assume that the bug is exposed when a save operation
 is attempted by one thread during the critical section of another save
@@ -28,7 +29,7 @@ By making the relative timing between threads less predictable, the cost of carr
 Of the various software diversity transformations which have been studied~\cite{Larsen2014}, the ones which are most applicable to time randomization are those which
 \begin{itemize}
 	\item add delays to a thread or threads, and those which
-	\item reorder something such that thread interleaving is affected.
+	\item apply reordering to affect thread interleaving.
 \end{itemize}
 The first category is almost always possible, as adding delays rarely breaks programs.
 However, an obvious drawback to this approach is loss of performance, and this drawback must be weighed against the benefits of the transformation.
@@ -49,7 +50,7 @@ Using the log from that ltrace run,
 	\item[T3] the third transformation chooses every external library function call immediately following a synchronization mechanism.
 \end{description}
 (Hereafter, these transformations are referred to as \textbf{T1}, \textbf{T2}, and \textbf{T3}.)
-Functions were only excluded in the rare cases that the function takes a
+Functions were only excluded in the rare cases when they take a
 variable argument list, or interposing the function interferes with the
 interposition method itself (e.g., \texttt{sigsetjmp}).
 Both cases are unsuitable for the interposition method used in this work.
@@ -70,4 +71,6 @@ Each of these redefinitions consisted of exactly the following pieces:
 	\item assignment of the original library function (via \texttt{dlsym}) to the function pointer declared in 1., and
 	\item a call to the original library function, returning the return value.
 \end{enumerate}
-This file was then compiled as a dynamic library \texttt{interpose.so} to be preloaded at runtime before each experiment.
+This file was then compiled as a dynamic library
+%\texttt{interpose.so}
+to be preloaded at runtime before each experiment.
