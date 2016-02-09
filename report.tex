@@ -1,10 +1,15 @@
 \documentclass[10pt,conference,compsocconf]{IEEEtran}
 \usepackage[nocompress]{cite}
-\usepackage[pdftex]{graphicx}
-\graphicspath{{figures/}}
-\DeclareGraphicsExtensions{.pdf,.png}
 \usepackage[font=small]{caption}
 \usepackage{subcaption,hyperref,balance}
+\ifCLASSINFOpdf
+	\usepackage[pdftex]{graphicx}
+\else
+	\usepackage[dvipdfmx]{graphicx}
+	\usepackage{bmpsize,breakurl}
+\fi
+\graphicspath{{figures/}}
+\DeclareGraphicsExtensions{.pdf,.png}
 \renewcommand{\sectionautorefname}{\S}
 \renewcommand{\subsectionautorefname}{\S}
 \renewcommand{\subsubsectionautorefname}{\S}
